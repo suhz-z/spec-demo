@@ -1,0 +1,3 @@
+ALTER TABLE "bookings" ALTER COLUMN "terms_version" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "bookings" ALTER COLUMN "terms_accepted_at" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_terms_acceptance_pair_check" CHECK (("bookings"."terms_version" is null and "bookings"."terms_accepted_at" is null) or ("bookings"."terms_version" is not null and "bookings"."terms_accepted_at" is not null));

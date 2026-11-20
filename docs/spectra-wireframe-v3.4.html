@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A minimal entry experience for exploring Spectra Gardens villas.">
+<title>Spectra Gardens — V3.3</title>
+<style>
+:root{
+  --bg:#f6f7f2;--paper:#fff;--ink:#1c2922;--muted:#778078;--line:#dfe5dc;
+  --green:#1f5945;--green-2:#dce9df;--green-3:#a9c8b0;
+  --amber:#b7833b;--amber-bg:#f4ead8;--grey:#89928c;--grey-bg:#e8ebe8;
+  --road:#e6e9e2;--land:#eaf0e6;--water:#dbe9e8;
+  --shadow:0 20px 60px rgba(32,52,41,.08);
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+button:disabled{opacity:.4;cursor:not-allowed}
+[hidden]{display:none!important}
+#intro,#explore,#villa{min-height:100svh}
+.wrap{width:min(1320px,calc(100% - 64px));margin:auto}
+.topline{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink)}
+.brand-mark{width:28px;height:28px;position:relative;border:1px solid var(--green);border-radius:50%;display:grid;place-items:center}
+.brand-mark:before,.brand-mark:after{content:"";position:absolute;background:var(--green)}
+.brand-mark:before{width:1px;height:17px}.brand-mark:after{height:1px;width:17px}
+.brand-copy{display:grid;line-height:1.08;gap:3px}
+.brand-copy strong{font-size:12px;letter-spacing:.18em;font-weight:700}
+.brand-copy span{font-size:9px;letter-spacing:.32em;color:var(--muted)}
+.top-meta{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.intro-grid{min-height:calc(100svh - 150px);display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:5.5vw;padding:48px 0 36px}
+.intro-copy{max-width:580px;padding:28px 0 30px}
+.kicker{font-size:10px;font-weight:650;letter-spacing:.2em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:12px}
+.kicker:before{content:"";width:27px;height:1px;background:var(--green)}
+h1{font-size:clamp(52px,6.2vw,88px);line-height:.99;letter-spacing:-.065em;font-weight:500;margin:25px 0 24px;max-width:650px}
+h1 em{font-family:var(--serif);font-weight:400;letter-spacing:-.06em;color:var(--green)}
+.primary{margin-top:38px;border:0;background:var(--green);color:#fff;padding:0 8px 0 24px;height:58px;border-radius:4px;display:inline-flex;align-items:center;gap:30px;font-weight:600;font-size:13px;letter-spacing:.01em;cursor:pointer;transition:transform .2s,background .2s}
+.primary:hover{background:#174a38;transform:translateY(-2px)}
+.arrow-circle{width:42px;height:42px;border-radius:3px;background:rgba(255,255,255,.13);display:grid;place-items:center;font-size:20px;font-weight:400}
+.art{position:relative;min-height:560px;display:grid;place-items:center;isolation:isolate}
+.art:before{content:"";position:absolute;width:min(85%,520px);aspect-ratio:1;background:#edf1e9;border-radius:50%;z-index:-1;filter:blur(1px)}
+.art-map{width:min(100%,650px);height:auto;overflow:visible;filter:drop-shadow(0 18px 24px rgba(42,66,49,.07))}
+.intro-foot{min-height:64px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;color:#8a938c;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.foot-stats{display:flex;gap:28px}.foot-stats b{color:#536157;font-weight:600}
+/* FLOW */
+.flow-header{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.back-link{border:0;background:none;padding:8px 0;color:var(--muted);font-size:12px;cursor:pointer}
+.back-link:hover{color:var(--green)}
+.back-link.back-icon{width:34px;height:34px;padding:0;display:grid;place-items:center;font-size:21px;line-height:1}
+.flow-meta{display:flex;gap:10px;align-items:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.step-dots{display:flex;gap:5px}.step-dots i{width:20px;height:3px;background:#dfe5dc;display:block}.step-dots i.on{background:var(--green)}
+.flow-intro{padding:38px 0 23px;display:flex;justify-content:space-between;align-items:end;gap:20px}
+.flow-intro .kicker{font-size:9px}
+.flow-intro h2{font-size:clamp(31px,4vw,46px);line-height:1.08;font-weight:500;letter-spacing:-.05em;margin:12px 0 7px}
+.flow-intro p{margin:0;color:var(--muted);font-size:13px}
+.counts{display:flex;gap:20px;align-items:center;padding-bottom:5px;flex-wrap:wrap}
+.count{display:grid;gap:2px}.count b{font-size:18px;font-weight:550;letter-spacing:-.04em}.count span{font-size:10px;color:var(--muted)}
+.flow-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:stretch;padding-bottom:36px}
+.map-area{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:17px;box-shadow:0 8px 30px rgba(32,52,41,.025)}
+.map-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:0 0 15px}
+.filters{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.filter{border:1px solid transparent;background:transparent;color:#7c867e;padding:7px 12px;border-radius:3px;font-size:11px;cursor:pointer}
+.filter[aria-pressed="true"]{background:#edf2eb;border-color:#e2e9df;color:var(--green);font-weight:600}
+.only-available{display:flex;align-items:center;gap:8px;color:#707a72;font-size:11px;cursor:pointer;white-space:nowrap}
+.only-available input{accent-color:var(--green);width:14px;height:14px}
+.map-frame{position:relative;background:#f8faf6;border:1px solid #edf0ea;overflow:hidden}
+.map-frame svg{display:block;width:100%;height:auto;min-height:300px}
+.map-legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:13px 2px 0;color:#7f8981;font-size:10px}
+.legend-item{display:flex;gap:7px;align-items:center}.swatch{width:10px;height:10px;border-radius:2px;border:1px solid currentColor}
+.map-disclaimer{margin-left:auto;color:#a0a8a1;font-size:9px}
+/* SVG map */
+.site-outline{fill:#f9fbf7;stroke:#dbe3d9;stroke-width:2;stroke-dasharray:7 7}
+.road{fill:var(--road)}.road-mark{stroke:#fff;stroke-width:2;stroke-dasharray:14 11;opacity:.9}
+.landscape{fill:var(--land)}.amenity{fill:#fff;stroke:#cfd9ce;stroke-width:1.5}.pool{fill:var(--water);stroke:#afcbc7;stroke-width:1.2}
+.map-label{fill:#7d897f;font:600 12px var(--sans);text-anchor:middle}.map-small{fill:#9aa49b;font:500 10px var(--sans);text-anchor:middle;letter-spacing:.08em}
+.tree{fill:#bed1ba;opacity:.75}.plot{cursor:pointer;outline:none;transition:opacity .18s}.plot rect{stroke-width:2;transition:stroke-width .15s,fill .15s;rx:4}
+.plot text{font:600 12px var(--sans);text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.plot.available rect{fill:#e1eee1;stroke:#82aa89}.plot.available text{fill:#477653}
+.plot.reserved rect{fill:#f5ecd9;stroke:#c39a58;stroke-dasharray:4 3}.plot.reserved text{fill:#9c7438}
+.plot.booked rect{fill:#e7ebe7;stroke:#adb6ae;stroke-dasharray:5 4}.plot.booked text{fill:#858f87}
+.plot:hover rect,.plot:focus-visible rect,.plot.selected rect{stroke:#1f5945;stroke-width:4;fill:#d3e5d5}
+.plot.dim{opacity:.19}.plot.selected{opacity:1}
+.north{position:absolute;top:13px;right:14px;width:30px;height:30px;border:1px solid #dce3d9;background:#fff;border-radius:50%;display:grid;place-items:center;font:600 9px var(--sans);color:#7b897d}
+.side-panel{border:1px solid var(--line);border-radius:5px;background:#fff;padding:21px;display:flex;flex-direction:column;min-height:100%}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#99a198;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.panel-empty{margin:auto 0;display:grid;gap:13px;padding:28px 0}
+.empty-symbol{width:38px;height:38px;border:1px solid #dfe7dc;border-radius:50%;display:grid;place-items:center;color:var(--green);font:22px var(--serif)}
+.panel-empty h3{font-size:23px;line-height:1.13;letter-spacing:-.04em;font-weight:500;margin:0;max-width:190px}
+.panel-empty p{font-size:12px;color:var(--muted);margin:0;max-width:210px}
+.panel-detail{padding:29px 0 16px;display:grid;gap:12px}
+.villa-title{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.villa-title h3{font-weight:500;font-size:29px;letter-spacing:-.055em;margin:0}
+.status{font-size:9px;letter-spacing:.06em;padding:5px 8px;border-radius:2px}
+.status.available{background:#e4f0e4;color:#477653}.status.reserved{background:#f5ecd9;color:#98713a}.status.booked{background:#e9ece9;color:#737d75}
+.villa-type{font-size:12px;color:#78837a}
+.details{border-top:1px solid #edf0eb;margin-top:8px;padding-top:10px;display:grid;gap:0}
+.detail-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #f0f2ee;font-size:11px}
+.detail-row span{color:#849087}.detail-row b{font-size:11px;font-weight:550;text-align:right;color:#39483e}
+.price-line{padding:17px 0 4px;display:grid;gap:4px}.price-line span{font-size:10px;color:#879188}.price-line b{font-size:22px;letter-spacing:-.04em;font-weight:550}.price-line small{font-size:9px;color:#9aa39c}
+.panel-action{width:100%;height:48px;background:var(--green);border:0;border-radius:3px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding:0 15px}
+.panel-action:hover{background:#174a38}.panel-action[disabled]{background:#d9dfd9;color:#7f8980}
+.flow-footer{border-top:1px solid var(--line);padding:13px 0 20px;display:flex;justify-content:space-between;gap:15px;color:#9aa39b;font-size:9px;letter-spacing:.04em}
+/* Villa screen */
+.villa-screen{padding-bottom:42px}
+.villa-heading{padding:30px 0 22px;display:flex;align-items:end;justify-content:space-between;gap:20px}
+.breadcrumb{font-size:10px;color:#8b958d;margin-bottom:9px}.breadcrumb button{border:0;background:none;padding:0;color:var(--green);cursor:pointer;font-size:inherit}
+.villa-heading h2{font-size:34px;font-weight:500;letter-spacing:-.05em;line-height:1.1;margin:0}.villa-heading p{margin:7px 0 0;color:var(--muted);font-size:12px}
+.villa-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px}
+.plan-card,.room-card{background:#fff;border:1px solid var(--line);border-radius:5px;padding:18px}
+.plan-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;padding-bottom:16px}.floor-tabs{display:flex;gap:5px}.floor-tab{padding:8px 13px;border:1px solid #e1e7df;background:#fff;border-radius:3px;font-size:11px;color:#7f8a81;cursor:pointer}.floor-tab[aria-pressed="true"]{background:#edf2eb;color:var(--green);border-color:#d8e4d6}
+.plan-art{background:#f8faf6;border:1px solid #edf0ea;padding:12px}.floor-svg{width:100%;height:auto;display:block}.room-shape{fill:#fff;stroke:#829085;stroke-width:2;cursor:pointer}.room-shape.service{fill:#f0f3ed}.room-shape.outside{fill:#f7f8f4;stroke-dasharray:5 4}.room-group:hover .room-shape,.room-group.active .room-shape{fill:#e3eee2;stroke:#1f5945;stroke-width:3}.room-name{font:600 12px var(--sans);fill:#435247;text-anchor:middle;pointer-events:none}.room-size{font:10px var(--sans);fill:#8b978d;text-anchor:middle;pointer-events:none}
+.plan-caption{display:flex;justify-content:space-between;gap:12px;padding-top:12px;color:#929c93;font-size:9px}
+.room-card{display:flex;flex-direction:column}.room-card h3{font-size:21px;letter-spacing:-.04em;font-weight:500;margin:18px 0 8px}.room-card p{color:var(--muted);font-size:11px}.room-data{margin-top:20px;border-top:1px solid #edf0eb}.room-data div{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0f2ee;font-size:10px}.room-data span{color:#879188}.room-data b{font-weight:550}.room-card .panel-action{margin-top:auto}
+/* Summary step */
+.summary-heading{padding:30px 0 22px}.summary-heading .kicker{font-size:9px}.summary-heading h2{font-size:clamp(32px,4vw,46px);font-weight:500;letter-spacing:-.05em;margin:12px 0 7px}.summary-heading p{margin:0;color:var(--muted);font-size:12px}
+.summary-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;padding-bottom:38px}.summary-card,.payment-card{background:#fff;border:1px solid var(--line);border-radius:5px;padding:23px}.summary-card{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}.summary-plan{background:#f8faf6;border:1px solid #edf0ea;padding:14px;min-height:230px;display:grid;place-items:center}.summary-plan svg{width:100%;max-width:380px;height:auto}.summary-facts{display:grid;gap:18px}.summary-facts h3{font-size:27px;font-weight:500;letter-spacing:-.05em;margin:0}.summary-facts p{font-size:11px;color:var(--muted);margin:4px 0 0}.fact-list{border-top:1px solid #edf0eb}.fact-list .detail-row{padding:11px 0}.payment-card{display:flex;flex-direction:column}.payment-card h3{font-size:20px;font-weight:500;letter-spacing:-.04em;margin:16px 0 5px}.payment-card>p{font-size:11px;color:var(--muted);margin:0 0 15px}.price-breakdown{border-top:1px solid #edf0eb}.price-breakdown .detail-row{padding:11px 0}.price-breakdown .detail-row b{font-size:11px}.pay-total{border-top:1px solid #dfe6dd;padding:15px 0 5px;margin-top:2px;display:flex;justify-content:space-between;gap:10px;font-size:11px}.pay-total b{font-size:15px;font-weight:600}.price-confirm{font-size:9px;color:#929d93;line-height:1.55;margin:12px 0 18px}.sales-link{height:48px;background:var(--green);color:#fff;text-decoration:none;border-radius:3px;padding:0 15px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600}.sales-link:hover{background:#174a38}
+/* Responsive */
+@media(max-width:900px){.intro-grid{grid-template-columns:1fr 0.9fr;gap:25px}.art{min-height:420px}.flow-layout,.villa-grid{grid-template-columns:minmax(0,1fr) 270px}.map-area{padding:12px}.side-panel{padding:17px}}
+@media(max-width:700px){.wrap{width:calc(100% - 36px)}.topline{height:70px}.top-meta{font-size:9px}.intro-grid{display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:54px 0 25px;min-height:auto}.intro-copy{padding:0}.intro-grid h1{font-size:clamp(50px,14vw,76px);margin:21px 0}.primary{margin-top:27px;height:54px}.art{min-height:280px;margin-top:10px}.art-map{max-width:440px}.intro-foot{min-height:65px;align-items:flex-start;padding-top:15px;gap:10px;flex-direction:column}.foot-stats{gap:15px}.flow-header{height:65px}.flow-meta{font-size:8px}.flow-intro{padding:27px 0 18px;display:block}.counts{padding-top:16px;gap:18px}.flow-layout,.villa-grid{grid-template-columns:1fr}.map-area{padding:10px}.map-frame svg{min-height:220px}.map-legend{gap:10px;font-size:9px}.map-disclaimer{width:100%;margin-left:0}.side-panel{min-height:350px}.panel-empty{margin:18px 0;padding:10px 0}.panel-detail{padding:20px 0 12px}.panel-action{margin-top:12px}.flow-footer{font-size:8px;flex-wrap:wrap}.villa-heading{padding:24px 0 17px;display:block}.villa-heading h2{font-size:30px}.plan-card,.room-card{padding:12px}.plan-toolbar{align-items:flex-start;flex-direction:column}.room-card{min-height:280px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Minimal discovery flow — keeps the entry screen unchanged */
+#explore,#villa,#summary{min-height:100svh;background:#f8f9f6;color:#26342b}
+#explore .wrap,#villa .wrap,#summary .wrap{width:min(1440px,calc(100% - 96px));margin:0 auto}
+.sub-brand{display:inline-flex;align-items:baseline;gap:7px;color:#28372e;text-decoration:none;font:700 11px/1 var(--sans);letter-spacing:.19em;white-space:nowrap}
+.sub-brand span{color:#7c887f;font-size:9px;font-weight:500;letter-spacing:.22em}
+.flow-header{height:76px;border-bottom:1px solid #e7ebe5;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px}
+.flow-header .back-link{font-size:12px;color:#657168;padding:8px 0}
+.flow-header .back-link:hover,.title-with-back .back-link:hover,.villa-heading-main .back-link:hover{color:var(--green)}
+.back-link.back-icon{width:34px;height:34px;padding:0;display:grid;place-items:center;font-size:21px;line-height:1}
+.title-with-back{display:flex;align-items:center;gap:20px}
+.title-with-back .back-link,.villa-heading-main .back-link{flex:0 0 auto;color:#78847b;font-size:12px}
+.title-with-back .back-link:before,.villa-heading-main .back-link:before{content:"";display:inline-block;width:0}
+.villa-heading-main{display:flex;align-items:center;gap:20px;min-width:0}
+.villa-heading-main>div{min-width:0}
+.flow-meta{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.12em;color:#98a198;font-weight:600}
+.flow-meta span{color:#c0c8c0}
+.flow-intro{padding:42px 0 24px;display:flex;align-items:center;justify-content:space-between}
+.flow-intro h2,.summary-heading h2{margin:0;font-size:clamp(27px,3.2vw,38px);line-height:1.08;font-weight:450;letter-spacing:-.055em;color:#26342b}
+.flow-layout{grid-template-columns:minmax(0,1fr) 290px;gap:48px;align-items:start;padding-bottom:64px}
+.map-area{min-width:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}
+.map-tools{padding:0 0 16px;min-height:42px}
+.filters{gap:17px}
+.filter{padding:8px 0 7px;border:0;border-bottom:1px solid transparent;border-radius:0;background:transparent;color:#8a958c;font-size:12px;transition:color .18s,border-color .18s}
+.filter[aria-pressed="true"]{background:transparent;border-color:#315e48;color:#315e48;font-weight:600}
+.filter:hover{color:#315e48}
+.only-available{font-size:11px;color:#657168;gap:7px}
+.only-available input{width:13px;height:13px}
+.map-frame{background:#f0f3ed;border:0;border-radius:2px;overflow:hidden}
+.map-frame svg{min-height:0}
+.north{top:14px;right:14px;width:auto;height:auto;padding:0;border:0;border-radius:0;background:transparent;color:#78867b;font-size:10px}
+.map-legend{padding:13px 0 0;gap:17px;color:#78847a;font-size:10px}
+.map-disclaimer{font-size:9px;color:#9aa39b}
+.side-panel{position:sticky;top:24px;min-height:0;padding:10px 0 10px 26px;background:transparent;border:0;border-left:1px solid #e4e9e2;border-radius:0}
+.panel-top{font-size:9px;letter-spacing:.12em;color:#929d94}
+.panel-empty{margin:64px 0 0;padding:0;gap:0}
+.panel-empty h3{max-width:none;font-size:17px;font-weight:450;letter-spacing:-.035em;color:#526057}
+.panel-detail{padding:23px 0 14px;gap:10px}
+.villa-title h3{font-size:27px;letter-spacing:-.055em}
+.status{padding:4px 7px;font-size:9px;letter-spacing:.02em;border-radius:2px}
+.villa-type{font-size:11px;color:#758178}
+.details{margin-top:8px;padding-top:7px;border-top:1px solid #e8ece6}
+.detail-row{padding:10px 0;border-bottom:1px solid #e9ede7;font-size:11px}
+.detail-row span{color:#849087}
+.detail-row b{font-weight:550;color:#35443a}
+.price-line{padding:17px 0 0;gap:3px}
+.price-line span{font-size:10px;color:#879188}
+.price-line b{font-size:24px;font-weight:500;color:#28372e}
+.price-line small{font-size:9px;color:#9aa39c}
+.panel-action{width:auto;height:auto;min-height:0;margin:22px 0 0;padding:0 0 8px;display:inline-flex;gap:25px;justify-content:flex-start;background:transparent;border:0;border-bottom:1px solid #bfcbbf;border-radius:0;color:#315e48;font-size:12px;font-weight:600}
+.panel-action:hover{background:transparent;color:#174a38;border-color:#315e48}
+.panel-action[disabled]{background:transparent;color:#9ca69d;border-color:#d8ded7}
+.flow-footer{display:none}
+
+/* Floor plan */
+.villa-screen{padding-bottom:58px}
+.villa-heading{padding:39px 0 25px;align-items:end}
+.villa-context{margin-bottom:8px;color:#8b968d;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.villa-heading h2{font-size:34px;font-weight:450;letter-spacing:-.055em;color:#26342b}
+.villa-heading p{display:none}
+.villa-grid{grid-template-columns:minmax(0,1fr) 270px;gap:48px;align-items:start}
+.plan-card{padding:0;background:transparent;border:0;border-radius:0}
+.plan-toolbar{padding:0 0 15px;align-items:center}
+.floor-tabs{gap:20px}
+.floor-tab{padding:8px 0 9px;border:0;border-bottom:1px solid transparent;border-radius:0;background:transparent;color:#879288;font-size:12px}
+.floor-tab[aria-pressed="true"]{background:transparent;color:#315e48;border-color:#315e48}
+.floor-tab:hover{color:#315e48}
+.plan-art{padding:8px;background:#f0f3ed;border:0;border-radius:2px}
+.room-shape{stroke:#a1aea2;stroke-width:1.5}
+.room-shape.service{fill:#f4f6f1}
+.room-shape.outside{fill:#edf1ea;stroke:#b5c0b5;stroke-dasharray:4 4}
+.room-group:hover .room-shape,.room-group.active .room-shape{fill:#dfeadf;stroke:#315e48;stroke-width:2.5}
+.room-name{font-weight:550;fill:#445348}
+.room-size{fill:#89968b}
+.plan-caption{padding-top:10px;color:#9aa39b;font-size:9px}
+.room-card{position:sticky;top:24px;min-height:0;padding:10px 0 10px 26px;display:flex;flex-direction:column;background:transparent;border:0;border-left:1px solid #e4e9e2;border-radius:0}
+.room-card h3{margin:26px 0 0;font-size:24px;font-weight:450;letter-spacing:-.05em;color:#29382f}
+.room-card p{display:none}
+.room-data{margin-top:22px;border-top:1px solid #e8ece6}
+.room-data div{padding:11px 0;border-bottom:1px solid #e9ede7;font-size:11px}
+.room-data span{color:#879188}
+.room-data b{font-weight:550;color:#35443a}
+.room-card .panel-action{margin-top:27px}
+
+/* Selection summary */
+.summary-heading{padding:42px 0 30px}
+.summary-grid{grid-template-columns:minmax(0,1fr) 340px;gap:80px;padding-bottom:66px;align-items:start}
+.summary-card{display:block;padding:8px 0 0;background:transparent;border:0;border-radius:0}
+.summary-lead{padding:0 0 27px}
+.summary-eyebrow{font-size:9px;letter-spacing:.13em;color:#929d94}
+.summary-lead h3{margin:13px 0 5px;font-size:clamp(34px,4vw,48px);line-height:1;font-weight:450;letter-spacing:-.06em;color:#28372e}
+.summary-lead p{margin:0;color:#78847b;font-size:12px}
+.fact-list{border-top:1px solid #e5eae3;max-width:620px}
+.fact-list .detail-row{padding:14px 0;font-size:12px}
+.fact-list .detail-row b{font-size:12px}
+.payment-card{display:flex;flex-direction:column;padding:8px 0 0;background:transparent;border:0;border-radius:0;border-left:1px solid #e4e9e2;padding-left:28px}
+.price-intro{display:grid;gap:0;padding:0 0 22px}
+.price-intro strong{font-size:32px;font-weight:500;letter-spacing:-.05em;color:#28372e}
+.price-breakdown{border-top:1px solid #e5eae3}
+.price-breakdown .detail-row{padding:12px 0;font-size:11px}
+.price-breakdown .detail-row b{font-size:11px}
+.pay-total{padding:15px 0 5px;border-top:1px solid #dfe6dd;font-size:11px}
+.pay-total b{font-size:13px;font-weight:600}
+.price-confirm{margin:13px 0 17px;font-size:9px;line-height:1.55;color:#929d93}
+.sales-link{height:auto;min-height:0;align-self:flex-start;gap:24px;padding:0 0 8px;background:transparent;color:#315e48;border-radius:0;border:0;border-bottom:1px solid #bfcbbf;font-size:12px;font-weight:600}
+.sales-link:hover{background:transparent;color:#174a38;border-color:#315e48}
+
+@media(max-width:900px){
+  #explore .wrap,#villa .wrap,#summary .wrap{width:calc(100% - 56px)}
+  .flow-layout{grid-template-columns:minmax(0,1fr) 255px;gap:28px}
+  .villa-grid{grid-template-columns:minmax(0,1fr) 240px;gap:28px}
+  .summary-grid{grid-template-columns:minmax(0,1fr) 300px;gap:38px}
+}
+@media(max-width:700px){
+  #explore .wrap,#villa .wrap,#summary .wrap{width:calc(100% - 36px)}
+  .flow-header{height:66px;grid-template-columns:1fr auto;gap:10px}
+  .sub-brand{font-size:10px;gap:5px}
+  .sub-brand span{font-size:8px}
+  .flow-meta{font-size:9px;gap:5px}
+  .title-with-back{gap:12px;align-items:baseline}
+  .title-with-back .back-link,.villa-heading-main .back-link{font-size:11px}
+  .villa-heading-main{gap:12px;align-items:center}
+  .flow-intro{padding:30px 0 19px}
+  .flow-intro h2,.summary-heading h2{font-size:29px}
+  .flow-layout,.villa-grid,.summary-grid{grid-template-columns:1fr;gap:25px}
+  .map-tools{padding-bottom:12px}
+  .filters{gap:15px}
+  .map-frame svg{min-height:0}
+  .map-legend{gap:12px;font-size:9px}
+  .map-disclaimer{width:100%;margin-left:0}
+  .side-panel,.room-card,.payment-card{position:static;border-left:0;border-top:1px solid #e4e9e2;padding:20px 0 0}
+  .panel-empty{margin:12px 0 0}
+  .panel-detail{padding:18px 0 10px}
+  .panel-action{margin-top:18px}
+  .villa-heading{padding:28px 0 20px}
+  .villa-heading h2{font-size:30px}
+  .plan-toolbar{align-items:center;flex-direction:row}
+  .plan-art{padding:5px}
+  .room-card h3{margin:18px 0 0}
+  .room-data{margin-top:16px}
+  .summary-heading{padding:30px 0 22px}
+  .summary-grid{padding-bottom:42px}
+  .summary-card{padding-top:0}
+  .summary-lead{padding-bottom:20px}
+  .summary-lead h3{font-size:38px}
+  .payment-card{padding-top:20px}
+  .price-intro{padding-bottom:16px}
+}
+
+
+
+/* Post-summary booking flow */
+.booking-screen{min-height:100svh;background:#f8f9f6;color:#26342b}
+.booking-wrap{width:min(1120px,calc(100% - 96px));margin:0 auto}
+.booking-heading{padding:42px 0 34px}
+.booking-heading h2{margin:0;font-size:clamp(28px,3vw,38px);line-height:1.08;font-weight:450;letter-spacing:-.055em}
+.booking-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:84px;align-items:start;padding:4px 0 70px}
+.customer-form{max-width:610px;display:grid;gap:22px}
+.field{display:grid;gap:8px;font-size:12px;color:#68756b}
+.field input{width:100%;height:46px;padding:0 1px;border:0;border-bottom:1px solid #dce3db;border-radius:0;background:transparent;color:#26342b;font:400 14px var(--sans);outline:none}
+.field input::placeholder{color:#a5aea5}
+.field input:focus{border-color:#315e48;box-shadow:0 1px 0 #315e48}
+.field input[aria-invalid="true"]{border-color:#b45f54}
+.phone-field{display:flex;align-items:center;border-bottom:1px solid #dce3db;gap:14px}
+.phone-field:focus-within{border-color:#315e48;box-shadow:0 1px 0 #315e48}
+.phone-field>span{font-size:13px;color:#7d897f}
+.phone-field input{border:0;box-shadow:none!important}
+.terms-check{display:flex;align-items:flex-start;gap:10px;color:#68756b;font-size:11px;line-height:1.6}
+.terms-check input{margin:2px 0 0;accent-color:#315e48}
+.inline-text-button,.plain-edit{padding:0;border:0;border-bottom:1px solid #c2cec2;background:transparent;color:#315e48;font:inherit;cursor:pointer}
+.form-error{margin:-8px 0 0;color:#ad554c;font-size:11px;line-height:1.5}
+.booking-primary{min-height:48px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 15px;border:0;border-radius:2px;background:#315e48;color:#fff;font:600 12px var(--sans);text-align:left;cursor:pointer;transition:background .18s,transform .18s}
+.booking-primary:hover{background:#234b38;transform:translateY(-1px)}
+.booking-primary:focus-visible{outline:2px solid #315e48;outline-offset:3px}
+.form-note,.prototype-note{margin:-10px 0 0;color:#929d93;font-size:10px;line-height:1.55}
+.booking-aside,.review-payment{padding:4px 0 0 25px;border-left:1px solid #e4e9e2}
+.aside-label{font-size:9px;letter-spacing:.14em;color:#929d94;font-weight:600}
+.booking-aside h3{margin:15px 0 3px;font-size:24px;font-weight:450;letter-spacing:-.045em}
+.booking-aside>p{margin:0 0 23px;color:#78847b;font-size:11px}
+.aside-row{min-height:42px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #e6ebe4;color:#879188;font-size:11px}
+.aside-row b{color:#35443a;font-size:11px;font-weight:550;text-align:right}
+.review-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:84px;padding:4px 0 70px;align-items:start}
+.review-main{max-width:610px}
+.review-section{padding:0 0 22px;margin:0 0 24px;border-bottom:1px solid #e4e9e2}
+.review-section .aside-label{margin-bottom:12px}
+.review-row{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:32px;color:#4b594f;font-size:13px}
+.review-edit{margin-top:8px;font-size:11px}
+.plain-edit{font-size:11px;white-space:nowrap}
+.review-payment .aside-label{margin-bottom:10px}
+.review-payment .aside-row{min-height:46px}
+.review-payment .emphasis{margin-top:5px;border-top:1px solid #d9e1d8;border-bottom:1px solid #d9e1d8;color:#526057}
+.review-payment .emphasis b{font-size:13px;color:#29382f}
+.payment-note{margin:13px 0 18px;color:#929d93;font-size:10px;line-height:1.55}
+.review-payment .prototype-note{margin:11px 0 0}
+.state-screen{width:min(520px,100%);margin:0 auto;padding:clamp(70px,13vh,130px) 0 70px;text-align:center}
+.state-screen h2{margin:13px 0 10px;font-size:clamp(25px,3vw,34px);font-weight:450;letter-spacing:-.05em}
+.state-screen>p{max-width:410px;margin:0 auto;color:#78847b;font-size:12px;line-height:1.7}
+.state-reference{padding-top:10px;font-weight:600;color:#39483e!important}
+.processing-mark{width:42px;height:42px;margin:0 auto 27px;border:1px solid #d5dfd5;border-radius:50%;display:grid;place-items:center}
+.processing-mark span{width:22px;height:22px;border:2px solid #d6e1d6;border-top-color:#315e48;border-radius:50%;animation:booking-spin .9s linear infinite}
+@keyframes booking-spin{to{transform:rotate(360deg)}}
+.demo-outcomes{margin:34px auto 0;max-width:350px;text-align:left;border-top:1px solid #e3e9e2;border-bottom:1px solid #e3e9e2}
+.demo-outcomes summary{padding:13px 0;color:#526057;font-size:11px;cursor:pointer;list-style:none}
+.demo-outcomes summary::-webkit-details-marker{display:none}
+.demo-outcomes summary:after{content:"+";float:right;color:#315e48}
+.demo-outcomes[open] summary:after{content:"−"}
+.outcome-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 0 14px}
+.outcome-actions button{padding:10px 8px;border:1px solid #dfe6dd;background:transparent;color:#536157;font:500 10px var(--sans);cursor:pointer;text-align:left}
+.outcome-actions button:hover{border-color:#315e48;color:#315e48}
+.text-back{display:inline-block;margin:25px auto 0;padding:0;border:0;background:transparent;color:#718076;font:500 11px var(--sans);cursor:pointer}
+.text-back:hover{color:#315e48}
+.text-back.back-icon{width:36px;height:36px;margin:24px auto 0;padding:0;display:grid;place-items:center;border:1px solid transparent;border-radius:50%;font-size:22px;line-height:1;color:#718076;transition:color .18s,border-color .18s,background .18s}
+.text-back.back-icon:hover{color:#315e48;border-color:#dce5da;background:#f1f4ef}
+.state-symbol{width:44px;height:44px;margin:0 auto 25px;border:1px solid #dfe6dd;border-radius:50%;display:grid;place-items:center;color:#315e48;font:400 25px var(--sans)}
+.state-symbol.pending{color:#9b7940;border-color:#e8dfcd}
+.state-symbol.failed{color:#b65c51;border-color:#ecd9d6;font-size:29px}
+.state-symbol.success{color:#315e48;border-color:#d6e2d6}
+.state-action{max-width:330px;margin:28px auto 0}
+.state-feedback{margin-top:14px!important;color:#8b6e40!important;font-size:11px!important}
+.similar-villas{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:24px 0 2px}
+.similar-villas button{min-width:66px;padding:10px 13px;border:1px solid #dce4da;background:transparent;color:#315e48;font:600 11px var(--sans);cursor:pointer}
+.similar-villas button:hover{border-color:#315e48;background:#eef3ed}
+.confirmation-data{max-width:390px;margin:26px auto 0;text-align:left;border-top:1px solid #e4e9e2}
+.confirmation-data .aside-row{min-height:44px}
+.terms-inline{margin:15px 0 17px;border-top:1px solid #e5eae3;border-bottom:1px solid #e5eae3}
+.terms-inline summary{padding:13px 0;color:#68756b;font-size:10px;cursor:pointer;list-style:none}
+.terms-inline summary::-webkit-details-marker{display:none}
+.terms-inline summary span{float:right;color:#315e48}
+.terms-inline[open] summary span{transform:rotate(45deg)}
+.terms-inline p{margin:0 0 13px;color:#929d93;font-size:10px;line-height:1.55}
+.booking-link{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border:0;border-bottom:1px solid #bfcbbf;background:transparent;color:#315e48;font:600 12px var(--sans);text-align:left;cursor:pointer}
+.booking-link:hover{border-color:#315e48;color:#174a38}
+.booking-secondary{display:inline-block;margin-top:13px;color:#8a968c;text-decoration:none;font-size:10px}
+.booking-secondary:hover{color:#315e48}
+@media(max-width:900px){.booking-grid{gap:42px}.review-layout{gap:42px;grid-template-columns:minmax(0,1fr) 300px}}
+@media(max-width:700px){
+  .booking-wrap{width:calc(100% - 36px)}
+  .booking-heading .title-with-back{align-items:center}
+  .booking-heading{padding:30px 0 23px}
+  .booking-heading h2{font-size:29px}
+  .booking-grid,.review-layout{grid-template-columns:1fr;gap:28px;padding-bottom:44px}
+  .booking-aside,.review-payment{border-left:0;border-top:1px solid #e4e9e2;padding:20px 0 0}
+  .booking-aside h3{margin-top:12px}
+  .customer-form{gap:20px}
+  .review-layout{gap:24px}
+  .review-section{margin-bottom:20px;padding-bottom:18px}
+  .state-screen{padding:70px 0 48px}
+  .outcome-actions{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){.processing-mark span{animation:none}.booking-primary{transition:none}}
+
+
+/* Reduced drawing scale: keep the layout controls full-size, make the plans quieter */
+@media(min-width:701px){
+  #mapFrame{width:86%;margin-inline:auto}
+  .plan-art{width:86%;margin-inline:auto}
+}
+@media(max-width:700px){
+  #mapFrame{width:94%;margin-inline:auto}
+  .plan-art{width:94%;margin-inline:auto}
+}
+
+
+/* V3.3 landing CTA — refined pill button */
+#intro .primary{
+  min-height:58px;
+  height:58px;
+  margin-top:38px;
+  padding:0 9px 0 27px;
+  gap:34px;
+  border:1px solid #214f3d;
+  border-radius:999px;
+  background:#214f3d;
+  color:#fff;
+  box-shadow:0 8px 22px rgba(33,79,61,.13);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.015em;
+  transition:background .22s ease,border-color .22s ease,transform .22s ease,box-shadow .22s ease;
+}
+#intro .primary:hover{
+  background:#173f30;
+  border-color:#173f30;
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(33,79,61,.19);
+}
+#intro .primary .arrow-circle{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#e6eee7;
+  color:#214f3d;
+  font-size:18px;
+  transition:transform .22s ease,background .22s ease;
+}
+#intro .primary:hover .arrow-circle{
+  background:#fff;
+  transform:translate(2px,-1px);
+}
+#intro .primary:focus-visible{outline:2px solid #214f3d;outline-offset:5px}
+@media(max-width:700px){
+  #intro .primary{min-height:54px;height:54px;margin-top:27px;padding-left:23px;gap:26px}
+  #intro .primary .arrow-circle{width:38px;height:38px}
+}
+@media(prefers-reduced-motion:reduce){#intro .primary,#intro .primary .arrow-circle{transition:none}}
+
+
+/* Journey breadcrumbs replace individual back-arrow controls */
+.journey-breadcrumbs{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:15px 0 2px;color:#9aa49b;font-size:11px;line-height:1.4}
+.journey-breadcrumbs button{appearance:none;border:0;background:transparent;padding:2px 0;color:#78867c;font:500 11px var(--sans);cursor:pointer;transition:color .18s}
+.journey-breadcrumbs button:hover{color:#245b43}
+.journey-breadcrumbs [aria-current="step"]{color:#29382f;font-weight:600}
+.journey-breadcrumbs .crumb-separator{color:#c2cbc1;font-size:12px;user-select:none}
+.title-with-back>.back-link,.villa-heading-main>.back-link,.state-screen>.text-back{display:none!important}
+@media(max-width:700px){.journey-breadcrumbs{gap:7px;padding:12px 0 0;font-size:10px}.journey-breadcrumbs button{font-size:10px}}
+
+</style>
+</head>
+<body>
+<!-- SPECTRA GARDENS WIREFRAME V3.3: v3 landing page integrated into v3.2 flow -->
+<!-- ENTRY: v3 landing page -->
+<section id="intro">
+  <div class="wrap">
+    <header class="topline">
+      <a class="brand" href="#" aria-label="Spectra Gardens home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-copy"><strong>SPECTRA</strong><span>GARDENS</span></span>
+      </a>
+      <div class="top-meta">Kottakkal · Kerala</div>
+    </header>
+    <main class="intro-grid">
+      <div class="intro-copy">
+
+        <h1>Find a place<br>to feel <em>at home.</em></h1>
+
+        <button class="primary" id="startBtn"><span>Get started</span><span class="arrow-circle" aria-hidden="true">↗</span></button>
+
+      </div>
+      <div class="art" aria-label="Abstract illustration of the Spectra Gardens master layout">
+        <svg class="art-map" viewBox="0 0 740 660" role="img" aria-label="Abstract residential master plan with villa plots and central green spaces">
+          <defs><pattern id="grain" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".55" fill="#dbe5d8"/></pattern></defs>
+          <rect x="72" y="35" width="596" height="590" rx="10" fill="#f8faf6" stroke="#dfe7dc" stroke-width="1.5"/>
+          <rect x="94" y="188" width="552" height="27" rx="2" fill="#e8ece5"/><path d="M100 201h540" stroke="#fff" stroke-width="1.6" stroke-dasharray="13 12"/>
+          <rect x="94" y="416" width="552" height="27" rx="2" fill="#e8ece5"/><path d="M100 429h540" stroke="#fff" stroke-width="1.6" stroke-dasharray="13 12"/>
+          <rect x="352" y="440" width="36" height="170" fill="#e8ece5"/><path d="M370 448v155" stroke="#fff" stroke-width="1.6" stroke-dasharray="13 12"/>
+          <rect x="326" y="225" width="88" height="170" rx="5" fill="#e9f0e6"/>
+          <rect x="337" y="238" width="66" height="57" rx="3" fill="#fff" stroke="#d3dfd1"/><rect x="337" y="307" width="66" height="42" rx="18" fill="#dcebe8" stroke="#c5dcd6"/><rect x="337" y="360" width="31" height="24" rx="2" fill="#fff" stroke="#d3dfd1"/><rect x="372" y="360" width="31" height="24" rx="2" fill="#fff" stroke="#d3dfd1"/>
+          <g fill="#dce9d9" stroke="#a8c4aa" stroke-width="1.2">
+            <rect x="104" y="64" width="43" height="112" rx="3"/><rect x="154" y="64" width="43" height="112" rx="3"/><rect x="204" y="64" width="43" height="112" rx="3"/><rect x="254" y="64" width="43" height="112" rx="3"/><rect x="304" y="64" width="43" height="112" rx="3"/><rect x="394" y="64" width="43" height="112" rx="3"/><rect x="444" y="64" width="43" height="112" rx="3"/><rect x="494" y="64" width="43" height="112" rx="3"/><rect x="544" y="64" width="43" height="112" rx="3"/><rect x="594" y="64" width="43" height="112" rx="3"/>
+            <rect x="104" y="231" width="43" height="76" rx="3"/><rect x="154" y="231" width="43" height="76" rx="3"/><rect x="204" y="231" width="43" height="76" rx="3"/><rect x="254" y="231" width="43" height="76" rx="3"/><rect x="443" y="231" width="43" height="76" rx="3"/><rect x="493" y="231" width="43" height="76" rx="3"/><rect x="543" y="231" width="43" height="76" rx="3"/><rect x="593" y="231" width="43" height="76" rx="3"/>
+            <rect x="104" y="326" width="43" height="76" rx="3"/><rect x="154" y="326" width="43" height="76" rx="3"/><rect x="204" y="326" width="43" height="76" rx="3"/><rect x="254" y="326" width="43" height="76" rx="3"/><rect x="443" y="326" width="43" height="76" rx="3"/><rect x="493" y="326" width="43" height="76" rx="3"/><rect x="543" y="326" width="43" height="76" rx="3"/><rect x="593" y="326" width="43" height="76" rx="3"/>
+            <rect x="104" y="461" width="43" height="133" rx="3"/><rect x="154" y="461" width="43" height="133" rx="3"/><rect x="204" y="461" width="43" height="133" rx="3"/><rect x="254" y="461" width="43" height="133" rx="3"/><rect x="304" y="461" width="43" height="133" rx="3"/><rect x="394" y="461" width="43" height="133" rx="3"/><rect x="444" y="461" width="43" height="133" rx="3"/><rect x="494" y="461" width="43" height="133" rx="3"/><rect x="544" y="461" width="43" height="133" rx="3"/><rect x="594" y="461" width="43" height="133" rx="3"/>
+          </g>
+          <g fill="#b7cfb4" opacity=".9"><circle cx="120" cy="48" r="4"/><circle cx="179" cy="48" r="4"/><circle cx="238" cy="48" r="4"/><circle cx="297" cy="48" r="4"/><circle cx="444" cy="48" r="4"/><circle cx="503" cy="48" r="4"/><circle cx="562" cy="48" r="4"/><circle cx="621" cy="48" r="4"/><circle cx="120" cy="608" r="4"/><circle cx="179" cy="608" r="4"/><circle cx="238" cy="608" r="4"/><circle cx="297" cy="608" r="4"/><circle cx="444" cy="608" r="4"/><circle cx="503" cy="608" r="4"/><circle cx="562" cy="608" r="4"/><circle cx="621" cy="608" r="4"/></g>
+          <path d="M72 626h596" stroke="#dfe7dc" stroke-width="1"/><path d="M345 625h50" stroke="#6e9a76" stroke-width="4" stroke-linecap="round"/>
+          <text x="370" y="277" font-family="Inter, sans-serif" font-size="10" fill="#728675" text-anchor="middle" letter-spacing="1.5">CLUBHOUSE</text><text x="370" y="332" font-family="Inter, sans-serif" font-size="9" fill="#78918c" text-anchor="middle">POOL</text><text x="370" y="376" font-family="Inter, sans-serif" font-size="7" fill="#8a9c8c" text-anchor="middle">GREEN</text>
+          <text x="370" y="203" font-family="Inter, sans-serif" font-size="8" fill="#a0aaa0" text-anchor="middle" letter-spacing="2">9 M INTERNAL ROAD</text><text x="370" y="434" font-family="Inter, sans-serif" font-size="8" fill="#a0aaa0" text-anchor="middle" letter-spacing="2">9 M INTERNAL ROAD</text>
+          <text x="370" y="620" font-family="Inter, sans-serif" font-size="8" fill="#79927c" text-anchor="middle" letter-spacing="1.5">MAIN GATE</text>
+          <rect x="72" y="35" width="596" height="590" rx="10" fill="url(#grain)" opacity=".2"/>
+        </svg>
+
+      </div>
+    </main>
+    <footer class="intro-foot">
+      <span>KOTTAKKAL · KERALA</span>
+      <div class="foot-stats"><span><b>36</b> villas</span><span><b>3 &amp; 4</b> BHK</span></div>
+    </footer>
+  </div>
+</section>
+
+<!-- FIRST FLOW STEP: villa selection -->
+<section id="explore" hidden>
+  <div class="wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">01 <span>/</span> 06</div>
+    </header>
+    <div class="flow-intro">
+      <div class="title-with-back"><button class="back-link back-icon" id="backIntro" aria-label="Back" title="Back">←</button><h2>Select a plot</h2></div>
+    </div>
+    <div class="flow-layout">
+      <div class="map-area">
+        <div class="map-tools">
+          <div class="filters" role="group" aria-label="Filter villas">
+            <button class="filter" data-type="all" aria-pressed="true">All villas</button>
+            <button class="filter" data-type="3BHK" aria-pressed="false">3 BHK</button>
+            <button class="filter" data-type="4BHK" aria-pressed="false">4 BHK</button>
+          </div>
+          <label class="only-available"><input id="availableOnly" type="checkbox"> Available only</label>
+        </div>
+        <div class="map-frame" id="mapFrame"><div class="north">N</div><svg id="masterMap" viewBox="0 0 1000 680" role="group" aria-label="Interactive Spectra Gardens master plan"></svg></div>
+        <div class="map-legend">
+          <span class="legend-item"><i class="swatch" style="background:#e1eee1;color:#82aa89"></i>Available</span>
+          <span class="legend-item"><i class="swatch" style="background:#f5ecd9;color:#c39a58"></i>Reserved</span>
+          <span class="legend-item"><i class="swatch" style="background:#e7ebe7;color:#adb6ae;border-style:dashed"></i>Booked</span>
+        </div>
+      </div>
+      <aside class="side-panel" id="villaPanel" aria-live="polite">
+        <div class="panel-top"><span>Villa details</span><span id="panelIndex">—</span></div>
+        <div class="panel-empty" id="emptyPanel"><h3>Select a plot</h3></div>
+        <div id="detailPanel" hidden>
+          <div class="panel-detail">
+            <div class="villa-title"><h3 id="villaId">Villa A-07</h3><span class="status available" id="villaStatus">Available</span></div>
+            <div class="villa-type" id="villaType">4 BHK · Ground + 1</div>
+            <div class="details">
+              <div class="detail-row"><span>Plot area</span><b id="plotArea">3,480 sq.ft</b></div>
+              <div class="detail-row"><span>Built-up area</span><b id="builtArea">2,900 sq.ft</b></div>
+              <div class="detail-row"><span>Facing</span><b id="facing">South</b></div>
+              <div class="detail-row"><span>Plot position</span><b id="corner">Regular</b></div>
+            </div>
+            <div class="price-line"><b id="price">₹2.08 Cr</b></div>
+          </div>
+          <button class="panel-action" id="viewVilla"><span>View villa</span><span>↗</span></button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- SECOND FLOW STEP: room exploration -->
+<section id="villa" hidden>
+  <div class="wrap villa-screen">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">02 <span>/</span> 06</div>
+    </header>
+    <div class="villa-heading">
+      <div class="villa-heading-main">
+        <button class="back-link back-icon" id="backMap" type="button" aria-label="Back to layout" title="Back to layout">←</button>
+        <div><div class="villa-context" id="crumbVilla">Villa A-07</div><h2 id="floorTitle">Floor plan</h2><p id="floorSubtitle" hidden>4 BHK · Ground + 1 · 3,480 sq.ft plot</p></div>
+      </div>
+      <div class="status available" id="floorStatus">Available</div>
+    </div>
+    <button id="crumbMap" type="button" hidden>Master layout</button>
+    <div class="villa-grid">
+      <div class="plan-card">
+        <div class="plan-toolbar"><div class="floor-tabs"><button class="floor-tab" data-floor="ground" aria-pressed="true">Ground floor</button><button class="floor-tab" data-floor="first" aria-pressed="false">First floor</button></div></div>
+        <div class="plan-art"><svg id="floorPlan" class="floor-svg" viewBox="0 0 800 520" role="group" aria-label="Interactive villa floor plan"></svg></div>
+        <div class="plan-caption"><span>Room areas · Not to scale</span></div>
+      </div>
+      <aside class="room-card" aria-live="polite">
+        <div class="panel-top"><span>Room details</span><span id="roomNumber">—</span></div>
+        <h3 id="roomTitle">Select a room</h3><p id="roomIntro" hidden></p>
+        <div class="room-data" id="roomData"><div><span>Room size</span><b>—</b></div><div><span>Area</span><b>—</b></div><div><span>Floor</span><b>Ground</b></div></div>
+        <button class="panel-action" id="continueSummary"><span>Continue to summary</span><span>↗</span></button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- THIRD FLOW STEP: a transparent pre-booking summary -->
+<section id="summary" hidden>
+  <div class="wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">03 <span>/</span> 06</div>
+    </header>
+    <div class="summary-heading"><div class="title-with-back"><button class="back-link back-icon" id="backFloor" type="button" aria-label="Back to floor plan" title="Back to floor plan">←</button><h2>Your selection</h2></div></div>
+    <div class="summary-grid">
+      <section class="summary-card" aria-label="Selected villa details">
+        <div class="summary-lead">
+          <div class="summary-eyebrow">SELECTED VILLA</div>
+          <h3 id="summaryVilla">Villa A-07</h3>
+          <p id="summaryType">4 BHK · Ground + 1</p>
+        </div>
+        <div class="fact-list">
+          <div class="detail-row"><span>Plot area</span><b id="summaryPlot">3,480 sq.ft</b></div>
+          <div class="detail-row"><span>Built-up area</span><b id="summaryBuilt">2,900 sq.ft</b></div>
+          <div class="detail-row"><span>Facing</span><b id="summaryFacing">South</b></div>
+          <div class="detail-row"><span>Availability</span><b id="summaryStatus">Available</b></div>
+        </div>
+      </section>
+      <aside class="payment-card">
+        <div class="price-intro"><strong id="summaryPrice">₹2.08 Cr</strong></div>
+        <div class="price-breakdown">
+          <div class="detail-row"><span>Taxes &amp; charges</span><b>To be confirmed</b></div>
+          <div class="detail-row"><span>Booking advance</span><b>To be confirmed</b></div>
+          <div class="detail-row"><span>Remaining balance</span><b>To be confirmed</b></div>
+        </div>
+        <div class="pay-total"><span>Final payable amount</span><b>To be confirmed</b></div>
+        <details class="terms-inline">
+          <summary>Cancellation and refund terms <span aria-hidden="true">＋</span></summary>
+          <p>Policy details will be provided by Spectra Gardens before payment.</p>
+        </details>
+        <button class="booking-link" id="proceedDetails" type="button">Proceed to booking <span aria-hidden="true">↗</span></button>
+        <a class="booking-secondary" href="tel:+917510544444">Talk to sales</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOURTH FLOW STEP: customer details -->
+<section id="details" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">04 <span>/</span> 06</div>
+    </header>
+    <div class="booking-heading">
+      <div class="title-with-back"><button class="back-link back-icon" id="backToSummary" type="button" aria-label="Back to summary">←</button><h2>Customer details</h2></div>
+    </div>
+    <div class="booking-grid">
+      <form class="customer-form" id="customerForm" novalidate>
+        <label class="field"><span>Full name</span><input id="customerName" name="name" type="text" autocomplete="name" placeholder="Name as on ID" required></label>
+        <label class="field"><span>Mobile number</span><div class="phone-field"><span>+91</span><input id="customerMobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="10-digit mobile number" required></div></label>
+        <label class="field"><span>Email</span><input id="customerEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label>
+        <label class="terms-check"><input id="acceptTerms" type="checkbox" required><span>I accept the <button type="button" id="openBookingTerms" class="inline-text-button">booking terms and conditions</button>.</span></label>
+        <p class="form-error" id="customerError" role="alert" hidden></p>
+        <button class="booking-primary" type="submit">Review payment <span aria-hidden="true">↗</span></button>
+        <p class="form-note">Hold duration: To be confirmed.</p>
+      </form>
+      <aside class="booking-aside">
+        <div class="aside-label">YOUR SELECTION</div>
+        <h3 id="detailsVilla">Villa A-07</h3>
+        <p id="detailsType">4 BHK · Ground + 1</p>
+        <div class="aside-row"><span>Property price</span><b id="detailsPrice">₹2.08 Cr</b></div>
+        <div class="aside-row"><span>Pay now</span><b>To be confirmed</b></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- FIFTH FLOW STEP: final review before payment -->
+<section id="review" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">05 <span>/</span> 06</div>
+    </header>
+    <div class="booking-heading">
+      <div class="title-with-back"><button class="back-link back-icon" id="backToDetails" type="button" aria-label="Back to details">←</button><h2>Review and pay</h2></div>
+    </div>
+    <div class="review-layout">
+      <div class="review-main">
+        <div class="review-section">
+          <div class="aside-label">VILLA</div>
+          <div class="review-row"><span id="reviewVilla">Villa A-07 · 4 BHK</span><button type="button" class="plain-edit" id="editVilla">Edit</button></div>
+        </div>
+        <div class="review-section">
+          <div class="aside-label">BUYER</div>
+          <div class="review-row"><span id="reviewBuyer">—</span></div>
+          <div class="review-row"><span id="reviewMobile">—</span></div>
+          <div class="review-row"><span id="reviewEmail">—</span></div>
+          <button type="button" class="plain-edit review-edit" id="editDetails">Edit details</button>
+        </div>
+      </div>
+      <aside class="review-payment">
+        <div class="aside-label">PAYMENT SUMMARY</div>
+        <div class="aside-row"><span>Property price</span><b id="reviewPrice">₹2.08 Cr</b></div>
+        <div class="aside-row"><span>Taxes and charges</span><b>To be confirmed</b></div>
+        <div class="aside-row emphasis"><span>Pay now to book</span><b>To be confirmed</b></div>
+        <div class="aside-row"><span>Remaining balance</span><b>To be confirmed</b></div>
+        <p class="payment-note">Availability is checked again before payment.</p>
+        <button class="booking-primary" id="paySecurely" type="button">Continue to payment <span aria-hidden="true">↗</span></button>
+        <p class="prototype-note">Preview only. No payment will be collected.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT HANDOFF: demo controls expose the documented outcome states -->
+<section id="processing" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">05 <span>/</span> 06</div>
+    </header>
+    <div class="state-screen">
+      <div class="processing-mark" aria-hidden="true"><span></span></div>
+      <div class="aside-label">PAYMENT</div>
+      <h2>Payment gateway preview</h2>
+      <p>This prototype is not connected to a payment provider. No payment will be collected.</p>
+      <details class="demo-outcomes">
+        <summary>Preview a payment outcome</summary>
+        <div class="outcome-actions">
+          <button type="button" data-outcome="success">Successful payment</button>
+          <button type="button" data-outcome="pending">Payment pending</button>
+          <button type="button" data-outcome="failed">Payment failed</button>
+          <button type="button" data-outcome="taken">Villa no longer available</button>
+        </div>
+      </details>
+      <button type="button" class="text-back back-icon" id="backToReview" aria-label="Back to payment review" title="Back to payment review">←</button>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT OUTCOME: pending -->
+<section id="paymentPending" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">05 <span>/</span> 06</div>
+    </header>
+    <div class="state-screen">
+      <div class="state-symbol pending" aria-hidden="true">◷</div>
+      <div class="aside-label">PAYMENT PENDING</div>
+      <h2>Payment is pending</h2>
+      <p>The payment provider has not confirmed this transaction yet. Do not pay again.</p>
+      <p class="state-reference" id="pendingVilla">Villa A-07</p>
+      <button type="button" class="booking-primary state-action" id="checkPaymentStatus">Check status</button>
+      <p class="state-feedback" id="pendingFeedback" role="status" hidden></p>
+      <button type="button" class="text-back back-icon" id="pendingBackToDemo" aria-label="Back to payment preview" title="Back to payment preview">←</button>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT OUTCOME: failed -->
+<section id="paymentFailed" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">05 <span>/</span> 06</div>
+    </header>
+    <div class="state-screen">
+      <div class="state-symbol failed" aria-hidden="true">×</div>
+      <div class="aside-label">PAYMENT FAILED</div>
+      <h2>Payment didn’t go through</h2>
+      <p>No booking has been created. You can return to payment review or choose another villa.</p>
+      <p class="state-reference" id="failedVilla">Villa A-07</p>
+      <button type="button" class="booking-primary state-action" id="retryPayment">Try payment again</button>
+      <button type="button" class="text-back back-icon" id="failedToPlan" aria-label="Back to master plan" title="Back to master plan">←</button>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT OUTCOME: selected villa no longer available -->
+<section id="villaTaken" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">05 <span>/</span> 06</div>
+    </header>
+    <div class="state-screen taken-screen">
+      <div class="state-symbol pending" aria-hidden="true">!</div>
+      <div class="aside-label">AVAILABILITY CHANGED</div>
+      <h2 id="takenTitle">This villa is no longer available</h2>
+      <p>Choose another available villa to continue.</p>
+      <div class="similar-villas" id="similarVillas"></div>
+      <button type="button" class="text-back back-icon" id="takenToPlan" aria-label="Back to master plan" title="Back to master plan">←</button>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL FLOW STEP: confirmation state for prototype only -->
+<section id="confirmation" class="booking-screen" hidden>
+  <div class="wrap booking-wrap">
+    <header class="flow-header">
+      <a class="sub-brand" href="#" aria-label="Spectra Gardens home">SPECTRA <span>GARDENS</span></a>
+      <div class="flow-meta">06 <span>/</span> 06</div>
+    </header>
+    <div class="state-screen confirmation-screen">
+      <div class="state-symbol success" aria-hidden="true">✓</div>
+      <div class="aside-label">DEMO CONFIRMATION</div>
+      <h2>Booking flow complete</h2>
+      <p>This is a design preview. No real payment or booking has been created.</p>
+      <div class="confirmation-data">
+        <div class="aside-row"><span>Villa</span><b id="confirmVilla">Villa A-07</b></div>
+        <div class="aside-row"><span>Buyer</span><b id="confirmBuyer">—</b></div>
+        <div class="aside-row"><span>Reference</span><b id="confirmBookingId">PREVIEW</b></div>
+        <div class="aside-row"><span>Payment</span><b>Not collected</b></div>
+      </div>
+      <button type="button" class="booking-primary state-action" id="downloadReceipt">Download summary <span aria-hidden="true">↓</span></button>
+      <button type="button" class="text-back" id="finishBooking">Done</button>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = (s, root=document) => root.querySelector(s);
+const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+const moneyCr = n => '₹' + (n / 1e7).toFixed(2) + ' Cr';
+const sqft = n => Math.round(n).toLocaleString('en-IN') + ' sq.ft';
+const fmt = n => Math.round(n).toLocaleString('en-IN');
+const TYPE = {'3BHK':{label:'3 BHK',builtUp:2450,floors:'Ground + 1'},'4BHK':{label:'4 BHK',builtUp:2900,floors:'Ground + 1'}};
+const BOOKED=['A-02','A-05','A-09','B-03','C-06','C-02','D-01','D-08'];
+const RESERVED=['A-06','B-07','C-05','D-04'];
+const villas=[];
+function addRow(prefix,start,count,x0,step,w,y,h,type,facing){
+  for(let i=0;i<count;i++){
+    const n=start+i,id=prefix+'-'+String(n).padStart(2,'0'),corner=i===0||i===count-1;
+    const vary=((n*137+prefix.charCodeAt(0)*7)%5)*70;
+    const plot=(type==='4BHK'?3200:2500)+vary+(corner?300:0);
+    const builtUp=TYPE[type].builtUp;
+    const basic=Math.round((builtUp*5000+plot*1800)/10000)*10000;
+    villas.push({id,type,builtUp,plot,floors:TYPE[type].floors,corner,facing,basic,price:basic+(corner?350000:0),status:BOOKED.includes(id)?'booked':RESERVED.includes(id)?'reserved':'available',x:x0+i*step,y,w,h});
+  }
+}
+addRow('A',1,10,44,92,84,40,140,'4BHK','South');
+addRow('B',1,4,44,86,78,230,96,'4BHK','North');
+addRow('B',5,4,44,86,78,336,96,'3BHK','South');
+addRow('C',1,4,620,86,78,230,96,'4BHK','North');
+addRow('C',5,4,620,86,78,336,96,'3BHK','South');
+addRow('D',1,5,44,84,76,490,140,'3BHK','North');
+addRow('D',6,5,544,84,76,490,140,'3BHK','North');
+let selected=null,hovered=null,activeType='all',availableOnly=false,activeFloor='ground',activeRoom=null;
+function getVilla(id){return villas.find(v=>v.id===id)}
+function mapSVG(){
+  let s=`<rect x="8" y="8" width="984" height="664" rx="10" class="site-outline"/><rect x="392" y="226" width="216" height="218" rx="8" class="landscape"/><rect x="460" y="484" width="80" height="188" class="landscape"/>`;
+  s+=`<rect x="16" y="190" width="968" height="30" class="road"/><line x1="24" y1="205" x2="976" y2="205" class="road-mark"/><rect x="16" y="450" width="968" height="30" class="road"/><line x1="24" y1="465" x2="976" y2="465" class="road-mark"/><rect x="470" y="480" width="60" height="192" class="road"/><line x1="500" y1="486" x2="500" y2="668" class="road-mark"/>`;
+  s+=`<rect x="404" y="236" width="192" height="80" rx="6" class="amenity"/><text x="500" y="272" class="map-label">Clubhouse</text><text x="500" y="292" class="map-small">GYM · HALL · CAFE</text><rect x="424" y="330" width="152" height="56" rx="28" class="pool"/><text x="500" y="363" class="map-label">Pool</text><rect x="404" y="398" width="88" height="38" rx="6" class="amenity"/><text x="448" y="422" class="map-small">PLAY AREA</text><rect x="500" y="398" width="96" height="38" rx="6" class="amenity"/><text x="548" y="422" class="map-small">YOGA LAWN</text>`;
+  s+=`<text x="300" y="210" class="map-small">ROAD 1 · 9 M</text><text x="700" y="210" class="map-small">ROAD 1 · 9 M</text><text x="300" y="470" class="map-small">ROAD 2 · 9 M</text><text x="700" y="470" class="map-small">ROAD 2 · 9 M</text><text x="500" y="560" class="map-small" transform="rotate(-90 500 560)">ENTRY ROAD · 12 M</text><text x="500" y="656" class="map-small" style="fill:#527e5c">MAIN GATE</text>`;
+  const trees=[];for(let y=500;y<=640;y+=28)trees.push([464,y],[536,y]);[[410,244],[596,244],[402,320],[598,320],[402,392],[598,392]].forEach(t=>trees.push(t));for(let x=40;x<=960;x+=46)trees.push([x,24]);for(let x=40;x<=440;x+=46)trees.push([x,652]);for(let x=560;x<=960;x+=46)trees.push([x,652]);
+  s+=trees.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" class="tree"/>`).join('');
+  villas.forEach(v=>{
+    const dim=(activeType!=='all'&&v.type!==activeType)||(availableOnly&&v.status!=='available');
+    const cls=['plot',v.status,dim?'dim':'',selected===v.id?'selected':''].filter(Boolean).join(' ');
+    const aria=`Villa ${v.id}, ${TYPE[v.type].label}, ${v.status}`;
+    s+=`<g class="${cls}" data-id="${v.id}" tabindex="0" role="button" aria-label="${aria}"><rect x="${v.x}" y="${v.y}" width="${v.w}" height="${v.h}"/><text x="${v.x+v.w/2}" y="${v.y+v.h/2}">${v.id}</text></g>`;
+  });
+  return s;
+}
+function renderMap(){
+  $('#masterMap').innerHTML=mapSVG();
+  $$('.plot',$('#masterMap')).forEach(g=>{
+    g.addEventListener('pointerenter',()=>{hovered=g.dataset.id;renderPanel(hovered,false)});
+    g.addEventListener('pointerleave',()=>{hovered=null;renderPanel(selected,true)});
+    g.addEventListener('focus',()=>{hovered=g.dataset.id;renderPanel(hovered,false)});
+    g.addEventListener('blur',()=>{hovered=null;renderPanel(selected,true)});
+    g.addEventListener('click',()=>{selected=g.dataset.id;hovered=null;renderMap();renderPanel(selected,true)});
+    g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selected=g.dataset.id;hovered=null;renderMap();renderPanel(selected,true)}});
+  });
+}
+function renderPanel(id,selectedState){
+  if(!id){$('#emptyPanel').hidden=false;$('#detailPanel').hidden=true;$('#panelIndex').textContent='—';return;}
+  const v=getVilla(id);if(!v)return;
+  $('#emptyPanel').hidden=true;$('#detailPanel').hidden=false;$('#panelIndex').textContent=id;
+  $('#villaId').textContent='Villa '+v.id;$('#villaType').textContent=TYPE[v.type].label+' · '+v.floors;
+  $('#plotArea').textContent=sqft(v.plot);$('#builtArea').textContent=sqft(v.builtUp);$('#facing').textContent=v.facing;$('#corner').textContent=v.corner?'Corner plot':'Regular';$('#price').textContent=moneyCr(v.price);
+  const status=$('#villaStatus');status.className='status '+v.status;status.textContent=v.status[0].toUpperCase()+v.status.slice(1);
+  $('#viewVilla').disabled=false;$('#viewVilla').querySelector('span:first-child').textContent=v.status==='available'?'View villa':'View details';
+}
+function setType(t){activeType=t;$$('[data-type]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.type===t)));renderMap();renderPanel(selected||hovered,true)}
+function openExplore(){
+  $('#intro').hidden=true;$('#explore').hidden=false;$('#villa').hidden=true;
+  window.scrollTo({top:0,behavior:'instant'});renderMap();renderPanel(selected,true);
+}
+function backToIntro(){$('#explore').hidden=true;$('#villa').hidden=true;$('#intro').hidden=false;window.scrollTo({top:0,behavior:'instant'})}
+$('#startBtn').addEventListener('click',openExplore);$('#backIntro').addEventListener('click',backToIntro);
+$$('.filter').forEach(b=>b.addEventListener('click',()=>setType(b.dataset.type)));
+$('#availableOnly').addEventListener('change',e=>{availableOnly=e.target.checked;renderMap()});
+$('#viewVilla').addEventListener('click',()=>{if(!selected)return;openVilla(selected)});
+function openVilla(id){selected=id;const v=getVilla(id);$('#explore').hidden=true;$('#villa').hidden=false;window.scrollTo({top:0,behavior:'instant'});$('#crumbVilla').textContent='Villa '+id;$('#floorStatus').className='status '+v.status;$('#floorStatus').textContent=v.status[0].toUpperCase()+v.status.slice(1);$('#floorSubtitle').textContent=TYPE[v.type].label+' · '+v.floors+' · '+sqft(v.plot)+' plot area';activeFloor='ground';activeRoom=null;$$('.floor-tab').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.floor===activeFloor)));drawFloor();renderRoom(null)}
+$('#backMap').addEventListener('click',()=>{ $('#villa').hidden=true;$('#explore').hidden=false;window.scrollTo({top:0,behavior:'instant'});renderMap();renderPanel(selected,true)});
+$('#crumbMap').addEventListener('click',()=>$('#backMap').click());
+const ROOM_DATA={
+  ground:[
+    {id:'kitchen',name:'Kitchen',size:'13′ × 12′',area:'156 sq.ft',x:70,y:48,w:178,h:130,service:false},
+    {id:'work',name:'Work area',size:'7′ × 12′',area:'84 sq.ft',x:248,y:48,w:96,h:130,service:true},
+    {id:'bed1',name:'Bedroom 1',size:'13′ × 12′',area:'156 sq.ft',x:344,y:48,w:178,h:130,service:false},
+    {id:'bath1',name:'Bath 1',size:'7′ × 12′',area:'84 sq.ft',x:522,y:48,w:96,h:130,service:true},
+    {id:'dining',name:'Dining',size:'14′ × 10′',area:'140 sq.ft',x:70,y:178,w:190,h:108,service:false},
+    {id:'living',name:'Living room',size:'18′ × 18′',area:'324 sq.ft',x:260,y:178,w:240,h:194,service:false},
+    {id:'study',name:'Study',size:'8′ × 9′',area:'72 sq.ft',x:500,y:178,w:118,h:97,service:false},
+    {id:'toilet',name:'Common toilet',size:'8′ × 9′',area:'72 sq.ft',x:500,y:275,w:118,h:97,service:true},
+    {id:'stair',name:'Staircase',size:'8′ × 8′',area:'64 sq.ft',x:70,y:286,w:105,h:86,service:true},
+    {id:'foyer',name:'Foyer',size:'6′ × 8′',area:'48 sq.ft',x:175,y:286,w:85,h:86,service:true},
+    {id:'sitout',name:'Sit-out',size:'14′ × 6′',area:'84 sq.ft',x:175,y:372,w:190,h:55,outside:true},
+    {id:'porch',name:'Car porch',size:'16′ × 16′',area:'256 sq.ft',x:405,y:372,w:213,h:110,outside:true}
+  ],
+  first:[
+    {id:'master',name:'Master bedroom',size:'16′ × 14′',area:'224 sq.ft',x:70,y:48,w:218,h:150},
+    {id:'wardrobe',name:'Walk-in',size:'6′ × 7′',area:'42 sq.ft',x:288,y:48,w:105,h:75,service:true},
+    {id:'mbath',name:'Master bath',size:'6′ × 7′',area:'42 sq.ft',x:288,y:123,w:105,h:75,service:true},
+    {id:'bed2',name:'Bedroom 2',size:'12′ × 14′',area:'168 sq.ft',x:393,y:48,w:165,h:150},
+    {id:'bath2',name:'Bath 2',size:'6′ × 14′',area:'84 sq.ft',x:558,y:48,w:95,h:150,service:true},
+    {id:'store',name:'Linen store',size:'8′ × 8′',area:'64 sq.ft',x:70,y:198,w:110,h:86,service:true},
+    {id:'stair2',name:'Staircase',size:'8′ × 8′',area:'64 sq.ft',x:70,y:284,w:110,h:86,service:true},
+    {id:'lounge',name:'Family lounge',size:'22′ × 16′',area:'352 sq.ft',x:180,y:198,w:270,h:172},
+    {id:'office',name:'Home office',size:'10′ × 16′',area:'160 sq.ft',x:450,y:198,w:203,h:172},
+    {id:'balcony',name:'Balcony',size:'22′ × 5′',area:'110 sq.ft',x:180,y:370,w:270,h:55,outside:true}
+  ]
+};
+function drawFloor(){
+  const rooms=ROOM_DATA[activeFloor];let s='<rect x="45" y="25" width="635" height="470" rx="4" fill="#f5f7f2" stroke="#dfe6dc" stroke-width="1.5"/>';
+  rooms.forEach(r=>{const classes=['room-group',activeRoom===r.id?'active':''].join(' ');const cls=['room-shape',r.service?'service':'',r.outside?'outside':''].join(' ');s+=`<g class="${classes}" data-room="${r.id}" tabindex="0" role="button" aria-label="${r.name}, ${r.size}"><rect class="${cls}" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"/><text class="room-name" x="${r.x+r.w/2}" y="${r.y+r.h/2-4}">${r.name}</text><text class="room-size" x="${r.x+r.w/2}" y="${r.y+r.h/2+15}">${r.size}</text></g>`});
+  s+='<text x="360" y="514" text-anchor="middle" fill="#8b978d" font-family="Inter, sans-serif" font-size="10" letter-spacing="1.5">FRONT / ROAD SIDE</text>';
+  $('#floorPlan').innerHTML=s;
+  $$('.room-group',$('#floorPlan')).forEach(g=>{const choose=()=>{activeRoom=g.dataset.room;drawFloor();renderRoom(activeRoom)};g.addEventListener('click',choose);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}})});
+}
+function renderRoom(id){
+  const r=id?ROOM_DATA[activeFloor].find(x=>x.id===id):null;
+  if(!r){$('#roomTitle').textContent='Select a room';$('#roomIntro').textContent='';$('#roomNumber').textContent='—';$('#roomData').innerHTML=`<div><span>Room size</span><b>—</b></div><div><span>Area</span><b>—</b></div><div><span>Floor</span><b>${activeFloor==='ground'?'Ground':'First'}</b></div>`;return}
+  $('#roomTitle').textContent=r.name;$('#roomIntro').textContent='';$('#roomNumber').textContent='ROOM';$('#roomData').innerHTML=`<div><span>Room size</span><b>${r.size}</b></div><div><span>Area</span><b>${r.area}</b></div><div><span>Floor</span><b>${activeFloor==='ground'?'Ground':'First'}</b></div>`;
+}
+$$('.floor-tab').forEach(b=>b.addEventListener('click',()=>{activeFloor=b.dataset.floor;activeRoom=null;$$('.floor-tab').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawFloor();renderRoom(null)}));
+$('#continueSummary').addEventListener('click',openSummary);
+function openSummary(){
+  const v=getVilla(selected);if(!v)return;
+  $('#villa').hidden=true;$('#summary').hidden=false;window.scrollTo({top:0,behavior:'instant'});
+  $('#summaryVilla').textContent='Villa '+v.id;$('#summaryType').textContent=TYPE[v.type].label+' · '+v.floors;
+  $('#summaryPlot').textContent=sqft(v.plot);$('#summaryBuilt').textContent=sqft(v.builtUp);$('#summaryFacing').textContent=v.facing;
+  $('#summaryStatus').textContent=v.status[0].toUpperCase()+v.status.slice(1);$('#summaryPrice').textContent=moneyCr(v.price);
+}
+$('#backFloor').addEventListener('click',()=>{$('#summary').hidden=true;$('#villa').hidden=false;window.scrollTo({top:0,behavior:'instant'})});
+
+/* Booking journey interaction. Payment actions are deliberately simulated. */
+const bookingScreenIds=['intro','explore','villa','summary','details','review','processing','paymentPending','paymentFailed','villaTaken','confirmation'];
+function showBookingScreen(id){
+  bookingScreenIds.forEach(screenId=>{const el=document.getElementById(screenId);if(el)el.hidden=screenId!==id;});
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function currentVilla(){return selected?getVilla(selected):null;}
+function populateBookingSummary(){
+  const v=currentVilla();if(!v)return;
+  $('#detailsVilla').textContent='Villa '+v.id;
+  $('#detailsType').textContent=TYPE[v.type].label+' · '+v.floors;
+  $('#detailsPrice').textContent=moneyCr(v.price);
+  $('#reviewVilla').textContent='Villa '+v.id+' · '+TYPE[v.type].label;
+  $('#reviewPrice').textContent=moneyCr(v.price);
+}
+function showSimilarVillas(){
+  const v=currentVilla();const holder=$('#similarVillas');holder.innerHTML='';
+  if(!v)return;
+  let matches=villas.filter(x=>x.id!==v.id&&x.status==='available'&&x.type===v.type);
+  if(!matches.length)matches=villas.filter(x=>x.id!==v.id&&x.status==='available');
+  matches.slice(0,3).forEach(match=>{
+    const button=document.createElement('button');button.type='button';button.textContent=match.id;
+    button.addEventListener('click',()=>{selected=match.id;openVilla(match.id);});
+    holder.appendChild(button);
+  });
+  if(!holder.children.length){const note=document.createElement('p');note.textContent='No similar villas are currently available.';note.className='form-note';holder.appendChild(note);}
+}
+function openCustomerDetails(){
+  const v=currentVilla();if(!v)return;
+  if(v.status!=='available'){showTakenState();return;}
+  populateBookingSummary();
+  showBookingScreen('details');
+}
+function showTakenState(){
+  const v=currentVilla();
+  $('#takenTitle').textContent=v?'Villa '+v.id+' is no longer available':'This villa is no longer available';
+  showSimilarVillas();
+  showBookingScreen('villaTaken');
+}
+$('#proceedDetails').addEventListener('click',openCustomerDetails);
+$('#backToSummary').addEventListener('click',()=>showBookingScreen('summary'));
+$('#backToDetails').addEventListener('click',()=>showBookingScreen('details'));
+$('#editDetails').addEventListener('click',()=>showBookingScreen('details'));
+$('#editVilla').addEventListener('click',()=>{showBookingScreen('explore');renderMap();renderPanel(selected,true);});
+$('#backToReview').addEventListener('click',()=>showBookingScreen('review'));
+$('#retryPayment').addEventListener('click',()=>showBookingScreen('review'));
+$('#failedToPlan').addEventListener('click',()=>{showBookingScreen('explore');renderMap();renderPanel(selected,true);});
+$('#takenToPlan').addEventListener('click',()=>{showBookingScreen('explore');renderMap();renderPanel(selected,true);});
+$('#pendingBackToDemo').addEventListener('click',()=>showBookingScreen('processing'));
+$('#checkPaymentStatus').addEventListener('click',()=>{
+  $('#pendingFeedback').textContent='This preview is not connected to the payment provider, so a live status cannot be checked.';
+  $('#pendingFeedback').hidden=false;
+});
+$('#openBookingTerms').addEventListener('click',()=>{
+  showBookingScreen('summary');
+  const terms=document.querySelector('.terms-inline');terms.open=true;
+  terms.scrollIntoView({block:'center',behavior:'smooth'});
+});
+$('#customerMobile').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,10);});
+$('#customerForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=$('#customerName').value.trim();
+  const mobile=$('#customerMobile').value.replace(/\D/g,'');
+  const email=$('#customerEmail').value.trim();
+  const accepted=$('#acceptTerms').checked;
+  const emailOK=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const errors=[];
+  if(name.length<2)errors.push('Enter your full name.');
+  if(!/^\d{10}$/.test(mobile))errors.push('Enter a valid 10-digit mobile number.');
+  if(!emailOK)errors.push('Enter a valid email address.');
+  if(!accepted)errors.push('Accept the booking terms to continue.');
+  ['customerName','customerMobile','customerEmail'].forEach(id=>document.getElementById(id).setAttribute('aria-invalid','false'));
+  if(name.length<2)$('#customerName').setAttribute('aria-invalid','true');
+  if(!/^\d{10}$/.test(mobile))$('#customerMobile').setAttribute('aria-invalid','true');
+  if(!emailOK)$('#customerEmail').setAttribute('aria-invalid','true');
+  const error=$('#customerError');
+  if(errors.length){error.textContent=errors.join(' ');error.hidden=false;return;}
+  error.hidden=true;
+  const v=currentVilla();if(!v)return;
+  if(v.status!=='available'){showTakenState();return;}
+  $('#reviewBuyer').textContent=name;
+  $('#reviewMobile').textContent='+91 '+mobile;
+  $('#reviewEmail').textContent=email;
+  populateBookingSummary();
+  showBookingScreen('review');
+});
+$('#paySecurely').addEventListener('click',()=>{
+  const v=currentVilla();if(!v)return;
+  if(v.status!=='available'){showTakenState();return;}
+  $('#pendingVilla').textContent='Villa '+v.id;
+  $('#failedVilla').textContent='Villa '+v.id;
+  showBookingScreen('processing');
+});
+document.querySelectorAll('[data-outcome]').forEach(button=>button.addEventListener('click',()=>{
+  const outcome=button.dataset.outcome;
+  const v=currentVilla();if(!v)return;
+  if(outcome==='success'){
+    v.status='booked';
+    const reference='SG-PREVIEW-'+Math.floor(100000+Math.random()*900000);
+    $('#confirmVilla').textContent='Villa '+v.id+' · '+TYPE[v.type].label;
+    $('#confirmBuyer').textContent=$('#customerName').value.trim();
+    $('#confirmBookingId').textContent=reference;
+    showBookingScreen('confirmation');
+  }else if(outcome==='pending'){
+    $('#pendingFeedback').hidden=true;
+    showBookingScreen('paymentPending');
+  }else if(outcome==='failed'){
+    showBookingScreen('paymentFailed');
+  }else if(outcome==='taken'){
+    v.status='booked';
+    showTakenState();
+  }
+}));
+$('#downloadReceipt').addEventListener('click',()=>{
+  const v=currentVilla();if(!v)return;
+  const lines=[
+    'SPECTRA GARDENS - BOOKING FLOW PREVIEW',
+    'This is a design preview. No real payment or booking has been created.',
+    '',
+    'Villa: '+v.id,
+    'Configuration: '+TYPE[v.type].label,
+    'Buyer: '+$('#customerName').value.trim(),
+    'Mobile: +91 '+$('#customerMobile').value,
+    'Email: '+$('#customerEmail').value.trim(),
+    'Property price (sample): '+moneyCr(v.price),
+    'Payment status: Not collected'
+  ];
+  const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);const link=document.createElement('a');
+  link.href=url;link.download='spectra-gardens-booking-preview.txt';document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);
+});
+$('#finishBooking').addEventListener('click',()=>{showBookingScreen('explore');renderMap();renderPanel(selected,true);});
+
+
+/* Breadcrumb navigation */
+const JOURNEY_PATHS={
+  explore:[['intro','Home'],['explore','Plots']],
+  villa:[['intro','Home'],['explore','Plots'],['villa','Floor plan']],
+  summary:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection']],
+  details:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection'],['details','Details']],
+  review:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection'],['details','Details'],['review','Review']],
+  processing:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection'],['details','Details'],['review','Review'],['processing','Payment']],
+  paymentPending:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection'],['details','Details'],['review','Review'],['processing','Payment'],['paymentPending','Pending']],
+  paymentFailed:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection'],['details','Details'],['review','Review'],['paymentFailed','Failed']],
+  villaTaken:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['villaTaken','Unavailable']],
+  confirmation:[['intro','Home'],['explore','Plots'],['villa','Floor plan'],['summary','Selection'],['details','Details'],['review','Review'],['confirmation','Confirmation']]
+};
+function renderJourneyBreadcrumbs(){
+  Object.entries(JOURNEY_PATHS).forEach(([screenId,items])=>{
+    const screen=document.getElementById(screenId);if(!screen)return;
+    const header=screen.querySelector('.flow-header');if(!header)return;
+    let nav=screen.querySelector('.journey-breadcrumbs');
+    if(!nav){nav=document.createElement('nav');nav.className='journey-breadcrumbs';nav.setAttribute('aria-label','Booking progress');header.insertAdjacentElement('afterend',nav);}
+    nav.innerHTML=items.map(([target,label],index)=>{
+      const current=index===items.length-1;
+      const node=current?`<span aria-current="step">${label}</span>`:`<button type="button" data-crumb-target="${target}">${label}</button>`;
+      return (index?'<span class="crumb-separator" aria-hidden="true">/</span>':'')+node;
+    }).join('');
+  });
+}
+renderJourneyBreadcrumbs();
+document.addEventListener('click',event=>{
+  const crumb=event.target.closest('[data-crumb-target]');if(!crumb)return;
+  const target=crumb.dataset.crumbTarget;
+  if(target==='intro'){backToIntro();return;}
+  if(target==='explore'){
+    showBookingScreen('explore');renderMap();renderPanel(selected,true);return;
+  }
+  if(target==='villa'){showBookingScreen('villa');return;}
+  if(target==='summary'){showBookingScreen('summary');return;}
+  if(target==='details'){showBookingScreen('details');return;}
+  if(target==='review'){showBookingScreen('review');return;}
+  if(target==='processing'){showBookingScreen('processing');return;}
+});
+
+</script>
+</body>
+</html>
