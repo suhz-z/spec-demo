@@ -11,9 +11,18 @@ import {
   type PointerEvent,
 } from "react";
 
-import { AssetSitePlan, type SitePlot } from "@/components/inventory/asset-site-plan";
+import { AssetFloorPlan } from "@/components/inventory/asset-floor-plan";
 
-import { mapSVG, moneyCr, sqft, TYPE, VILLAS, type Villa, type VillaType } from "./wireframe-data";
+import {
+  mapSVG,
+  moneyCr,
+  ROOM_DATA,
+  sqft,
+  TYPE,
+  VILLAS,
+  type Villa,
+  type VillaType,
+} from "./wireframe-data";
 
 type Screen =
   | "intro"
@@ -28,6 +37,7 @@ type Screen =
   | "villaTaken"
   | "confirmation";
 
+type Floor = "ground" | "first";
 type FieldErrors = { name?: boolean; mobile?: boolean; email?: boolean };
 
 const JOURNEY: Record<Screen, [Screen, string][]> = {
@@ -39,25 +49,25 @@ const JOURNEY: Record<Screen, [Screen, string][]> = {
   villa: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
   ],
   summary: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
   ],
   details: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
     ["details", "Details"],
   ],
   review: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
     ["details", "Details"],
     ["review", "Review"],
@@ -65,7 +75,7 @@ const JOURNEY: Record<Screen, [Screen, string][]> = {
   processing: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
     ["details", "Details"],
     ["review", "Review"],
@@ -74,7 +84,7 @@ const JOURNEY: Record<Screen, [Screen, string][]> = {
   paymentPending: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
     ["details", "Details"],
     ["review", "Review"],
@@ -84,7 +94,7 @@ const JOURNEY: Record<Screen, [Screen, string][]> = {
   paymentFailed: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
     ["details", "Details"],
     ["review", "Review"],
@@ -93,13 +103,13 @@ const JOURNEY: Record<Screen, [Screen, string][]> = {
   villaTaken: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["villaTaken", "Unavailable"],
   ],
   confirmation: [
     ["intro", "Home"],
     ["explore", "Plots"],
-    ["villa", "Site plan"],
+    ["villa", "Floor plan"],
     ["summary", "Selection"],
     ["details", "Details"],
     ["review", "Review"],
@@ -125,6 +135,10 @@ function getVilla(id: string | null): Villa | undefined {
   return id ? VILLAS.find((villa) => villa.id === id) : undefined;
 }
 
+function roomOf(floor: Floor, id: string | null) {
+  return id ? ROOM_DATA[floor].find((room) => room.id === id) : undefined;
+}
+
 function targetId(target: EventTarget | null, attribute: string): string | null {
   if (!(target instanceof Element)) return null;
   return target.closest(`[${attribute}]`)?.getAttribute(attribute) ?? null;
@@ -136,7 +150,8 @@ export function WireframeFlow() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [activeType, setActiveType] = useState<"all" | VillaType>("all");
   const [availableOnly, setAvailableOnly] = useState(false);
-  const [selectedPlot, setSelectedPlot] = useState<SitePlot | null>(null);
+  const [activeFloor, setActiveFloor] = useState<Floor>("ground");
+  const [activeRoom, setActiveRoom] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
@@ -157,7 +172,8 @@ export function WireframeFlow() {
       if (villaFromUrl) {
         setSelected(villaFromUrl.id);
         setHovered(null);
-        setSelectedPlot(null);
+        setActiveFloor("ground");
+        setActiveRoom(null);
       }
       if (villaFromUrl || window.location.hash === "#villa-map") setScreen("explore");
     };
@@ -172,6 +188,7 @@ export function WireframeFlow() {
 
   const villa = getVilla(selected);
   const panelVilla = getVilla(hovered ?? selected);
+  const room = roomOf(activeFloor, activeRoom);
   const counts = {
     available: VILLAS.filter((item) => item.status === "available").length,
     reserved: VILLAS.filter((item) => item.status === "reserved").length,
@@ -185,7 +202,8 @@ export function WireframeFlow() {
 
   const openVilla = (id: string) => {
     setSelected(id);
-    setSelectedPlot(null);
+    setActiveFloor("ground");
+    setActiveRoom(null);
     showScreen("villa");
   };
 
@@ -232,7 +250,18 @@ export function WireframeFlow() {
       {index === items.length - 1 ? (
         <span aria-current="step">{label}</span>
       ) : (
-        <button type="button" data-crumb-target={target} onClick={() => showScreen(target)}>
+        <button
+          type="button"
+          data-crumb-target={target}
+          onClick={() => {
+            if (target === "villa") {
+              setActiveRoom(null);
+              showScreen("villa");
+            } else {
+              showScreen(target);
+            }
+          }}
+        >
           {label}
         </button>
       )}
@@ -754,7 +783,7 @@ export function WireframeFlow() {
                 {backButton("Back to layout", "explore")}
                 <div>
                   <div className="villa-context">Villa {villa.id}</div>
-                  <h2>Site plan</h2>
+                  <h2>Floor plan</h2>
                   <p>
                     {TYPE[villa.type].label} · {villa.floors} · {sqft(villa.plot)} plot
                   </p>
@@ -766,36 +795,59 @@ export function WireframeFlow() {
             </div>
             <div className="villa-grid">
               <div className="plan-card">
+                <div className="plan-toolbar">
+                  <div className="floor-tabs">
+                    {(["ground", "first"] as const).map((floor) => (
+                      <button
+                        key={floor}
+                        type="button"
+                        className="floor-tab"
+                        data-floor={floor}
+                        aria-pressed={activeFloor === floor}
+                        onClick={() => {
+                          setActiveFloor(floor);
+                          setActiveRoom(null);
+                        }}
+                      >
+                        {floor === "ground" ? "Ground floor" : "First floor"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="plan-art">
-                  <AssetSitePlan
-                    selectedPlotId={selectedPlot?.id}
-                    onSelect={setSelectedPlot}
+                  <AssetFloorPlan
+                    floor={activeFloor}
+                    selectedRoomId={activeRoom ?? undefined}
+                    onSelect={(assetRoom) => {
+                      setActiveRoom(assetRoom.id);
+                    }}
                     onPreview={() => {}}
-                    onPlots={() => {}}
+                    onRooms={() => {}}
                   />
                 </div>
                 <div className="plan-caption">
-                  <span>Traced from the supplied subdivision drawing · not to scale</span>
+                  <span>Room areas · Not to scale</span>
                 </div>
               </div>
               <aside className="room-card" aria-live="polite">
                 <div className="panel-top">
-                  <span>Plot details</span>
-                  <span>{selectedPlot ? "PLOT" : "—"}</span>
+                  <span>Room details</span>
+                  <span>{room ? "ROOM" : "—"}</span>
                 </div>
-                <h3>{selectedPlot?.name ?? "Select a plot"}</h3>
+                <h3>{room?.name ?? "Select a room"}</h3>
+                <p id="roomIntro" hidden />
                 <div className="room-data" id="roomData">
                   <div>
-                    <span>Plot area</span>
-                    <b>{selectedPlot?.area ?? "—"}</b>
+                    <span>Room size</span>
+                    <b>{room?.size ?? "—"}</b>
                   </div>
                   <div>
-                    <span>Location</span>
-                    <b>Moolaparambu</b>
+                    <span>Area</span>
+                    <b>{room?.area ?? "—"}</b>
                   </div>
                   <div>
-                    <span>Plan</span>
-                    <b>Six-plot subdivision</b>
+                    <span>Floor</span>
+                    <b>{activeFloor === "ground" ? "Ground" : "First"}</b>
                   </div>
                 </div>
                 <button
@@ -818,7 +870,7 @@ export function WireframeFlow() {
             {flowHeader(STEP.summary)}
             <div className="summary-heading">
               <div className="title-with-back">
-                {backButton("Back to plan", "villa")}
+                {backButton("Back to floor plan", "villa")}
                 <h2>Your selection</h2>
               </div>
             </div>
