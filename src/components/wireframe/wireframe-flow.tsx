@@ -2,6 +2,7 @@
 
 import {
   Fragment,
+  useEffect,
   useRef,
   useState,
   type FormEvent,
@@ -10,8 +11,9 @@ import {
   type PointerEvent,
 } from "react";
 
+import { AssetFloorPlan } from "@/components/inventory/asset-floor-plan";
+
 import {
-  drawFloor,
   mapSVG,
   moneyCr,
   ROOM_DATA,
@@ -160,7 +162,29 @@ export function WireframeFlow() {
   const [takenTitle, setTakenTitle] = useState("This villa is no longer available");
   const [confirmation, setConfirmation] = useState({ villa: "", buyer: "", reference: "PREVIEW" });
   const mapRef = useRef<SVGSVGElement>(null);
-  const planRef = useRef<SVGSVGElement>(null);
+
+  // Arriving from /villa/[villaId] (or any /#villa-map link) should land on the
+  // plot picker with the requested villa selected, not on the intro screen.
+  useEffect(() => {
+    const applyUrlState = () => {
+      const requested = new URLSearchParams(window.location.search).get("villa");
+      const villaFromUrl = requested ? getVilla(requested) : undefined;
+      if (villaFromUrl) {
+        setSelected(villaFromUrl.id);
+        setHovered(null);
+        setActiveFloor("ground");
+        setActiveRoom(null);
+      }
+      if (villaFromUrl || window.location.hash === "#villa-map") setScreen("explore");
+    };
+    applyUrlState();
+    window.addEventListener("hashchange", applyUrlState);
+    window.addEventListener("popstate", applyUrlState);
+    return () => {
+      window.removeEventListener("hashchange", applyUrlState);
+      window.removeEventListener("popstate", applyUrlState);
+    };
+  }, []);
 
   const villa = getVilla(selected);
   const panelVilla = getVilla(hovered ?? selected);
@@ -192,7 +216,6 @@ export function WireframeFlow() {
   };
 
   const mapMarkup = mapSVG({ activeType, availableOnly, selected, villas: VILLAS });
-  const planMarkup = drawFloor(activeFloor, activeRoom);
 
   const onMapPointer = (event: PointerEvent<SVGSVGElement>) =>
     setHovered(targetId(event.target, "data-id"));
@@ -212,17 +235,6 @@ export function WireframeFlow() {
       setHovered(null);
     }
   };
-  const onPlanSelect = (event: ReactMouseEvent<SVGSVGElement> | KeyboardEvent<SVGSVGElement>) => {
-    const id = targetId(event.target, "data-room");
-    if (id) setActiveRoom(id);
-  };
-  const onPlanKeyDown = (event: KeyboardEvent<SVGSVGElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      onPlanSelect(event);
-    }
-  };
-
   const crumb = (
     target: Screen,
     label: string,
@@ -634,7 +646,7 @@ export function WireframeFlow() {
                 <h2>Select a plot</h2>
               </div>
             </div>
-            <div className="flow-layout">
+            <div className="flow-layout" id="villa-map">
               <div className="map-area">
                 <div className="map-tools">
                   <div className="filters" role="group" aria-label="Filter villas">
@@ -672,9 +684,7 @@ export function WireframeFlow() {
                     onClick={onMapClick}
                     onKeyDown={onMapKeyDown}
                     onPointerOver={onMapPointer}
-                    onPointerOut={(event) => {
-                      if (!targetId(event.target, "data-id")) setHovered(null);
-                    }}
+                    onPointerOut={() => setHovered(null)}
                     onFocus={(event) => setHovered(targetId(event.target, "data-id"))}
                     onBlur={() => setHovered(null)}
                   />
@@ -739,7 +749,7 @@ export function WireframeFlow() {
                     <button
                       className="panel-action"
                       type="button"
-                      onClick={() => selected && openVilla(selected)}
+                      onClick={() => panelVilla && openVilla(panelVilla.id)}
                     >
                       <span>
                         {panelVilla.status === "available" ? "View villa" : "View details"}
@@ -805,16 +815,14 @@ export function WireframeFlow() {
                   </div>
                 </div>
                 <div className="plan-art">
-                  <svg
-                    id="floorPlan"
-                    className="floor-svg"
-                    ref={planRef}
-                    viewBox="0 0 800 520"
-                    role="group"
-                    aria-label="Interactive villa floor plan"
-                    dangerouslySetInnerHTML={{ __html: planMarkup }}
-                    onClick={onPlanSelect}
-                    onKeyDown={onPlanKeyDown}
+                  <AssetFloorPlan
+                    floor={activeFloor}
+                    selectedRoomId={activeRoom ?? undefined}
+                    onSelect={(assetRoom) => {
+                      setActiveRoom(assetRoom.id);
+                    }}
+                    onPreview={() => {}}
+                    onRooms={() => {}}
                   />
                 </div>
                 <div className="plan-caption">

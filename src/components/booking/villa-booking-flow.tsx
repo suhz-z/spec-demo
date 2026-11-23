@@ -128,7 +128,7 @@ function breadcrumbsFor(step: Step, villaCode: string): Crumb[] {
   const base: Crumb[] = [
     { label: "Home", href: "/" },
     { label: "Plots", href: "/#villa-map" },
-    { label: "Floor plan", href: `/villa/${encodeURIComponent(villaCode)}` },
+    { label: "Site plan", href: `/villa/${encodeURIComponent(villaCode)}` },
   ];
   if (step === "selection" || step === "hold") {
     return [...base, { label: "Selection", current: true }];
@@ -205,7 +205,9 @@ export function VillaBookingFlow({
   disabledReason,
 }: VillaBookingFlowProps) {
   const searchParams = useSearchParams();
-  const resumeReference = searchParams.get("booking");
+  // Read once on mount. persistReference() writes ?booking=... into the URL
+  // when payment starts; that must not re-trigger the "resume" effect mid-flow.
+  const [resumeReference] = useState(() => searchParams.get("booking"));
 
   const [step, setStep] = useState<Step>(
     initialHold ? "details" : resumeReference || !summary ? "hold" : "selection",
