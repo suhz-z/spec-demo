@@ -12,12 +12,11 @@ beforeEach(() => {
   vi.stubGlobal(
     "fetch",
     vi.fn(async (input: string | URL | Request) => {
-      const match = /\/spectra-(ground|first)-floor-plan\.svg/.exec(String(input));
-      if (!match) return { ok: false, status: 404 };
+      const file = String(input).split("/").pop() ?? "";
+      if (file !== "moolaparambu-site-plan.svg") return { ok: false, status: 404 };
       return {
         ok: true,
-        text: async () =>
-          readFileSync(resolve(process.cwd(), `public/spectra-${match[1]}-floor-plan.svg`), "utf8"),
+        text: async () => readFileSync(resolve(process.cwd(), "public", file), "utf8"),
       };
     }),
   );
@@ -38,9 +37,9 @@ describe("WireframeFlow", () => {
     fireEvent.click(screen.getByRole("button", { name: /Villa A-07, 4 BHK, available/i }));
     fireEvent.click(screen.getByRole("button", { name: /view villa/i }));
 
-    expect(screen.getByRole("heading", { name: /floor plan/i })).toBeInTheDocument();
-    fireEvent.click(await screen.findByRole("button", { name: /Kitchen, 13/ }));
-    expect(screen.getByRole("heading", { name: "Kitchen" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /site plan/i })).toBeInTheDocument();
+    fireEvent.click(await screen.findByRole("button", { name: /Plot 3, 16.10 cent/i }));
+    expect(screen.getByRole("heading", { name: "Plot 3" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /continue to summary/i }));
 
     expect(screen.getByRole("heading", { name: /your selection/i })).toBeInTheDocument();
@@ -89,25 +88,21 @@ describe("WireframeFlow", () => {
     fireEvent.click(screen.getByRole("button", { name: /view details/i }));
 
     expect(screen.getByText("Villa A-02")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /floor plan/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /site plan/i })).toBeInTheDocument();
   });
 
-  it("uses the supplied SVG floor plan assets and switches them with the floor tabs", async () => {
+  it("loads the supplied Moolaparambu SVG and shows selectable plot details", async () => {
     render(<WireframeFlow />);
     fireEvent.click(screen.getByRole("button", { name: /get started/i }));
     fireEvent.click(screen.getByRole("button", { name: /Villa A-01, 4 BHK, available/i }));
     fireEvent.click(screen.getByRole("button", { name: /view villa/i }));
 
-    expect(await screen.findByRole("button", { name: /Kitchen, 13/ })).toBeInTheDocument();
-    expect(fetch).toHaveBeenCalledWith("/spectra-ground-floor-plan.svg", {
-      cache: "force-cache",
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /first floor/i }));
-    expect(await screen.findByRole("button", { name: /Master bedroom/ })).toBeInTheDocument();
-    expect(fetch).toHaveBeenCalledWith("/spectra-first-floor-plan.svg", {
-      cache: "force-cache",
-    });
+    const plot = await screen.findByRole("button", { name: /Plot 3, 16.10 cent/i });
+    expect(fetch).toHaveBeenCalledWith("/moolaparambu-site-plan.svg", { cache: "force-cache" });
+    fireEvent.click(plot);
+    expect(screen.getByRole("heading", { name: "Plot 3" })).toBeInTheDocument();
+    expect(screen.getByText("16.10 cent")).toBeInTheDocument();
+    expect(screen.getByText("Moolaparambu")).toBeInTheDocument();
   });
 
   it("lands on the plot picker with the requested villa when arriving from the villa page", () => {
