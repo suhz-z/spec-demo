@@ -24,7 +24,8 @@ describe("HomePage", () => {
     );
     expect(screen.getByText(/indicative floor plan/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /get started/i })).toHaveAttribute("href", "/plots");
-    expect(screen.getAllByText(/16.10/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/7.00/).length).toBeGreaterThan(0);
+    expect(screen.getByText("MOOLAPARAMBU · KERALA")).toBeInTheDocument();
+    expect(screen.queryByText(/16.10/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/7.00/)).not.toBeInTheDocument();
   });
 });

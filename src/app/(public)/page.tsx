@@ -52,17 +52,6 @@ export default function HomePage() {
 
           <footer className="intro-foot">
             <span>MOOLAPARAMBU · KERALA</span>
-            <div className="foot-stats">
-              <span>
-                <b>6</b> plots
-              </span>
-              <span>
-                <b>16.10</b> cent each
-              </span>
-              <span>
-                <b>7.00</b> cent internal road
-              </span>
-            </div>
           </footer>
         </div>
       </div>

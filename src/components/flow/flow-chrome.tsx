@@ -22,9 +22,7 @@ export function FlowHeader({ step, crumbs }: { step?: string; crumbs?: readonly 
           <div className="flow-meta" aria-label={`Step ${step.replace(" / ", " of ")}`}>
             {step}
           </div>
-        ) : (
-          <span className="flow-location">Moolaparambu · Kerala</span>
-        )}
+        ) : null}
       </header>
       {crumbs && crumbs.length ? (
         <nav className="journey-breadcrumbs" aria-label="Booking progress">

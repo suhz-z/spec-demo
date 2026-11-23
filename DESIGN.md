@@ -798,6 +798,7 @@ Tests must not weaken or delete existing coverage. Phase 2 establishes the runne
 - A waitlist/enquiry submission is not wired because its destination and spam controls remain open under D-23. The all-unavailable state is informational.
 - Mobile sheet keyboard behavior is covered by component tests; touch-device behavior and visual layout still need browser/device review.
 - Phase 4 visual review remains outstanding. Phase 5 server implementation may proceed independently; live payments remain disabled.
+- Retired the `VillaExplorer` and `VillaLandingHero` components and their dedicated tests during the Phase 10 review. Neither was mounted by any route: the live landing page is the static wireframe intro linking to `/plots`, so the explorer's filters, polling, and live counts existed only as tested code, not as a delivered experience. Floor-plan and mini-map coverage formerly in `villa-exploration.test.tsx` is retained in `villa-plan-and-location.test.tsx`. Reintroducing these components requires an explicit decision to wire them into a route.
 
 ### 15.7 Phase 2 did not authorise
 
