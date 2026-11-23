@@ -2762,6 +2762,25 @@ svg {
   height: auto;
 }
 
+/* The Moolaparambu site-plan SVG keeps its own linework styles inline; these
+   rules only add the app's focus treatment and image fallback. */
+.sg-demo-plan .plot-group {
+  cursor: pointer;
+  outline: none;
+}
+
+.sg-demo-plan .plot-group:focus-visible .plot-shape {
+  outline: 2px solid var(--sg-brand);
+  outline-offset: 2px;
+}
+
+.sg-plan-fallback svg,
+.sg-plan-fallback img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .sg-plan-loading {
   padding: var(--sg-space-6);
   color: var(--sg-ink-muted);

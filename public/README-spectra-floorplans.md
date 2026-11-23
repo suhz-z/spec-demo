@@ -68,3 +68,9 @@ async function loadFloorPlan(floor) {
 Call `loadFloorPlan(activeFloor)` whenever the user opens the villa or switches between the Ground floor and First floor tabs. Keep the current `ROOM_DATA` object for the room-detail panel; the SVG's `data-room` attributes map to those room IDs.
 
 If you use inline SVG, retain the SVG `viewBox` so it scales responsively. The room detail data can continue to come from the prototype's `ROOM_DATA` object.
+
+## Moolaparambu site plan
+
+`moolaparambu-site-plan.svg` and `moolaparambu-site-plan-preview.png` replace the demo villa floor plan on the villa detail page. The SVG traces the six-plot subdivision plan, its internal access road and the southern approach; the PNG is a static fallback when the inline SVG cannot be loaded.
+
+The SVG contains its own `<script>` for plot selection. `asset-site-plan.tsx` removes executable content before inserting the SVG inline, keeps its `<style>` for the traced linework, and handles plot selection from React. Plot groups carry `data-plot` and accessible labels such as "Plot 3, 16.10 cent". Areas and dimensions are reproduced as printed in the source drawing.

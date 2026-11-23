@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Container } from "@/components/ui/container";
 import { StatusPill } from "@/components/ui/status-pill";
-import { VillaPlanViewer } from "@/components/inventory/villa-plan-viewer";
+import { SitePlanViewer } from "@/components/inventory/site-plan-viewer";
 import { VillaLocationMap } from "@/components/inventory/villa-location-map";
 import { VillaBookingFlow } from "@/components/booking/villa-booking-flow";
 import { getServerEnv } from "@/lib/env";
@@ -21,7 +21,10 @@ type VillaPageProps = {
 
 export async function generateMetadata({ params }: VillaPageProps): Promise<Metadata> {
   const { villaId } = await params;
-  return { title: `Villa ${villaId}`, description: "Explore villa details and floor plan." };
+  return {
+    title: `Villa ${villaId}`,
+    description: "Explore villa details and the Moolaparambu site plan.",
+  };
 }
 
 export default async function VillaPage({ params, searchParams }: VillaPageProps) {
@@ -143,14 +146,7 @@ export default async function VillaPage({ params, searchParams }: VillaPageProps
           />
         )}
         <VillaLocationMap villa={villa} community={community} />
-        {fixture ? (
-          <VillaPlanViewer villa={villa} plans={fixture.plans} useDemoAssets />
-        ) : (
-          <div className="sg-plan-unavailable">
-            <h2>Plan coming soon</h2>
-            <p>An approved architectural drawing is not available for this villa yet.</p>
-          </div>
-        )}
+        <SitePlanViewer villaCode={villa.id} />
       </Container>
     </section>
   );
