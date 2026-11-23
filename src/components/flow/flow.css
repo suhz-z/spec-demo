@@ -1,0 +1,965 @@
+/* Page-level layout for the route-based Moolaparambu prototype. Component
+   styling (type, buttons, cards, fields) comes from wireframe.css; these rules
+   handle page composition, plan sizing and viewport fitting. */
+
+#wireframe-app.flow-root {
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+#wireframe-app .flow-width {
+  display: flex;
+  width: min(1440px, calc(100% - 96px));
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  margin-inline: auto;
+}
+
+#wireframe-app .flow-page {
+  display: flex;
+  height: 100svh;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f8f9f6;
+  color: #26342b;
+}
+
+#wireframe-app .flow-page > .flow-width {
+  min-height: 0;
+}
+
+#wireframe-app .flow-page-body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+#wireframe-app .flow-location {
+  color: #98a198;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#wireframe-app .journey-breadcrumbs a {
+  padding: 2px 0;
+  color: #78867c;
+  font: 500 11px var(--sans);
+  text-decoration: none;
+  transition: color 0.18s;
+}
+
+#wireframe-app .journey-breadcrumbs a:hover {
+  color: #245b43;
+}
+
+#wireframe-app .flow-back {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: #78847b;
+  font-size: 21px;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    color 0.18s,
+    background 0.18s;
+}
+
+#wireframe-app .flow-back:hover {
+  background: #eef3ed;
+  color: #315e48;
+}
+
+#wireframe-app .flow-page-head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0 17px;
+}
+
+#wireframe-app .flow-page-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 18px;
+}
+
+#wireframe-app .flow-page-head h1 {
+  margin: 0;
+  color: #26342b;
+  font-size: clamp(27px, 3.2vw, 38px);
+  font-weight: 450;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+
+#wireframe-app .flow-page-head p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#wireframe-app .flow-page-aside {
+  flex: 0 0 auto;
+  padding-bottom: 3px;
+  color: #879288;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#wireframe-app .flow-page-foot {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 18px;
+  border-top: 1px solid var(--line);
+  padding: 10px 0 13px;
+  color: #9aa39b;
+  font-size: 9px;
+  letter-spacing: 0.03em;
+}
+
+/* --------------------------------------------------------------------------
+   Landing
+   -------------------------------------------------------------------------- */
+
+#wireframe-app .landing-grid {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  padding: clamp(10px, 2.4vh, 28px) 0;
+}
+
+#wireframe-app .landing-page h1 {
+  max-width: 620px;
+  margin: 0 0 20px;
+  font-size: clamp(42px, 5.8vw, 78px);
+}
+
+#wireframe-app .landing-cta.primary {
+  margin-top: clamp(18px, 3.6vh, 34px);
+  text-decoration: none;
+}
+
+#wireframe-app .landing-art {
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+#wireframe-app .landing-art::before {
+  position: absolute;
+  z-index: -1;
+  width: min(82%, 500px);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  background: #edf1e9;
+  content: "";
+  filter: blur(1px);
+}
+
+#wireframe-app .landing-plan-frame {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+
+#wireframe-app .landing-plan-frame figcaption {
+  flex: 0 0 auto;
+  color: #98a198;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#wireframe-app .landing-plan-image {
+  display: block;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  max-width: 100%;
+  max-height: calc(100% - 24px);
+  border: 1px solid #dfe7dc;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(32, 52, 41, 0.1);
+  object-fit: contain;
+}
+
+#wireframe-app .landing-page .intro-foot {
+  flex: 0 0 58px;
+}
+
+#wireframe-app .landing-page .foot-stats {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+#wireframe-app .landing-page .foot-stats b {
+  font-size: 11px;
+}
+
+/* --------------------------------------------------------------------------
+   Plot picker and floor plan
+   -------------------------------------------------------------------------- */
+
+#wireframe-app .flow-plan-layout {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: stretch;
+  gap: 42px;
+  padding-bottom: 10px;
+}
+
+#wireframe-app .flow-plan-main {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+}
+
+#wireframe-app .flow-plan-toolbar {
+  display: flex;
+  min-height: 36px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 8px;
+}
+
+#wireframe-app .flow-plan-toolbar .floor-tabs {
+  display: flex;
+  gap: 20px;
+}
+
+#wireframe-app .flow-plan-summary {
+  color: #8b968d;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#wireframe-app .flow-plan-legend {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #78847a;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+#wireframe-app .flow-plan-stage {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid #e7ebe4;
+  background: #f0f3ed;
+  padding: 6px;
+}
+
+#wireframe-app .flow-plan-stage .sg-demo-plan {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#wireframe-app .flow-plan-stage .sg-demo-plan > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#wireframe-app .flow-plan-stage .sg-plan-loading {
+  margin: 0;
+  padding: 20px;
+}
+
+#wireframe-app .flow-plan-stage .sg-plan-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#wireframe-app .flow-plan-stage .sg-plan-fallback img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#wireframe-app .flow-plan-note {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 8px;
+  color: #9aa39b;
+  font-size: 9px;
+}
+
+#wireframe-app .flow-side-panel {
+  display: flex;
+  min-height: 0;
+  overflow: auto;
+  flex-direction: column;
+  border-left: 1px solid #e4e9e2;
+  padding: 8px 0 8px 26px;
+  scrollbar-width: thin;
+}
+
+#wireframe-app .flow-side-panel .panel-empty {
+  margin: auto 0;
+}
+
+#wireframe-app .flow-side-panel .villa-title h2 {
+  margin: 0;
+  color: #29382f;
+  font-size: 27px;
+  font-weight: 450;
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+}
+
+#wireframe-app .flow-side-panel .villa-type {
+  font-size: 11px;
+  color: #758178;
+}
+
+#wireframe-app .flow-side-panel .status {
+  flex: 0 0 auto;
+}
+
+#wireframe-app .flow-side-panel .panel-action {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-bottom: 8px;
+  text-decoration: none;
+}
+
+#wireframe-app .flow-side-panel .panel-action span:last-child {
+  color: #315e48;
+}
+
+#wireframe-app .flow-side-panel .room-data {
+  margin-top: 18px;
+}
+
+#wireframe-app .flow-side-panel .panel-empty h2 {
+  margin: 0;
+  color: #526057;
+  font-size: 18px;
+  font-weight: 450;
+  letter-spacing: -0.035em;
+}
+
+#wireframe-app .flow-side-panel .panel-empty p {
+  max-width: 220px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   Summary
+   -------------------------------------------------------------------------- */
+
+#wireframe-app .flow-summary-grid {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  align-items: start;
+  gap: 76px;
+  overflow: auto;
+  padding-bottom: 18px;
+  scrollbar-width: thin;
+}
+
+#wireframe-app .flow-summary-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(240px, 1fr);
+  align-items: center;
+  gap: 30px;
+}
+
+#wireframe-app .flow-summary-plan {
+  display: flex;
+  min-height: 210px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e7ebe4;
+  background: #f0f3ed;
+  padding: 10px;
+}
+
+#wireframe-app .flow-summary-plan img,
+#wireframe-app .flow-summary-plan .sg-demo-plan > svg {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+#wireframe-app .flow-summary-plan .sg-demo-plan {
+  width: 100%;
+  height: 100%;
+}
+
+#wireframe-app .flow-summary-plan .sg-demo-plan[data-static="true"] {
+  pointer-events: none;
+}
+
+#wireframe-app .flow-summary-facts h2 {
+  margin: 12px 0 5px;
+  color: #28372e;
+  font-size: clamp(30px, 3.6vw, 44px);
+  font-weight: 450;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+#wireframe-app .flow-summary-facts > p {
+  margin: 0 0 8px;
+  color: #78847b;
+  font-size: 12px;
+}
+
+#wireframe-app .flow-summary-facts .fact-list {
+  max-width: none;
+}
+
+#wireframe-app .flow-payment-card {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #e4e9e2;
+  padding: 4px 0 0 28px;
+}
+
+#wireframe-app .flow-payment-card .price-intro {
+  padding-bottom: 18px;
+}
+
+#wireframe-app .flow-payment-card .price-intro span {
+  color: #929d94;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+#wireframe-app .flow-payment-card .price-intro strong {
+  margin-top: 6px;
+  font-size: 31px;
+}
+
+#wireframe-app .flow-payment-card .booking-primary,
+#wireframe-app .flow-form-grid .booking-primary,
+#wireframe-app .flow-review-grid .booking-primary,
+#wireframe-app .flow-state-page .booking-primary {
+  text-decoration: none;
+}
+
+#wireframe-app .flow-payment-card .booking-primary {
+  margin-top: 12px;
+}
+
+#wireframe-app .flow-payment-card .prototype-note {
+  margin: 10px 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   Details and review
+   -------------------------------------------------------------------------- */
+
+#wireframe-app .flow-form-grid {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 76px;
+  overflow: auto;
+  padding: 4px 0 24px;
+  scrollbar-width: thin;
+}
+
+#wireframe-app .flow-form-grid .customer-form {
+  gap: 17px;
+}
+
+#wireframe-app .flow-form-grid .form-note {
+  margin: 0;
+}
+
+#wireframe-app .flow-form-grid .booking-aside {
+  padding-top: 2px;
+}
+
+#wireframe-app .flow-form-grid .aside-row {
+  min-height: 38px;
+  font-size: 10px;
+}
+
+#wireframe-app .flow-form-grid .aside-row b {
+  font-size: 10px;
+}
+
+#wireframe-app .inline-text-link {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid #c2cec2;
+  background: transparent;
+  color: #315e48;
+  font: inherit;
+  text-decoration: none;
+}
+
+#wireframe-app .inline-text-link:hover {
+  border-color: #315e48;
+}
+
+#wireframe-app .flow-review-grid {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  align-items: start;
+  gap: 76px;
+  overflow: auto;
+  padding: 4px 0 24px;
+  scrollbar-width: thin;
+}
+
+#wireframe-app .flow-review-grid .form-note {
+  margin: 0;
+}
+
+#wireframe-app .flow-review-grid .plain-edit {
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Payment and outcome states
+   -------------------------------------------------------------------------- */
+
+#wireframe-app .flow-state-page {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 0 0 22px;
+  scrollbar-width: thin;
+}
+
+#wireframe-app .flow-state-page .state-screen {
+  padding: 4px 0 0;
+}
+
+#wireframe-app .flow-state-page .state-screen > p {
+  max-width: 460px;
+}
+
+#wireframe-app .flow-state-page .booking-primary {
+  text-decoration: none;
+}
+
+#wireframe-app .flow-state-page .text-back {
+  text-decoration: none;
+}
+
+#wireframe-app .flow-payment-page .state-screen {
+  padding-top: 0;
+}
+
+#wireframe-app .flow-payment-page .demo-outcomes {
+  margin-top: 22px;
+}
+
+#wireframe-app .flow-state-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+  margin-top: 4px;
+}
+
+#wireframe-app .flow-state-links .text-back {
+  margin: 14px 0 0;
+}
+
+#wireframe-app .flow-confirmation-actions {
+  display: grid;
+  gap: 0;
+  justify-items: center;
+}
+
+#wireframe-app .flow-confirmation-actions .state-action {
+  margin: 24px auto 0;
+}
+
+#wireframe-app .flow-confirmation-actions .text-back {
+  margin-top: 14px;
+}
+
+#wireframe-app .flow-check-status {
+  margin-top: 8px !important;
+}
+
+#wireframe-app .flow-state-page .similar-villas a {
+  min-width: 66px;
+  padding: 10px 13px;
+  border: 1px solid #dce4da;
+  color: #315e48;
+  font: 600 11px var(--sans);
+  text-align: center;
+  text-decoration: none;
+}
+
+#wireframe-app .flow-state-page .similar-villas a:hover {
+  border-color: #315e48;
+  background: #eef3ed;
+}
+
+#wireframe-app .flow-state-page .terms-inline {
+  text-align: left;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive fitting
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  #wireframe-app .flow-width {
+    width: calc(100% - 64px);
+  }
+
+  #wireframe-app .flow-plan-layout {
+    grid-template-columns: minmax(0, 1fr) 270px;
+    gap: 28px;
+  }
+
+  #wireframe-app .flow-summary-grid {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 36px;
+  }
+
+  #wireframe-app .flow-form-grid,
+  #wireframe-app .flow-review-grid {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  #wireframe-app .landing-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px 0 4px;
+  }
+
+  #wireframe-app .landing-copy {
+    max-width: none;
+  }
+
+  #wireframe-app .landing-page h1 {
+    margin-bottom: 11px;
+    font-size: clamp(34px, 7vw, 52px);
+  }
+
+  #wireframe-app .landing-cta.primary {
+    margin-top: 14px;
+  }
+
+  #wireframe-app .flow-plan-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  #wireframe-app .flow-side-panel {
+    max-height: 190px;
+    border-top: 1px solid #e4e9e2;
+    border-left: 0;
+    padding: 10px 0 0;
+  }
+
+  #wireframe-app .flow-side-panel .panel-detail {
+    padding: 10px 0 6px;
+  }
+
+  #wireframe-app .flow-side-panel .panel-empty {
+    margin: 4px 0 0;
+  }
+
+  #wireframe-app .flow-side-panel .panel-empty h2 {
+    font-size: 16px;
+  }
+
+  #wireframe-app .flow-side-panel .panel-empty p {
+    max-width: none;
+    margin-top: 5px;
+  }
+
+  #wireframe-app .flow-side-panel .panel-action {
+    margin-top: 10px;
+  }
+
+  #wireframe-app .flow-side-panel .details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+  }
+
+  #wireframe-app .flow-side-panel .price-line {
+    display: none;
+  }
+
+  #wireframe-app .flow-page-head {
+    align-items: center;
+    padding: 14px 0 11px;
+  }
+
+  #wireframe-app .flow-page-aside {
+    display: none;
+  }
+
+  #wireframe-app .flow-summary-grid,
+  #wireframe-app .flow-form-grid,
+  #wireframe-app .flow-review-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding-bottom: 20px;
+  }
+
+  #wireframe-app .flow-summary-card {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  #wireframe-app .flow-summary-plan {
+    min-height: 170px;
+  }
+
+  #wireframe-app .flow-payment-card,
+  #wireframe-app .booking-aside,
+  #wireframe-app .review-payment {
+    border-top: 1px solid #e4e9e2;
+    border-left: 0;
+    padding: 16px 0 0;
+  }
+
+  #wireframe-app .flow-state-page {
+    padding-bottom: 18px;
+  }
+}
+
+@media (max-width: 700px) {
+  #wireframe-app .flow-width {
+    width: calc(100% - 36px);
+  }
+
+  #wireframe-app .landing-page .intro-foot {
+    flex-basis: 50px;
+  }
+
+  #wireframe-app .landing-page .foot-stats {
+    gap: 10px;
+    font-size: 8px;
+  }
+
+  #wireframe-app .landing-page .foot-stats b {
+    font-size: 10px;
+  }
+
+  #wireframe-app .flow-header {
+    height: 64px;
+  }
+
+  #wireframe-app .journey-breadcrumbs {
+    padding-top: 9px;
+  }
+
+  #wireframe-app .flow-page-head {
+    padding: 10px 0 9px;
+  }
+
+  #wireframe-app .flow-page-heading {
+    gap: 10px;
+  }
+
+  #wireframe-app .flow-page-head h1 {
+    font-size: 26px;
+  }
+
+  #wireframe-app .flow-page-head p {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+
+  #wireframe-app .flow-plan-toolbar {
+    min-height: 31px;
+    padding-bottom: 6px;
+  }
+
+  #wireframe-app .flow-plan-summary,
+  #wireframe-app .flow-plan-legend {
+    font-size: 9px;
+  }
+
+  #wireframe-app .flow-plan-stage {
+    padding: 3px;
+  }
+
+  #wireframe-app .flow-plan-note {
+    font-size: 8px;
+  }
+
+  #wireframe-app .flow-plan-note span:last-child {
+    display: none;
+  }
+
+  #wireframe-app .flow-side-panel {
+    max-height: 166px;
+  }
+
+  #wireframe-app .flow-side-panel .villa-title h2 {
+    font-size: 22px;
+  }
+
+  #wireframe-app .flow-side-panel .details {
+    margin-top: 3px;
+  }
+
+  #wireframe-app .flow-side-panel .detail-row {
+    padding: 6px 0;
+    font-size: 10px;
+  }
+
+  #wireframe-app .flow-side-panel .detail-row b {
+    font-size: 10px;
+  }
+
+  #wireframe-app .flow-page-foot {
+    font-size: 8px;
+    padding-bottom: 10px;
+  }
+
+  #wireframe-app .flow-summary-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  #wireframe-app .flow-summary-plan {
+    min-height: 140px;
+    max-height: 190px;
+  }
+
+  #wireframe-app .flow-summary-plan img,
+  #wireframe-app .flow-summary-plan .sg-demo-plan > svg {
+    max-height: 166px;
+  }
+
+  #wireframe-app .flow-summary-facts h2 {
+    margin-top: 8px;
+    font-size: 32px;
+  }
+
+  #wireframe-app .flow-summary-facts .detail-row b {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  #wireframe-app .flow-state-page .state-screen h2 {
+    font-size: 26px;
+  }
+
+  #wireframe-app .flow-state-page .state-screen > p {
+    font-size: 11px;
+  }
+}
+
+@media (max-height: 680px) and (min-width: 901px) {
+  #wireframe-app .landing-page .intro-foot {
+    flex-basis: 48px;
+  }
+
+  #wireframe-app .landing-page h1 {
+    margin: 0 0 14px;
+    font-size: clamp(36px, 4.6vw, 58px);
+  }
+
+  #wireframe-app .landing-cta.primary {
+    height: 52px;
+    margin-top: 14px;
+  }
+
+  #wireframe-app .flow-header {
+    height: 64px;
+  }
+
+  #wireframe-app .flow-page-head {
+    padding-top: 12px;
+    padding-bottom: 10px;
+  }
+
+  #wireframe-app .flow-page-head h1 {
+    font-size: 31px;
+  }
+
+  #wireframe-app .flow-side-panel {
+    padding-top: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #wireframe-app .flow-back {
+    transition: none;
+  }
+}

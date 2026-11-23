@@ -1,15 +1,71 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-import { WireframeFlow } from "@/components/wireframe/wireframe-flow";
+import { FlowHeader } from "@/components/flow/flow-chrome";
+
+import "@/components/flow/flow.css";
 import "@/components/wireframe/wireframe.css";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
-  title: "Spectra Gardens — V3.3",
-  description: "Explore the Spectra Gardens villa layout and floor plans.",
+  title: "Spectra Gardens — Moolaparambu plots",
+  description:
+    "Six plots of 16.10 cent each at Moolaparambu, Kerala, served by a 7.00 cent internal road.",
 };
 
 export default function HomePage() {
-  return <WireframeFlow />;
+  return (
+    <div id="wireframe-app" className="flow-root">
+      <div className="flow-page landing-page">
+        <div className="flow-width">
+          <FlowHeader />
+
+          <main className="landing-grid">
+            <div className="landing-copy">
+              <h1>
+                Find a place <br />
+                to feel <em>at home.</em>
+              </h1>
+              <Link className="primary landing-cta" href="/plots">
+                <span>Get started</span>
+                <span className="arrow-circle" aria-hidden="true">
+                  ↗
+                </span>
+              </Link>
+            </div>
+
+            <div className="landing-art">
+              <figure className="landing-plan-frame">
+                <Image
+                  className="landing-plan-image"
+                  src="/spectra-ground-floor-plan-preview.png"
+                  alt="Indicative ground-floor layout of a Spectra Gardens villa"
+                  width={1000}
+                  height={700}
+                  priority
+                  unoptimized
+                />
+                <figcaption>Indicative floor plan · not to scale</figcaption>
+              </figure>
+            </div>
+          </main>
+
+          <footer className="intro-foot">
+            <span>MOOLAPARAMBU · KERALA</span>
+            <div className="foot-stats">
+              <span>
+                <b>6</b> plots
+              </span>
+              <span>
+                <b>16.10</b> cent each
+              </span>
+              <span>
+                <b>7.00</b> cent internal road
+              </span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  );
 }

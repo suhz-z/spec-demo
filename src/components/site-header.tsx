@@ -16,9 +16,9 @@ export function SiteHeader() {
           </Link>
 
           <div className="sg-nav">
-            <span className="sg-header__location">Kottakkal · Kerala</span>
+            <span className="sg-header__location">Moolaparambu · Kerala</span>
             <nav aria-label="Primary">
-              <Link href="/#villa-map">Explore villas</Link>
+              <Link href="/plots">Explore plots</Link>
             </nav>
           </div>
         </div>

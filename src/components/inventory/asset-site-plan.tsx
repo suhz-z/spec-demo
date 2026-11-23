@@ -14,6 +14,10 @@ type AssetSitePlanProps = {
   onSelect: (plot: SitePlot) => void;
   onPreview: (plot: SitePlot | null) => void;
   onPlots: (plots: SitePlot[]) => void;
+  /** Render the plan as a static figure with only the selected plot marked. */
+  readOnly?: boolean;
+  /** Accessible name for the static figure. */
+  label?: string;
 };
 
 const SITE_PLAN_SRC = "/moolaparambu-site-plan.svg";
@@ -58,6 +62,8 @@ export function AssetSitePlan({
   onSelect,
   onPreview,
   onPlots,
+  readOnly = false,
+  label,
 }: AssetSitePlanProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const plotsRef = useRef<SitePlot[]>([]);
@@ -88,11 +94,23 @@ export function AssetSitePlan({
 
         const svg = parsed.documentElement;
         sanitize(svg);
+        if (readOnly) {
+          svg.setAttribute("aria-hidden", "true");
+          svg.querySelectorAll("[data-plot]").forEach((group) => {
+            group.removeAttribute("tabindex");
+            group.removeAttribute("role");
+          });
+        }
         const plots = parsePlots(svg);
         if (plots.length === 0) throw new Error("site plan has no selectable plots");
         plotsRef.current = plots;
         container.replaceChildren(svg);
         callbacks.current.onPlots(plots);
+
+        if (readOnly) {
+          setStatus("ready");
+          return;
+        }
 
         const closestPlot = (target: EventTarget | null): Element | null =>
           target instanceof Element ? target.closest("[data-plot]") : null;
@@ -139,7 +157,7 @@ export function AssetSitePlan({
       cancelled = true;
       detachListeners?.();
     };
-  }, []);
+  }, [readOnly]);
 
   useEffect(() => {
     const container = hostRef.current;
@@ -156,7 +174,13 @@ export function AssetSitePlan({
   return (
     <>
       {/* React must not own these children: the validated SVG is inserted with DOM APIs. */}
-      <div className="sg-demo-plan" ref={hostRef} />
+      <div
+        className="sg-demo-plan"
+        ref={hostRef}
+        data-static={readOnly ? "true" : undefined}
+        role={readOnly ? "img" : undefined}
+        aria-label={readOnly ? (label ?? "Moolaparambu land subdivision plan") : undefined}
+      />
       {status === "loading" ? <p className="sg-plan-loading">Loading site plan…</p> : null}
       {status === "error" ? (
         <div className="sg-plan-fallback">

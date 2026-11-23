@@ -7,7 +7,7 @@ export function SiteFooter() {
         <div className="sg-footer__inner">
           <div className="sg-footer__meta">
             <strong>Spectra Gardens</strong>
-            <span>Kottakkal, Kerala</span>
+            <span>Moolaparambu, Kerala</span>
             <span>Confirm availability and terms before making a purchase decision.</span>
           </div>
           <div>
