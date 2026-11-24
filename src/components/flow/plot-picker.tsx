@@ -60,19 +60,12 @@ function PanelDetails({ plot }: { plot: Plot }) {
 
 export function PlotPicker() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [loadedCount, setLoadedCount] = useState<number | null>(null);
 
-  const shown = getPlot(hoveredId ?? selectedId);
   const selected = getPlot(selectedId);
 
   const handleSelect = useCallback((plot: SitePlot) => {
     setSelectedId(plot.id);
-    setHoveredId(null);
-  }, []);
-
-  const handlePreview = useCallback((plot: SitePlot | null) => {
-    setHoveredId(plot?.id ?? null);
   }, []);
 
   const handlePlots = useCallback((plots: SitePlot[]) => {
@@ -85,7 +78,6 @@ export function PlotPicker() {
         backHref="/"
         backLabel="Back to home"
         title="Select a plot"
-        subtitle={`Six plots of ${SITE.plotAreaLabel} each, served by a ${SITE.roadAreaLabel} internal road.`}
         aside={`${SITE.name} · ${SITE.region}`}
       />
 
@@ -104,7 +96,7 @@ export function PlotPicker() {
             <AssetSitePlan
               selectedPlotId={selected?.id}
               onSelect={handleSelect}
-              onPreview={handlePreview}
+              onPreview={() => {}}
               onPlots={handlePlots}
             />
           </FlowPlanStage>
@@ -116,11 +108,11 @@ export function PlotPicker() {
 
         <aside className="flow-side-panel" aria-live="polite">
           <div className="panel-top">
-            <span>{hoveredId ? "Plot preview" : "Plot details"}</span>
-            <span>{shown ? `PLOT ${shown.id}` : "—"}</span>
+            <span>Plot details</span>
+            <span>{selected ? `PLOT ${selected.id}` : "—"}</span>
           </div>
-          {shown ? (
-            <PanelDetails plot={shown} />
+          {selected ? (
+            <PanelDetails plot={selected} />
           ) : (
             <div className="panel-empty">
               <h2>Select a plot</h2>

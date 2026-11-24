@@ -36,7 +36,7 @@ describe("SummaryPage", () => {
   it("highlights the chosen plot on the source site plan", async () => {
     const { container } = render(<SummaryPage plot={plot3} />);
 
-    expect(screen.getByRole("heading", { name: /your selection/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Plot 3" })).toBeInTheDocument();
     expect(screen.getByText("SELECTED PLOT · SITE PLAN")).toBeInTheDocument();
     expect(screen.getAllByText("Price on request").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /proceed to booking/i })).toHaveAttribute(

@@ -1866,6 +1866,12 @@
 #wireframe-app .field input[aria-invalid="true"] {
   border-color: #b45f54;
 }
+#wireframe-app .field-error {
+  color: #ad554c;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.4;
+}
 #wireframe-app .phone-field {
   display: flex;
   align-items: center;

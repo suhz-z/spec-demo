@@ -53,7 +53,7 @@ describe("PlotPicker", () => {
     expect(action).toHaveAttribute("href", "/plots/3/summary");
   });
 
-  it("previews a plot on hover without selecting it", async () => {
+  it("keeps plot details hidden until a plot is selected", async () => {
     render(
       <FlowProvider>
         <PlotPicker />
@@ -63,7 +63,8 @@ describe("PlotPicker", () => {
     const plotFive = await screen.findByRole("button", { name: /Plot 5, 16.10 cent/i });
     fireEvent.pointerOver(plotFive);
 
-    expect(screen.getByText("Plot preview")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: "Plot 5" })).toBeInTheDocument();
+    expect(screen.getByText("Plot details")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Select a plot" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 2, name: "Plot 5" })).not.toBeInTheDocument();
   });
 });

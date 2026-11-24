@@ -11,8 +11,7 @@ export function SummaryPage({ plot }: { plot: Plot }) {
       <FlowPageHead
         backHref={plot.hasFloorPlan ? `/plots/${plot.id}/floor-plan` : "/plots"}
         backLabel={plot.hasFloorPlan ? "Back to floor plan" : "Back to site plan"}
-        title="Your selection"
-        subtitle={`Plot ${plot.id} · ${SITE.name}`}
+        title={plot.name}
         aside="Check the facts before continuing"
       />
 
@@ -23,7 +22,6 @@ export function SummaryPage({ plot }: { plot: Plot }) {
           </div>
           <div className="flow-summary-facts">
             <div className="summary-eyebrow">SELECTED PLOT · SITE PLAN</div>
-            <h2>Plot {plot.id}</h2>
             <p>
               {SITE.name} · {SITE.region}
             </p>

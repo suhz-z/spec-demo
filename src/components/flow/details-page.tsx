@@ -9,7 +9,7 @@ import { FLOW_STEPS, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
 import { useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
-type FieldErrors = { name?: boolean; mobile?: boolean; email?: boolean };
+type FieldErrors = { name?: string; mobile?: string; email?: string };
 
 type Draft = {
   name: string;
@@ -17,6 +17,17 @@ type Draft = {
   email: string;
   accepted: boolean;
 };
+
+function validateField(field: "name" | "mobile" | "email", value: string): string | undefined {
+  if (field === "name" && value.trim().length < 2) return "Enter your full name.";
+  if (field === "mobile" && !/^\d{10}$/.test(value)) {
+    return "Enter a valid 10-digit mobile number.";
+  }
+  if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+    return "Enter a valid email address.";
+  }
+  return undefined;
+}
 
 export function DetailsPage({ plot }: { plot: Plot }) {
   const router = useRouter();
@@ -36,23 +47,30 @@ export function DetailsPage({ plot }: { plot: Plot }) {
     setDraft({ ...values, ...patch });
   };
 
+  const updateField = (field: "name" | "mobile" | "email", value: string) => {
+    const nextValue = field === "mobile" ? value.replace(/\D/g, "").slice(0, 10) : value;
+    update({ [field]: nextValue });
+    setFieldErrors((current) => ({
+      ...current,
+      [field]: validateField(field, nextValue),
+    }));
+    setFormError("");
+  };
+
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const errors: FieldErrors = {};
+    const nameError = validateField("name", values.name);
+    const mobileError = validateField("mobile", values.mobile);
+    const emailError = validateField("email", values.email);
+    if (nameError) errors.name = nameError;
+    if (mobileError) errors.mobile = mobileError;
+    if (emailError) errors.email = emailError;
     const messages: string[] = [];
 
-    if (values.name.trim().length < 2) {
-      errors.name = true;
-      messages.push("Enter your full name.");
-    }
-    if (!/^\d{10}$/.test(values.mobile)) {
-      errors.mobile = true;
-      messages.push("Enter a valid 10-digit mobile number.");
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
-      errors.email = true;
-      messages.push("Enter a valid email address.");
-    }
+    if (nameError) messages.push(nameError);
+    if (mobileError) messages.push(mobileError);
+    if (emailError) messages.push(emailError);
     if (!values.accepted) messages.push("Accept the booking terms to continue.");
 
     setFieldErrors(errors);
@@ -89,9 +107,15 @@ export function DetailsPage({ plot }: { plot: Plot }) {
               placeholder="Name as on ID"
               value={values.name}
               aria-invalid={Boolean(fieldErrors.name)}
+              aria-describedby={fieldErrors.name ? "details-name-error" : undefined}
               aria-label="Full name"
-              onChange={(event) => update({ name: event.target.value })}
+              onChange={(event) => updateField("name", event.target.value)}
             />
+            {fieldErrors.name ? (
+              <em id="details-name-error" className="field-error">
+                {fieldErrors.name}
+              </em>
+            ) : null}
           </label>
 
           <label className="field">
@@ -106,12 +130,16 @@ export function DetailsPage({ plot }: { plot: Plot }) {
                 placeholder="10-digit mobile number"
                 value={values.mobile}
                 aria-invalid={Boolean(fieldErrors.mobile)}
+                aria-describedby={fieldErrors.mobile ? "details-mobile-error" : undefined}
                 aria-label="Mobile number"
-                onChange={(event) =>
-                  update({ mobile: event.target.value.replace(/\D/g, "").slice(0, 10) })
-                }
+                onChange={(event) => updateField("mobile", event.target.value)}
               />
             </div>
+            {fieldErrors.mobile ? (
+              <em id="details-mobile-error" className="field-error">
+                {fieldErrors.mobile}
+              </em>
+            ) : null}
           </label>
 
           <label className="field">
@@ -122,9 +150,15 @@ export function DetailsPage({ plot }: { plot: Plot }) {
               placeholder="name@example.com"
               value={values.email}
               aria-invalid={Boolean(fieldErrors.email)}
+              aria-describedby={fieldErrors.email ? "details-email-error" : undefined}
               aria-label="Email"
-              onChange={(event) => update({ email: event.target.value })}
+              onChange={(event) => updateField("email", event.target.value)}
             />
+            {fieldErrors.email ? (
+              <em id="details-email-error" className="field-error">
+                {fieldErrors.email}
+              </em>
+            ) : null}
           </label>
 
           <label className="terms-check">
