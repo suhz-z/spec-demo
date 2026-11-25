@@ -22,16 +22,29 @@ export const SITE = {
 
 export const PLOT_AREA_SQFT = Math.round(SITE.plotAreaCent * SQFT_PER_CENT);
 
-const DEMO_PLOT_PRICE = 4_830_000;
-const DEMO_BOOKING_ADVANCE = 500_000;
+const DEMO_PLOT_PRICES = [
+  4_500_000,
+  4_650_000,
+  4_830_000,
+  4_980_000,
+  5_100_000,
+  5_300_000,
+] as const;
 
-export const DEMO_PLOT_PRICING = {
-  propertyPrice: DEMO_PLOT_PRICE,
-  bookingAdvance: DEMO_BOOKING_ADVANCE,
-  taxesAndCharges: 241_500,
-  remainingBalance: DEMO_PLOT_PRICE - DEMO_BOOKING_ADVANCE,
-  totalPayable: DEMO_PLOT_PRICE + 241_500,
-} as const;
+export function getDemoPlotPricing(plotId: string) {
+  const plotIndex = Number.parseInt(plotId, 10) - 1;
+  const propertyPrice = DEMO_PLOT_PRICES[plotIndex] ?? DEMO_PLOT_PRICES[0];
+  const bookingAdvance = propertyPrice * 0.1;
+  const taxesAndCharges = propertyPrice * 0.05;
+
+  return {
+    propertyPrice,
+    bookingAdvance,
+    taxesAndCharges,
+    remainingBalance: propertyPrice - bookingAdvance,
+    totalPayable: propertyPrice + taxesAndCharges,
+  };
+}
 
 export function formatRupees(amount: number): string {
   return `₹${amount.toLocaleString("en-IN")}`;

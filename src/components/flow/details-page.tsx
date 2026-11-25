@@ -16,11 +16,11 @@ import {
 } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
 import {
-  DEMO_PLOT_PRICING,
   FLOW_STEPS,
   flowCrumbs,
   formatRupees,
   formatSqFt,
+  getDemoPlotPricing,
   type Plot,
 } from "./flow-data";
 import { useFlow } from "./flow-provider";
@@ -49,6 +49,7 @@ function validateField(field: "name" | "mobile" | "email", value: string): strin
 export function DetailsPage({ plot }: { plot: Plot }) {
   const router = useRouter();
   const { hydrated, customer, acceptedTerms, saveCustomer } = useFlow();
+  const pricing = getDemoPlotPricing(plot.id);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState("");
@@ -241,11 +242,11 @@ export function DetailsPage({ plot }: { plot: Plot }) {
           <div className="selection-rows">
             <div className="selection-row">
               <span>Property price</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
+              <b>{formatRupees(pricing.propertyPrice)}</b>
             </div>
             <div className="selection-row">
               <span>Pay now</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
+              <b>{formatRupees(pricing.bookingAdvance)}</b>
             </div>
             <div className="selection-row">
               <span>Availability</span>

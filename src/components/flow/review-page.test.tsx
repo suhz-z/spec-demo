@@ -47,7 +47,7 @@ describe("ReviewPage", () => {
     expect(screen.getByText("Simile Jamal")).toBeInTheDocument();
     expect(screen.getByText("+91 9494949494")).toBeInTheDocument();
     expect(screen.getByText("simile@example.com")).toBeInTheDocument();
-    expect(screen.getByText("₹48,30,000")).toBeInTheDocument();
+    expect(screen.getByText("₹45,00,000")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /edit details/i })).toHaveAttribute(
       "href",
       "/plots/1/details",

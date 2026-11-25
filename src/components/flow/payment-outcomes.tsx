@@ -5,17 +5,18 @@ import { useState } from "react";
 
 import { FlowPageHead } from "./flow-chrome";
 import {
-  DEMO_PLOT_PRICING,
   FLOW_STEPS,
   PLOTS,
   flowCrumbs,
   formatRupees,
+  getDemoPlotPricing,
   type Plot,
 } from "./flow-data";
 import { FlowShell } from "./flow-shell";
 
 export function PaymentPendingPage({ plot }: { plot: Plot }) {
   const [feedback, setFeedback] = useState("");
+  const pricing = getDemoPlotPricing(plot.id);
 
   return (
     <FlowShell step={FLOW_STEPS.outcome} crumbs={flowCrumbs("payment/pending", plot.id)}>
@@ -35,7 +36,7 @@ export function PaymentPendingPage({ plot }: { plot: Plot }) {
           <h2>Payment is pending</h2>
           <p>The payment provider has not confirmed this transaction yet. Do not pay again.</p>
           <p className="state-reference">
-            Plot {plot.id} · Amount due {formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}
+            Plot {plot.id} · Amount due {formatRupees(pricing.bookingAdvance)}
           </p>
           <button
             type="button"
@@ -68,6 +69,8 @@ export function PaymentPendingPage({ plot }: { plot: Plot }) {
 }
 
 export function PaymentFailedPage({ plot }: { plot: Plot }) {
+  const pricing = getDemoPlotPricing(plot.id);
+
   return (
     <FlowShell step={FLOW_STEPS.outcome} crumbs={flowCrumbs("payment/failed", plot.id)}>
       <FlowPageHead
@@ -88,7 +91,7 @@ export function PaymentFailedPage({ plot }: { plot: Plot }) {
             No booking has been created. You can return to payment review or choose another plot.
           </p>
           <p className="state-reference">
-            Plot {plot.id} · Amount due {formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}
+            Plot {plot.id} · Amount due {formatRupees(pricing.bookingAdvance)}
           </p>
           <Link className="booking-primary state-action" href={`/plots/${plot.id}/payment`}>
             Try payment again <span aria-hidden="true">↗</span>

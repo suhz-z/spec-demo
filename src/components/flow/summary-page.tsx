@@ -12,12 +12,12 @@ import type { SitePlot } from "@/components/inventory/asset-site-plan";
 
 import { FlowPageHead } from "./flow-chrome";
 import {
-  DEMO_PLOT_PRICING,
   FLOW_STEPS,
   SITE,
   flowCrumbs,
   formatRupees,
   formatSqFt,
+  getDemoPlotPricing,
   getPlot,
   type Plot,
 } from "./flow-data";
@@ -45,6 +45,7 @@ export function SummaryPage({ plot }: { plot: Plot }) {
   } | null>(null);
   const didDragRef = useRef(false);
   const selectedPlot = getPlot(selectedId) ?? plot;
+  const pricing = getDemoPlotPricing(selectedPlot.id);
   const [areaValue, areaUnit] = splitValue(selectedPlot.area);
   const [sqFtValue, sqFtUnit] = splitValue(formatSqFt(selectedPlot.areaSqFt));
   const [roadValue] = splitValue(SITE.roadAreaLabel);
@@ -174,7 +175,7 @@ export function SummaryPage({ plot }: { plot: Plot }) {
           <div className="price-intro">
             <span>{`PLOT ${selectedPlot.id} PRICE`}</span>
             <div className="price-title-row">
-              <strong>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</strong>
+              <strong>{formatRupees(pricing.propertyPrice)}</strong>
             </div>
           </div>
           <div className="price-facts">
@@ -194,20 +195,20 @@ export function SummaryPage({ plot }: { plot: Plot }) {
           <div className="price-breakdown">
             <div className="detail-row">
               <span>Booking advance</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
+              <b>{formatRupees(pricing.bookingAdvance)}</b>
             </div>
             <div className="detail-row">
               <span>Taxes &amp; charges</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.taxesAndCharges)}</b>
+              <b>{formatRupees(pricing.taxesAndCharges)}</b>
             </div>
             <div className="detail-row">
               <span>Remaining balance</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.remainingBalance)}</b>
+              <b>{formatRupees(pricing.remainingBalance)}</b>
             </div>
           </div>
           <div className="pay-total">
             <span>Final payable amount</span>
-            <b>{formatRupees(DEMO_PLOT_PRICING.totalPayable)}</b>
+            <b>{formatRupees(pricing.totalPayable)}</b>
           </div>
           <details className="terms-inline">
             <summary>

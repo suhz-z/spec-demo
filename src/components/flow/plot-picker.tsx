@@ -8,10 +8,10 @@ import { AssetSitePlan, type SitePlot } from "@/components/inventory/asset-site-
 import { FlowPageHead } from "./flow-chrome";
 import {
   FLOW_STEPS,
-  DEMO_PLOT_PRICING,
   SITE,
   flowCrumbs,
   formatRupees,
+  getDemoPlotPricing,
   formatSqFt,
   getPlot,
   plotPrimaryAction,
@@ -21,6 +21,7 @@ import { FlowPlanStage, FlowShell } from "./flow-shell";
 
 function PanelDetails({ plot }: { plot: Plot }) {
   const next = plotPrimaryAction(plot);
+  const pricing = getDemoPlotPricing(plot.id);
   return (
     <div className="panel-detail">
       <div className="villa-title">
@@ -48,8 +49,8 @@ function PanelDetails({ plot }: { plot: Plot }) {
       </div>
       <div className="price-line">
         <span>Price</span>
-        <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
-        <small>{formatRupees(DEMO_PLOT_PRICING.propertyPrice / SITE.plotAreaCent)} per cent</small>
+        <b>{formatRupees(pricing.propertyPrice)}</b>
+        <small>{formatRupees(pricing.propertyPrice / SITE.plotAreaCent)} per cent</small>
       </div>
       <Link className="sg-cta panel-cta" href={next.href}>
         <span>{next.label}</span>

@@ -4,13 +4,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { FlowPageHead } from "./flow-chrome";
-import { DEMO_PLOT_PRICING, FLOW_STEPS, flowCrumbs, formatRupees, type Plot } from "./flow-data";
+import {
+  FLOW_STEPS,
+  flowCrumbs,
+  formatRupees,
+  getDemoPlotPricing,
+  type Plot,
+} from "./flow-data";
 import { makeReference, useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
 export function PaymentPage({ plot }: { plot: Plot }) {
   const router = useRouter();
   const { setReference } = useFlow();
+  const pricing = getDemoPlotPricing(plot.id);
 
   const choose = (outcome: "success" | "pending" | "failed" | "taken") => {
     if (outcome === "success") {
@@ -38,7 +45,7 @@ export function PaymentPage({ plot }: { plot: Plot }) {
           <h2>Payment gateway</h2>
           <p>Choose an outcome to continue.</p>
           <p className="state-reference">
-            Plot {plot.id} · Amount due now {formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}
+            Plot {plot.id} · Amount due now {formatRupees(pricing.bookingAdvance)}
           </p>
 
           <details className="demo-outcomes">

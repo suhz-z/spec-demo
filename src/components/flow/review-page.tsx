@@ -7,11 +7,11 @@ import { AssetSitePlan } from "@/components/inventory/asset-site-plan";
 import { ArrowRightIcon, CheckoutScenery, SelectionWave } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
 import {
-  DEMO_PLOT_PRICING,
   FLOW_STEPS,
   flowCrumbs,
   formatRupees,
   formatSqFt,
+  getDemoPlotPricing,
   type Plot,
 } from "./flow-data";
 import { useFlow } from "./flow-provider";
@@ -19,6 +19,7 @@ import { FlowShell } from "./flow-shell";
 
 export function ReviewPage({ plot }: { plot: Plot }) {
   const { hydrated, customer } = useFlow();
+  const pricing = getDemoPlotPricing(plot.id);
 
   if (!hydrated) {
     return (
@@ -132,19 +133,19 @@ export function ReviewPage({ plot }: { plot: Plot }) {
           <div className="payment-rows">
             <div className="payment-row">
               <span>Plot price</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
+              <b>{formatRupees(pricing.propertyPrice)}</b>
             </div>
             <div className="payment-row">
               <span>Booking advance</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
+              <b>{formatRupees(pricing.bookingAdvance)}</b>
             </div>
             <div className="payment-row">
               <span>Taxes and charges</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.taxesAndCharges)}</b>
+              <b>{formatRupees(pricing.taxesAndCharges)}</b>
             </div>
             <div className="payment-row emphasis">
               <span>Amount due now</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
+              <b>{formatRupees(pricing.bookingAdvance)}</b>
             </div>
           </div>
 

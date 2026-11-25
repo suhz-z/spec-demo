@@ -4,18 +4,19 @@ import Link from "next/link";
 
 import { FlowPageHead } from "./flow-chrome";
 import {
-  DEMO_PLOT_PRICING,
   FLOW_STEPS,
   SITE,
   flowCrumbs,
   formatRupees,
   formatSqFt,
+  getDemoPlotPricing,
   type Plot,
 } from "./flow-data";
 import { useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
 function downloadSummary(plot: Plot, buyer: string, reference: string) {
+  const pricing = getDemoPlotPricing(plot.id);
   const lines = [
     "SPECTRA GARDENS - BOOKING SUMMARY",
     "",
@@ -25,9 +26,9 @@ function downloadSummary(plot: Plot, buyer: string, reference: string) {
     `Buyer: ${buyer}`,
     `Reference: ${reference}`,
     "Payment status: Not collected",
-    `Property price: ${formatRupees(DEMO_PLOT_PRICING.propertyPrice)}`,
-    `Booking advance: ${formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}`,
-    `Final payable amount: ${formatRupees(DEMO_PLOT_PRICING.totalPayable)}`,
+    `Property price: ${formatRupees(pricing.propertyPrice)}`,
+    `Booking advance: ${formatRupees(pricing.bookingAdvance)}`,
+    `Final payable amount: ${formatRupees(pricing.totalPayable)}`,
   ];
   const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -42,6 +43,7 @@ function downloadSummary(plot: Plot, buyer: string, reference: string) {
 
 export function ConfirmationPage({ plot }: { plot: Plot }) {
   const { hydrated, customer, reference } = useFlow();
+  const pricing = getDemoPlotPricing(plot.id);
 
   if (!hydrated) {
     return (
@@ -120,11 +122,11 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
             </div>
             <div className="aside-row">
               <span>Property price</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
+              <b>{formatRupees(pricing.propertyPrice)}</b>
             </div>
             <div className="aside-row">
               <span>Amount due now</span>
-              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
+              <b>{formatRupees(pricing.bookingAdvance)}</b>
             </div>
           </div>
           <div className="flow-confirmation-actions">
