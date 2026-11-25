@@ -1386,13 +1386,14 @@
 #wireframe-app .details-checkout-grid {
   grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
   gap: clamp(40px, 4vw, 56px);
-  padding-top: 12px;
+  padding-top: 24px;
 }
 
 #wireframe-app .review-checkout-grid {
   grid-template-columns: minmax(0, 1fr) minmax(290px, 390px);
   align-items: start;
   gap: clamp(32px, 3vw, 40px);
+  padding-top: 24px;
 }
 
 #wireframe-app .checkout-form {
