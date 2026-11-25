@@ -37,10 +37,10 @@ describe("SummaryPage", () => {
     const { container } = render(<SummaryPage plot={plot3} />);
 
     expect(screen.getByRole("heading", { level: 1, name: "Plot 3" })).toBeInTheDocument();
-    expect(screen.getAllByText("Price on request").length).toBeGreaterThan(0);
+    expect(screen.getByText("₹48,30,000")).toBeInTheDocument();
+    expect(screen.getByText("₹50,71,500")).toBeInTheDocument();
     expect(container.querySelectorAll(".price-fact")).toHaveLength(3);
     expect(screen.queryByText("SELECTED PLOT · SITE PLAN")).not.toBeInTheDocument();
-    expect(screen.getByText("On request")).toHaveClass("status", "available");
     expect(screen.queryByText("Check the facts before continuing")).not.toBeInTheDocument();
     expect(screen.queryByText(/source drawing/i)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /proceed to booking/i })).toHaveAttribute(

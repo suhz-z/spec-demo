@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { FlowPageHead } from "./flow-chrome";
-import { FLOW_STEPS, flowCrumbs, type Plot } from "./flow-data";
+import { DEMO_PLOT_PRICING, FLOW_STEPS, flowCrumbs, formatRupees, type Plot } from "./flow-data";
 import { makeReference, useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
@@ -37,7 +37,9 @@ export function PaymentPage({ plot }: { plot: Plot }) {
           <div className="aside-label">PAYMENT</div>
           <h2>Payment gateway</h2>
           <p>Choose an outcome to continue.</p>
-          <p className="state-reference">Plot {plot.id}</p>
+          <p className="state-reference">
+            Plot {plot.id} · Amount due now {formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}
+          </p>
 
           <details className="demo-outcomes">
             <summary>Choose an outcome</summary>

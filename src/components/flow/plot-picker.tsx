@@ -8,8 +8,10 @@ import { AssetSitePlan, type SitePlot } from "@/components/inventory/asset-site-
 import { FlowPageHead } from "./flow-chrome";
 import {
   FLOW_STEPS,
+  DEMO_PLOT_PRICING,
   SITE,
   flowCrumbs,
+  formatRupees,
   formatSqFt,
   getPlot,
   plotPrimaryAction,
@@ -41,13 +43,13 @@ function PanelDetails({ plot }: { plot: Plot }) {
         </div>
         <div className="detail-row">
           <span>Availability</span>
-          <b>On request</b>
+          <b>Enquiries open</b>
         </div>
       </div>
       <div className="price-line">
         <span>Price</span>
-        <b>Price on request</b>
-        <small>No approved price is published for this plot.</small>
+        <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
+        <small>{formatRupees(DEMO_PLOT_PRICING.propertyPrice / SITE.plotAreaCent)} per cent</small>
       </div>
       <Link className="sg-cta panel-cta" href={next.href}>
         <span>{next.label}</span>

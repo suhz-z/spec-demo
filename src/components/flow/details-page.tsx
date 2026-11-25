@@ -15,7 +15,14 @@ import {
   SelectionWave,
 } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
-import { FLOW_STEPS, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
+import {
+  DEMO_PLOT_PRICING,
+  FLOW_STEPS,
+  flowCrumbs,
+  formatRupees,
+  formatSqFt,
+  type Plot,
+} from "./flow-data";
 import { useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
@@ -234,16 +241,16 @@ export function DetailsPage({ plot }: { plot: Plot }) {
           <div className="selection-rows">
             <div className="selection-row">
               <span>Property price</span>
-              <b>Price on request</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
             </div>
             <div className="selection-row">
               <span>Pay now</span>
-              <b>To be confirmed</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
             </div>
             <div className="selection-row">
               <span>Availability</span>
               <b>
-                <span className="status available">On request</span>
+              <span className="status available">Enquiries open</span>
               </b>
             </div>
           </div>

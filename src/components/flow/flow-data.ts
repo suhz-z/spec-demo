@@ -4,8 +4,8 @@
  * six plots of 16.10 cent each and a 7.00 cent internal access road.
  *
  * The source drawing carries no prices, availability, villa type or built-up
- * areas. Those stay "on request" or "to be confirmed" rather than being
- * invented for the prototype.
+ * areas. Plot prices below are display-only prototype values and must not be
+ * used for inventory, payment calculations or production pricing.
  */
 export const SQFT_PER_CENT = 435.6;
 
@@ -21,6 +21,21 @@ export const SITE = {
 } as const;
 
 export const PLOT_AREA_SQFT = Math.round(SITE.plotAreaCent * SQFT_PER_CENT);
+
+const DEMO_PLOT_PRICE = 4_830_000;
+const DEMO_BOOKING_ADVANCE = 500_000;
+
+export const DEMO_PLOT_PRICING = {
+  propertyPrice: DEMO_PLOT_PRICE,
+  bookingAdvance: DEMO_BOOKING_ADVANCE,
+  taxesAndCharges: 241_500,
+  remainingBalance: DEMO_PLOT_PRICE - DEMO_BOOKING_ADVANCE,
+  totalPayable: DEMO_PLOT_PRICE + 241_500,
+} as const;
+
+export function formatRupees(amount: number): string {
+  return `₹${amount.toLocaleString("en-IN")}`;
+}
 
 export type Plot = {
   id: string;

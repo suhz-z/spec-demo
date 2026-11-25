@@ -11,7 +11,16 @@ import type {
 import type { SitePlot } from "@/components/inventory/asset-site-plan";
 
 import { FlowPageHead } from "./flow-chrome";
-import { FLOW_STEPS, SITE, flowCrumbs, formatSqFt, getPlot, type Plot } from "./flow-data";
+import {
+  DEMO_PLOT_PRICING,
+  FLOW_STEPS,
+  SITE,
+  flowCrumbs,
+  formatRupees,
+  formatSqFt,
+  getPlot,
+  type Plot,
+} from "./flow-data";
 import { FlowShell } from "./flow-shell";
 import { PlotLocationPlan } from "./plot-location-plan";
 
@@ -165,8 +174,7 @@ export function SummaryPage({ plot }: { plot: Plot }) {
           <div className="price-intro">
             <span>{`PLOT ${selectedPlot.id} PRICE`}</span>
             <div className="price-title-row">
-              <strong>Price on request</strong>
-              <span className="status available">On request</span>
+              <strong>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</strong>
             </div>
           </div>
           <div className="price-facts">
@@ -186,20 +194,20 @@ export function SummaryPage({ plot }: { plot: Plot }) {
           <div className="price-breakdown">
             <div className="detail-row">
               <span>Booking advance</span>
-              <b>To be confirmed</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
             </div>
             <div className="detail-row">
               <span>Taxes &amp; charges</span>
-              <b>As applicable</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.taxesAndCharges)}</b>
             </div>
             <div className="detail-row">
               <span>Remaining balance</span>
-              <b>To be confirmed</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.remainingBalance)}</b>
             </div>
           </div>
           <div className="pay-total">
             <span>Final payable amount</span>
-            <b>To be confirmed</b>
+            <b>{formatRupees(DEMO_PLOT_PRICING.totalPayable)}</b>
           </div>
           <details className="terms-inline">
             <summary>

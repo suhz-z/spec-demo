@@ -45,7 +45,7 @@ describe("PlotPicker", () => {
 
     expect(screen.getByRole("heading", { level: 2, name: "Plot 3" })).toBeInTheDocument();
     expect(screen.getByText("7,013 sq.ft")).toBeInTheDocument();
-    expect(screen.getByText("Price on request")).toBeInTheDocument();
+    expect(screen.getByText("₹48,30,000")).toBeInTheDocument();
     expect(screen.queryByText(/view floor plan/i)).not.toBeInTheDocument();
 
     const action = screen.getByRole("link", { name: /view summary/i });

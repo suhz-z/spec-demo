@@ -6,7 +6,14 @@ import { AssetSitePlan } from "@/components/inventory/asset-site-plan";
 
 import { ArrowRightIcon, CheckoutScenery, SelectionWave } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
-import { FLOW_STEPS, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
+import {
+  DEMO_PLOT_PRICING,
+  FLOW_STEPS,
+  flowCrumbs,
+  formatRupees,
+  formatSqFt,
+  type Plot,
+} from "./flow-data";
 import { useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
@@ -82,7 +89,7 @@ export function ReviewPage({ plot }: { plot: Plot }) {
               <p>
                 {plot.area} <span aria-hidden="true">•</span> {formatSqFt(plot.areaSqFt)}
               </p>
-              <span className="status available">On request</span>
+              <span className="status available">Enquiries open</span>
             </div>
             <AssetSitePlan
               readOnly
@@ -125,19 +132,19 @@ export function ReviewPage({ plot }: { plot: Plot }) {
           <div className="payment-rows">
             <div className="payment-row">
               <span>Plot price</span>
-              <b>Price on request</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
             </div>
             <div className="payment-row">
               <span>Booking advance</span>
-              <b>To be confirmed</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
             </div>
             <div className="payment-row">
               <span>Taxes and charges</span>
-              <b>As applicable</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.taxesAndCharges)}</b>
             </div>
             <div className="payment-row emphasis">
               <span>Amount due now</span>
-              <b>To be confirmed</b>
+              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
             </div>
           </div>
 

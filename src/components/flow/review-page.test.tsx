@@ -43,11 +43,11 @@ describe("ReviewPage", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Review and pay" })).toBeInTheDocument();
     expect(screen.getAllByText("Plot 1").length).toBeGreaterThan(0);
-    expect(screen.getByText("On request")).toHaveClass("status", "available");
+    expect(screen.getByText("Enquiries open")).toHaveClass("status", "available");
     expect(screen.getByText("Simile Jamal")).toBeInTheDocument();
     expect(screen.getByText("+91 9494949494")).toBeInTheDocument();
     expect(screen.getByText("simile@example.com")).toBeInTheDocument();
-    expect(screen.getAllByText("Price on request").length).toBeGreaterThan(0);
+    expect(screen.getByText("₹48,30,000")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /edit details/i })).toHaveAttribute(
       "href",
       "/plots/1/details",

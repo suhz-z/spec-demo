@@ -3,7 +3,15 @@
 import Link from "next/link";
 
 import { FlowPageHead } from "./flow-chrome";
-import { FLOW_STEPS, SITE, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
+import {
+  DEMO_PLOT_PRICING,
+  FLOW_STEPS,
+  SITE,
+  flowCrumbs,
+  formatRupees,
+  formatSqFt,
+  type Plot,
+} from "./flow-data";
 import { useFlow } from "./flow-provider";
 import { FlowShell } from "./flow-shell";
 
@@ -17,7 +25,9 @@ function downloadSummary(plot: Plot, buyer: string, reference: string) {
     `Buyer: ${buyer}`,
     `Reference: ${reference}`,
     "Payment status: Not collected",
-    "Price: On request",
+    `Property price: ${formatRupees(DEMO_PLOT_PRICING.propertyPrice)}`,
+    `Booking advance: ${formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}`,
+    `Final payable amount: ${formatRupees(DEMO_PLOT_PRICING.totalPayable)}`,
   ];
   const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -108,6 +118,14 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
               <span>Payment</span>
               <b>Not collected</b>
             </div>
+            <div className="aside-row">
+              <span>Property price</span>
+              <b>{formatRupees(DEMO_PLOT_PRICING.propertyPrice)}</b>
+            </div>
+            <div className="aside-row">
+              <span>Amount due now</span>
+              <b>{formatRupees(DEMO_PLOT_PRICING.bookingAdvance)}</b>
+            </div>
           </div>
           <div className="flow-confirmation-actions">
             <button
@@ -121,7 +139,6 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
               Done
             </Link>
           </div>
-          <p className="form-note">Price and payment terms remain on request.</p>
         </div>
       </div>
     </FlowShell>
