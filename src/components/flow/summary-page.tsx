@@ -5,14 +5,22 @@ import { FLOW_STEPS, SITE, flowCrumbs, formatSqFt, type Plot } from "./flow-data
 import { FlowShell } from "./flow-shell";
 import { PlotLocationPlan } from "./plot-location-plan";
 
+function splitValue(label: string): [string, string] {
+  const separator = label.indexOf(" ");
+  return separator === -1 ? [label, ""] : [label.slice(0, separator), label.slice(separator + 1)];
+}
+
 export function SummaryPage({ plot }: { plot: Plot }) {
+  const [areaValue, areaUnit] = splitValue(plot.area);
+  const [sqFtValue, sqFtUnit] = splitValue(formatSqFt(plot.areaSqFt));
+  const [roadValue] = splitValue(SITE.roadAreaLabel);
+
   return (
     <FlowShell step={FLOW_STEPS.summary} crumbs={flowCrumbs("summary", plot.id)}>
       <FlowPageHead
         backHref={plot.hasFloorPlan ? `/plots/${plot.id}/floor-plan` : "/plots"}
         backLabel={plot.hasFloorPlan ? "Back to floor plan" : "Back to site plan"}
         title={plot.name}
-        aside="Check the facts before continuing"
       />
 
       <div className="flow-summary-grid">
@@ -20,40 +28,29 @@ export function SummaryPage({ plot }: { plot: Plot }) {
           <div className="flow-summary-plan">
             <PlotLocationPlan plotId={plot.id} />
           </div>
-          <div className="flow-summary-facts">
-            <div className="summary-eyebrow">SELECTED PLOT · SITE PLAN</div>
-            <p>
-              {SITE.name} · {SITE.region}
-            </p>
-            <div className="fact-list">
-              <div className="detail-row">
-                <span>Plot area</span>
-                <b>{plot.area}</b>
-              </div>
-              <div className="detail-row">
-                <span>Area in sq.ft</span>
-                <b>{formatSqFt(plot.areaSqFt)}</b>
-              </div>
-              <div className="detail-row">
-                <span>Internal road</span>
-                <b>{SITE.roadAreaLabel} site-wide</b>
-              </div>
-              <div className="detail-row">
-                <span>Availability</span>
-                <b>On request</b>
-              </div>
-              <div className="detail-row">
-                <span>Source drawing</span>
-                <b>{SITE.sourceLabel}</b>
-              </div>
-            </div>
-          </div>
         </section>
 
         <aside className="flow-payment-card">
           <div className="price-intro">
             <span>PLOT PRICE</span>
-            <strong>Price on request</strong>
+            <div className="price-title-row">
+              <strong>Price on request</strong>
+              <span className="status available">On request</span>
+            </div>
+          </div>
+          <div className="price-facts">
+            <div className="price-fact">
+              <b>{areaValue}</b>
+              <span>{areaUnit}</span>
+            </div>
+            <div className="price-fact">
+              <b>{sqFtValue}</b>
+              <span>{sqFtUnit}</span>
+            </div>
+            <div className="price-fact">
+              <b>{roadValue}</b>
+              <span>cent site-wide</span>
+            </div>
           </div>
           <div className="price-breakdown">
             <div className="detail-row">
@@ -82,12 +79,9 @@ export function SummaryPage({ plot }: { plot: Plot }) {
               payment. This prototype does not publish unapproved terms.
             </p>
           </details>
-          <Link className="booking-primary" href={`/plots/${plot.id}/details`}>
+          <Link className="sg-cta booking-primary" href={`/plots/${plot.id}/details`}>
             Proceed to booking <span aria-hidden="true">↗</span>
           </Link>
-          <p className="prototype-note">
-            Design preview only. No real payment or booking is created.
-          </p>
         </aside>
       </div>
     </FlowShell>

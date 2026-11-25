@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+import { FlowFooter } from "@/components/site-footer";
 import { FlowHeader } from "@/components/flow/flow-chrome";
 
 import "@/components/flow/flow.css";
@@ -20,17 +21,15 @@ export default function HomePage() {
         <div className="flow-width">
           <FlowHeader />
 
-          <main className="landing-grid">
+          <main className="landing-grid" id="main-content">
             <div className="landing-copy">
               <h1>
                 Find a place <br />
                 to feel <em>at home.</em>
               </h1>
-              <Link className="primary landing-cta" href="/plots">
+              <Link className="sg-cta primary landing-cta" href="/plots">
                 <span>Get started</span>
-                <span className="arrow-circle" aria-hidden="true">
-                  ↗
-                </span>
+                <span aria-hidden="true">→</span>
               </Link>
             </div>
 
@@ -50,9 +49,7 @@ export default function HomePage() {
             </div>
           </main>
 
-          <footer className="intro-foot">
-            <span>MOOLAPARAMBU · KERALA</span>
-          </footer>
+          <FlowFooter />
         </div>
       </div>
     </div>

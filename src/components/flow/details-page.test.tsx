@@ -36,8 +36,10 @@ describe("DetailsPage", () => {
       </FlowProvider>,
     );
 
-    expect(screen.getByText("Plot 3 · 16.10 cent")).toBeInTheDocument();
+    expect(screen.queryByText(/please provide your details/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/your details stay in this browser session/i)).toBeInTheDocument();
     expect(screen.getAllByText("Price on request").length).toBeGreaterThan(0);
+    expect(screen.getByText("On request")).toHaveClass("status", "available");
     expect(screen.queryByText("₹2.08 Cr")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /review payment/i }));
@@ -48,7 +50,9 @@ describe("DetailsPage", () => {
     fireEvent.change(screen.getByLabelText("Mobile number"), {
       target: { value: "98765abc43210" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "asha@example.com" } });
+    fireEvent.change(screen.getByLabelText("Email address"), {
+      target: { value: "asha@example.com" },
+    });
     fireEvent.click(screen.getByRole("checkbox"));
     fireEvent.click(screen.getByRole("button", { name: /review payment/i }));
 

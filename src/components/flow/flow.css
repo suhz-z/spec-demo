@@ -10,7 +10,7 @@
 
 #wireframe-app .flow-width {
   display: flex;
-  width: min(1440px, calc(100% - 96px));
+  width: min(calc(100% - 96px), var(--sg-page-max));
   min-height: 0;
   flex: 1;
   flex-direction: column;
@@ -22,7 +22,7 @@
   height: 100svh;
   flex-direction: column;
   overflow: hidden;
-  background: #f8f9f6;
+  background: #fbfaf7;
   color: #26342b;
 }
 
@@ -31,10 +31,69 @@
 }
 
 #wireframe-app .flow-page-body {
+  position: relative;
   display: flex;
   min-height: 0;
   flex: 1;
   flex-direction: column;
+}
+
+#wireframe-app .flow-page-body > *:not(.checkout-scenery) {
+  position: relative;
+  z-index: 1;
+}
+
+#wireframe-app .flow-progress {
+  display: block;
+  width: 84px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e1e7de;
+}
+
+#wireframe-app .flow-page .flow-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#wireframe-app .flow-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #2e5b46;
+  transition: width 0.25s ease;
+}
+
+/* Shared booking-flow footer: one contact line aligned to the right. */
+#wireframe-app .flow-page .flow-footer {
+  display: flex;
+  min-height: 48px;
+  flex: 0 0 auto;
+  align-items: center;
+  border-top: 1px solid #e7ebe5;
+  background: rgba(251, 250, 247, 0.92);
+  color: #7e8b81;
+  font-size: 10px;
+}
+
+#wireframe-app .flow-page .flow-footer__inner {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+#wireframe-app .flow-page .flow-footer a {
+  color: #2e5b46;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#wireframe-app .flow-page .flow-footer a:hover {
+  text-decoration: underline;
 }
 
 #wireframe-app .flow-location {
@@ -43,6 +102,31 @@
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+#wireframe-app .journey-breadcrumbs {
+  justify-content: space-between;
+}
+
+#wireframe-app .journey-breadcrumbs__trail {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+#wireframe-app .journey-breadcrumbs .flow-meta {
+  flex: 0 0 auto;
+  gap: 10px;
+  color: #7e8b81;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+#wireframe-app .journey-breadcrumbs .flow-meta span {
+  color: #7e8b81;
 }
 
 #wireframe-app .journey-breadcrumbs a {
@@ -212,10 +296,6 @@
   object-fit: contain;
 }
 
-#wireframe-app .landing-page .intro-foot {
-  flex: 0 0 58px;
-}
-
 #wireframe-app .landing-page .foot-stats {
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -230,11 +310,12 @@
    Plot picker and floor plan
    -------------------------------------------------------------------------- */
 
-#wireframe-app .flow-plan-layout {
+#wireframe-app .flow-plan-layout,
+#wireframe-app .flow-summary-grid {
   display: grid;
   min-height: 0;
   flex: 1;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) 440px;
   align-items: stretch;
   gap: 32px;
   padding-bottom: 6px;
@@ -395,15 +476,9 @@
   flex: 0 0 auto;
 }
 
-#wireframe-app .flow-side-panel .panel-action {
-  align-self: flex-start;
-  margin-top: 12px;
-  padding-bottom: 5px;
-  text-decoration: none;
-}
-
-#wireframe-app .flow-side-panel .panel-action span:last-child {
-  color: #315e48;
+#wireframe-app .flow-side-panel .panel-cta {
+  width: 100%;
+  margin: 16px 0 0;
 }
 
 #wireframe-app .flow-side-panel .room-data {
@@ -431,12 +506,7 @@
    -------------------------------------------------------------------------- */
 
 #wireframe-app .flow-summary-grid {
-  display: grid;
-  min-height: 0;
-  flex: 1;
-  grid-template-columns: minmax(0, 1fr) 310px;
   align-items: start;
-  gap: 54px;
   overflow: auto;
   padding-bottom: 18px;
   scrollbar-width: thin;
@@ -444,9 +514,8 @@
 
 #wireframe-app .flow-summary-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: 24px;
 }
 
 #wireframe-app .flow-summary-plan {
@@ -465,7 +534,7 @@
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: min(620px, 68svh);
+  max-height: min(620px, 62svh);
   object-fit: contain;
 }
 
@@ -481,16 +550,6 @@
   pointer-events: none;
 }
 
-#wireframe-app .flow-summary-facts > p {
-  margin: 0 0 8px;
-  color: #78847b;
-  font-size: 12px;
-}
-
-#wireframe-app .flow-summary-facts .fact-list {
-  max-width: none;
-}
-
 #wireframe-app .flow-payment-card {
   display: flex;
   flex-direction: column;
@@ -499,19 +558,58 @@
 }
 
 #wireframe-app .flow-payment-card .price-intro {
-  padding-bottom: 18px;
+  padding-bottom: 12px;
 }
 
-#wireframe-app .flow-payment-card .price-intro span {
+#wireframe-app .flow-payment-card .price-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+}
+
+#wireframe-app .flow-payment-card .price-fact {
+  display: grid;
+  gap: 2px;
+}
+
+#wireframe-app .flow-payment-card .price-fact + .price-fact {
+  padding-left: 12px;
+  border-left: 1px solid #e4e9e2;
+}
+
+#wireframe-app .flow-payment-card .price-fact b {
+  color: #26342b;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+#wireframe-app .flow-payment-card .price-fact span {
+  color: #929d94;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+#wireframe-app .flow-payment-card .price-intro > span {
   color: #929d94;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.14em;
 }
 
-#wireframe-app .flow-payment-card .price-intro strong {
+#wireframe-app .flow-payment-card .price-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-top: 6px;
-  font-size: 31px;
+}
+
+#wireframe-app .flow-payment-card .price-title-row strong {
+  font-size: 23px;
 }
 
 #wireframe-app .flow-payment-card .booking-primary,
@@ -522,11 +620,58 @@
 }
 
 #wireframe-app .flow-payment-card .booking-primary {
-  margin-top: 12px;
+  position: relative;
+  margin-top: 20px;
+}
+
+#wireframe-app .flow-payment-card .booking-primary::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: #e4e9e2;
 }
 
 #wireframe-app .flow-payment-card .prototype-note {
   margin: 10px 0 0;
+}
+
+/* Keep the whole summary visible on laptop screens without inner scrolling. */
+#wireframe-app .flow-summary-grid {
+  padding-bottom: 8px;
+}
+
+#wireframe-app .flow-payment-card .price-intro {
+  padding-bottom: 8px;
+}
+
+#wireframe-app .flow-payment-card .price-facts {
+  margin-bottom: 8px;
+  padding: 8px 0;
+}
+
+#wireframe-app .flow-payment-card .price-breakdown .detail-row {
+  padding: 8px 0;
+}
+
+#wireframe-app .flow-payment-card .pay-total {
+  padding: 10px 0 4px;
+}
+
+#wireframe-app .flow-payment-card .terms-inline {
+  margin: 10px 0 0;
+}
+
+#wireframe-app .flow-payment-card .terms-inline summary {
+  padding: 10px 0;
+}
+
+@media (min-width: 901px) {
+  #wireframe-app .flow-summary-grid {
+    overflow: hidden;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -697,14 +842,10 @@
     width: calc(100% - 64px);
   }
 
-  #wireframe-app .flow-plan-layout {
-    grid-template-columns: minmax(0, 1fr) 270px;
-    gap: 28px;
-  }
-
+  #wireframe-app .flow-plan-layout,
   #wireframe-app .flow-summary-grid {
-    grid-template-columns: minmax(0, 1fr) 300px;
-    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 28px;
   }
 
   #wireframe-app .flow-form-grid,
@@ -764,7 +905,7 @@
     margin-top: 5px;
   }
 
-  #wireframe-app .flow-side-panel .panel-action {
+  #wireframe-app .flow-side-panel .panel-cta {
     margin-top: 10px;
   }
 
@@ -795,11 +936,6 @@
     padding-bottom: 20px;
   }
 
-  #wireframe-app .flow-summary-card {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
-    gap: 20px;
-  }
-
   #wireframe-app .flow-summary-plan {
     min-height: 170px;
   }
@@ -822,10 +958,6 @@
     width: calc(100% - 36px);
   }
 
-  #wireframe-app .landing-page .intro-foot {
-    flex-basis: 50px;
-  }
-
   #wireframe-app .landing-page .foot-stats {
     gap: 10px;
     font-size: 8px;
@@ -841,6 +973,14 @@
 
   #wireframe-app .journey-breadcrumbs {
     padding-top: 9px;
+  }
+
+  #wireframe-app .journey-breadcrumbs .flow-meta {
+    gap: 7px;
+  }
+
+  #wireframe-app .journey-breadcrumbs .flow-progress {
+    width: 52px;
   }
 
   #wireframe-app .flow-page-head {
@@ -876,10 +1016,6 @@
 
   #wireframe-app .flow-plan-note {
     font-size: 8px;
-  }
-
-  #wireframe-app .flow-plan-note span:last-child {
-    display: none;
   }
 
   #wireframe-app .flow-side-panel {
@@ -923,11 +1059,6 @@
     max-height: 166px;
   }
 
-  #wireframe-app .flow-summary-facts .detail-row b {
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
   #wireframe-app .flow-state-page .state-screen h2 {
     font-size: 26px;
   }
@@ -938,10 +1069,6 @@
 }
 
 @media (max-height: 680px) and (min-width: 901px) {
-  #wireframe-app .landing-page .intro-foot {
-    flex-basis: 48px;
-  }
-
   #wireframe-app .landing-page h1 {
     margin: 0 0 14px;
     font-size: clamp(36px, 4.6vw, 58px);
@@ -970,9 +1097,10 @@
   }
 }
 
-@media (min-width: 901px) and (max-width: 1440px) {
-  #wireframe-app .flow-plan-layout {
-    grid-template-columns: minmax(0, 1fr) 260px;
+@media (min-width: 1101px) and (max-width: 1440px) {
+  #wireframe-app .flow-plan-layout,
+  #wireframe-app .flow-summary-grid {
+    grid-template-columns: minmax(0, 1fr) 420px;
     gap: 24px;
   }
 }
@@ -1021,14 +1149,669 @@
     font-size: 19px;
   }
 
-  #wireframe-app .flow-side-panel .panel-action {
+  #wireframe-app .flow-side-panel .panel-cta {
     margin-top: 8px;
-    padding-bottom: 4px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #wireframe-app .flow-back {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Checkout: customer details and review
+   -------------------------------------------------------------------------- */
+
+#wireframe-app .flow-page.flow-page--checkout {
+  background: #fbfaf7;
+  color: #26342b;
+}
+
+#wireframe-app .flow-page--checkout .flow-header {
+  height: 76px;
+  border-bottom: 1px solid #e7ebe5;
+}
+
+#wireframe-app .flow-page--checkout .flow-header .flow-meta {
+  gap: 13px;
+  color: #7e8b81;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+#wireframe-app .flow-page--checkout .flow-header .flow-step-label {
+  color: #7e8b81;
+}
+
+#wireframe-app .flow-page--checkout .flow-page-head {
+  align-items: flex-start;
+  padding: 24px 0 28px;
+}
+
+#wireframe-app .flow-page--checkout .flow-page-heading {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+#wireframe-app .flow-page--checkout .flow-back {
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  color: #5f7064;
+  font-size: 20px;
+}
+
+#wireframe-app .flow-page--checkout .flow-back:hover {
+  background: #eef2ea;
+  color: #2e5b46;
+}
+
+#wireframe-app .flow-page--checkout .flow-page-head h1 {
+  font-size: clamp(21px, 1.9vw, 25px);
+  font-weight: 450;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+#wireframe-app .flow-page--checkout .flow-page-head p {
+  margin-top: 7px;
+  color: #6d7b70;
+  font-size: 12.5px;
+  letter-spacing: 0;
+}
+
+#wireframe-app .checkout-scenery {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#wireframe-app .checkout-waves {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#wireframe-app .checkout-leaves {
+  position: absolute;
+  bottom: -10px;
+  left: 40%;
+  display: block;
+  width: min(230px, 20vw);
+  height: auto;
+  opacity: 0.72;
+}
+
+#wireframe-app .flow-page--checkout .flow-page-head,
+#wireframe-app .flow-page--checkout .checkout-grid,
+#wireframe-app .flow-page--checkout .flow-state-page {
+  position: relative;
+  z-index: 1;
+}
+
+#wireframe-app .checkout-grid {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  align-items: start;
+  overflow: auto;
+  width: 100%;
+  max-width: 1120px;
+  padding: 0 0 28px;
+  scrollbar-width: thin;
+}
+
+#wireframe-app .details-checkout-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+  gap: clamp(32px, 4vw, 56px);
+}
+
+#wireframe-app .review-checkout-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(290px, 350px);
+  gap: clamp(24px, 3vw, 34px);
+}
+
+#wireframe-app .checkout-form {
+  display: grid;
+  max-width: 620px;
+  gap: 18px;
+}
+
+#wireframe-app .checkout-field {
+  display: grid;
+  gap: 8px;
+}
+
+#wireframe-app .checkout-field > label {
+  color: #3b4a40;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
+#wireframe-app .checkout-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#wireframe-app .checkout-input > svg {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: #8a988d;
+  pointer-events: none;
+}
+
+#wireframe-app .checkout-control {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid #e0e6dd;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #26342b;
+  font: 400 13.5px var(--sans);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+#wireframe-app .checkout-input .checkout-control {
+  padding-left: 42px;
+}
+
+#wireframe-app .checkout-control::placeholder {
+  color: #a0aaa2;
+}
+
+#wireframe-app .checkout-control:hover {
+  border-color: #cbd5c8;
+}
+
+#wireframe-app .checkout-control:focus {
+  border-color: #2e5b46;
+  box-shadow: 0 0 0 3px rgba(46, 91, 70, 0.09);
+}
+
+#wireframe-app .checkout-control[aria-invalid="true"] {
+  border-color: #b45f54;
+}
+
+#wireframe-app .checkout-control[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(180, 95, 84, 0.1);
+}
+
+#wireframe-app .checkout-phone {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 10px;
+}
+
+#wireframe-app .checkout-country {
+  display: flex;
+  height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid #e0e6dd;
+  border-radius: 8px;
+  background: #fff;
+  color: #3b4a40;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+#wireframe-app .checkout-country svg {
+  width: 14px;
+  height: 14px;
+  color: #7f8d83;
+}
+
+#wireframe-app .checkout-field .field-error {
+  margin: 0;
+}
+
+#wireframe-app .checkout-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 1px;
+  color: #5f6d62;
+  font-size: 11.5px;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+#wireframe-app .checkout-terms input {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid #c8d2c5;
+  border-radius: 4px;
+  appearance: none;
+  background-color: #fff;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 11px 9px;
+  cursor: pointer;
+}
+
+#wireframe-app .checkout-terms input:checked {
+  border-color: #2e5b46;
+  background-color: #2e5b46;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5.2 4.3 8.5 11 1.5' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+#wireframe-app .checkout-terms input:focus-visible {
+  outline: 2px solid #2e5b46;
+  outline-offset: 2px;
+}
+
+#wireframe-app .checkout-terms .inline-text-link {
+  border-bottom-color: #b9c7b9;
+  color: #2e5b46;
+}
+
+#wireframe-app .checkout-submit {
+  display: flex;
+  width: 100%;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 2px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 6px;
+  background: #245b43;
+  color: #fff;
+  font: 600 13px var(--sans);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+#wireframe-app .checkout-submit:hover {
+  background: #1a4a35;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+#wireframe-app .checkout-submit:focus-visible {
+  outline: 2px solid #245b43;
+  outline-offset: 3px;
+}
+
+#wireframe-app .checkout-submit svg {
+  width: 16px;
+  height: 16px;
+}
+
+#wireframe-app .checkout-form .form-error {
+  margin: 0;
+}
+
+#wireframe-app .checkout-eyebrow {
+  display: block;
+  color: #7d8a7f;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+#wireframe-app .selection-card {
+  position: relative;
+  display: flex;
+  min-height: 350px;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 28px 26px 30px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f2f5ee 0%, #edf2e8 62%, #e7eee1 100%);
+}
+
+#wireframe-app .selection-card > *:not(.selection-wave) {
+  position: relative;
+  z-index: 1;
+}
+
+#wireframe-app .selection-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 17px 0 21px;
+}
+
+#wireframe-app .selection-head h2 {
+  margin: 0;
+  color: #26342b;
+  font-size: 28px;
+  font-weight: 450;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+#wireframe-app .selection-head p {
+  margin: 5px 0 0;
+  color: #6d7b70;
+  font-size: 11px;
+}
+
+#wireframe-app .checkout-thumb {
+  display: block;
+  width: 102px;
+  height: 74px;
+  flex: 0 0 auto;
+  border-radius: 5px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(39, 64, 45, 0.12);
+}
+
+#wireframe-app .selection-rows {
+  margin-top: auto;
+}
+
+#wireframe-app .selection-row {
+  display: flex;
+  min-height: 39px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(111, 132, 111, 0.17);
+  color: #7c897e;
+  font-size: 11.5px;
+}
+
+#wireframe-app .selection-row b {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #2f3d34;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: right;
+}
+
+#wireframe-app .selection-row .status,
+#wireframe-app .booking-summary-head .status {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+#wireframe-app .booking-summary-head .status {
+  margin-top: 10px;
+}
+
+#wireframe-app .status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3f7a56;
+  box-shadow: 0 0 0 3px rgba(63, 122, 86, 0.12);
+}
+
+#wireframe-app .selection-wave {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 70px;
+  pointer-events: none;
+}
+
+#wireframe-app .review-booking-card,
+#wireframe-app .review-payment-card {
+  border: 1px solid #edf0ea;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 14px 40px rgba(32, 52, 41, 0.055);
+}
+
+#wireframe-app .review-booking-card {
+  padding: 25px 27px 27px;
+}
+
+#wireframe-app .booking-summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 15px 0 24px;
+}
+
+#wireframe-app .booking-summary-head h2 {
+  margin: 0;
+  color: #26342b;
+  font-size: 26px;
+  font-weight: 450;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+#wireframe-app .booking-summary-head p {
+  margin: 5px 0 0;
+  color: #6d7b70;
+  font-size: 11px;
+}
+
+#wireframe-app .booking-summary-head .checkout-thumb {
+  width: 96px;
+  height: 68px;
+}
+
+#wireframe-app .buyer-block {
+  padding-top: 21px;
+  border-top: 1px solid #edf0ea;
+}
+
+#wireframe-app .buyer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+#wireframe-app .checkout-edit {
+  color: #2e5b46;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #c1cec0;
+  text-underline-offset: 3px;
+}
+
+#wireframe-app .checkout-edit:hover {
+  color: #174a38;
+  text-decoration-color: #2e5b46;
+}
+
+#wireframe-app .buyer-block p {
+  margin: 6px 0 0;
+  color: #56645a;
+  font-size: 12.5px;
+}
+
+#wireframe-app .buyer-block .buyer-name {
+  margin-top: 12px;
+  color: #26342b;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+#wireframe-app .review-payment-card {
+  padding: 25px 24px 23px;
+}
+
+#wireframe-app .payment-rows {
+  margin: 13px 0 0;
+}
+
+#wireframe-app .payment-row {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #7c897e;
+  font-size: 11.5px;
+}
+
+#wireframe-app .payment-row b {
+  color: #2f3d34;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: right;
+}
+
+#wireframe-app .payment-row.emphasis {
+  margin-top: 2px;
+  color: #4d5c51;
+}
+
+#wireframe-app .payment-row.emphasis b {
+  color: #26342b;
+  font-size: 12px;
+}
+
+#wireframe-app .review-payment-card .checkout-submit {
+  margin-top: 17px;
+}
+
+#wireframe-app .secure-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 13px 0 0;
+  color: #7e8b81;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+#wireframe-app .secure-note svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  color: #3f7a56;
+}
+
+@media (max-width: 1100px) {
+  #wireframe-app .details-checkout-grid {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 32px;
+  }
+
+  #wireframe-app .review-checkout-grid {
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 26px;
+  }
+}
+
+@media (max-width: 720px) {
+  #wireframe-app .checkout-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    padding-bottom: 24px;
+  }
+
+  #wireframe-app .checkout-form {
+    max-width: none;
+  }
+
+  #wireframe-app .selection-card {
+    min-height: 0;
+    padding: 22px 22px 24px;
+  }
+
+  #wireframe-app .selection-rows {
+    margin-top: 4px;
+  }
+
+  #wireframe-app .review-booking-card,
+  #wireframe-app .review-payment-card {
+    padding: 22px 22px 23px;
+  }
+
+  #wireframe-app .checkout-leaves {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  #wireframe-app .flow-page--checkout .flow-header {
+    height: 64px;
+  }
+
+  #wireframe-app .flow-page--checkout .flow-header .flow-meta {
+    gap: 9px;
+    font-size: 9px;
+  }
+
+  #wireframe-app .flow-page--checkout .flow-progress {
+    width: 58px;
+  }
+
+  #wireframe-app .flow-page--checkout .flow-page-head {
+    padding: 18px 0 20px;
+  }
+
+  #wireframe-app .flow-page--checkout .flow-page-head h1 {
+    font-size: 21px;
+  }
+
+  #wireframe-app .flow-page--checkout .flow-page-head p {
+    font-size: 11.5px;
+  }
+
+  #wireframe-app .checkout-form {
+    gap: 16px;
+  }
+
+  #wireframe-app .checkout-control,
+  #wireframe-app .checkout-country {
+    height: 44px;
+  }
+
+  #wireframe-app .selection-head h2,
+  #wireframe-app .booking-summary-head h2 {
+    font-size: 23px;
+  }
+
+  #wireframe-app .checkout-thumb,
+  #wireframe-app .booking-summary-head .checkout-thumb {
+    width: 82px;
+    height: 60px;
+  }
+
+  #wireframe-app .checkout-submit {
+    height: 46px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #wireframe-app .flow-progress i,
+  #wireframe-app .checkout-control,
+  #wireframe-app .checkout-terms input,
+  #wireframe-app .checkout-submit {
     transition: none;
   }
 }

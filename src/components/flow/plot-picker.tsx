@@ -8,7 +8,6 @@ import { AssetSitePlan, type SitePlot } from "@/components/inventory/asset-site-
 import { FlowPageHead } from "./flow-chrome";
 import {
   FLOW_STEPS,
-  PLOT_AREA_SQFT,
   SITE,
   flowCrumbs,
   formatSqFt,
@@ -50,7 +49,7 @@ function PanelDetails({ plot }: { plot: Plot }) {
         <b>Price on request</b>
         <small>No approved price is published for this plot.</small>
       </div>
-      <Link className="panel-action" href={next.href}>
+      <Link className="sg-cta panel-cta" href={next.href}>
         <span>{next.label}</span>
         <span aria-hidden="true">↗</span>
       </Link>
@@ -74,18 +73,13 @@ export function PlotPicker() {
 
   return (
     <FlowShell step={FLOW_STEPS.plots} crumbs={flowCrumbs("", undefined)}>
-      <FlowPageHead
-        backHref="/"
-        backLabel="Back to home"
-        title="Select a plot"
-        aside={`${SITE.name} · ${SITE.region}`}
-      />
+      <FlowPageHead backHref="/" backLabel="Back to home" title="Select a plot" />
 
       <div className="flow-plan-layout">
         <div className="flow-plan-main">
           <div className="flow-plan-toolbar">
             <span className="flow-plan-summary">
-              {loadedCount === null ? "Loading survey plan…" : `${loadedCount} plots · equal area`}
+              {loadedCount === null ? "Loading survey plan…" : `${loadedCount} plots`}
             </span>
             <span className="flow-plan-legend">
               <i className="swatch" style={{ background: "#eef3ec", color: "#536459" }} />
@@ -102,7 +96,6 @@ export function PlotPicker() {
           </FlowPlanStage>
           <div className="flow-plan-note">
             <span>Source: {SITE.sourceLabel} · not to scale</span>
-            <span>Click, Enter or Space to select a plot</span>
           </div>
         </div>
 
@@ -123,16 +116,6 @@ export function PlotPicker() {
             </div>
           )}
         </aside>
-      </div>
-
-      <div className="flow-page-foot">
-        <span>
-          {SITE.plotCount} plots · {SITE.plotAreaLabel} each
-        </span>
-        <span>
-          Internal road {SITE.roadAreaLabel} · 1 cent = 435.6 sq.ft · {formatSqFt(PLOT_AREA_SQFT)}{" "}
-          per plot
-        </span>
       </div>
     </FlowShell>
   );

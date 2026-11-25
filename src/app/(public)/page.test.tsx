@@ -24,7 +24,10 @@ describe("HomePage", () => {
     );
     expect(screen.getByText(/indicative floor plan/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /get started/i })).toHaveAttribute("href", "/plots");
-    expect(screen.getByText("MOOLAPARAMBU · KERALA")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "+91 90000 00000" })).toHaveAttribute(
+      "href",
+      "tel:+919000000000",
+    );
     expect(screen.queryByText(/16.10/)).not.toBeInTheDocument();
     expect(screen.queryByText(/7.00/)).not.toBeInTheDocument();
   });

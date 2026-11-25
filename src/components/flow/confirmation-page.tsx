@@ -62,7 +62,10 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
               A confirmation is created only after the preview payment step. No real payment or
               booking exists.
             </p>
-            <Link className="booking-primary state-action" href={`/plots/${plot.id}/payment`}>
+            <Link
+              className="sg-cta booking-primary state-action"
+              href={`/plots/${plot.id}/payment`}
+            >
               Open the payment preview <span aria-hidden="true">↗</span>
             </Link>
             <Link className="text-back" href="/plots">
@@ -115,7 +118,7 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
           <div className="flow-confirmation-actions">
             <button
               type="button"
-              className="booking-primary state-action"
+              className="sg-cta booking-primary state-action"
               onClick={() => downloadSummary(plot, customer.name, reference)}
             >
               Download summary <span aria-hidden="true">↓</span>

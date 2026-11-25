@@ -38,8 +38,7 @@ describe("PlotPicker", () => {
     );
 
     expect(screen.getByRole("heading", { level: 1, name: /select a plot/i })).toBeInTheDocument();
-    expect(screen.getByText(/six plots of 16.10 cent each/i)).toBeInTheDocument();
-    expect(await screen.findByText("6 plots · equal area")).toBeInTheDocument();
+    expect(await screen.findByText("6 plots")).toBeInTheDocument();
 
     const plotThree = await screen.findByRole("button", { name: /Plot 3, 16.10 cent/i });
     fireEvent.click(plotThree);

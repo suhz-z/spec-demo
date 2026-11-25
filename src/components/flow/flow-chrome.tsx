@@ -1,45 +1,63 @@
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 
+import { SiteBrand } from "@/components/site-brand";
+import { SiteMenu } from "@/components/site-menu";
+
 import type { FlowCrumb } from "./flow-data";
 
 export type { FlowCrumb };
 
 export function FlowBrand() {
+  return <SiteBrand className="sub-brand" />;
+}
+
+function stepProgress(step: string): number {
+  const [current = 0, total = 0] = step.split("/").map((value) => Number.parseInt(value, 10));
+  if (!Number.isFinite(current) || !Number.isFinite(total) || total <= 0) return 0;
+  return Math.min(100, Math.max(0, Math.round((current / total) * 100)));
+}
+
+function StepMeta({ step }: { step: string }) {
   return (
-    <Link className="sub-brand" href="/" aria-label="Spectra Gardens home">
-      SPECTRA <span>GARDENS</span>
-    </Link>
+    <div className="flow-meta" aria-label={`Step ${step.replace(" / ", " of ")}`}>
+      <span className="flow-step-label">{step}</span>
+      <span className="flow-progress" aria-hidden="true">
+        <i style={{ width: `${stepProgress(step)}%` }} />
+      </span>
+    </div>
   );
 }
 
 export function FlowHeader({ step, crumbs }: { step?: string; crumbs?: readonly FlowCrumb[] }) {
+  const hasCrumbs = Boolean(crumbs && crumbs.length);
+
   return (
     <>
       <header className="flow-header">
         <FlowBrand />
-        {step ? (
-          <div className="flow-meta" aria-label={`Step ${step.replace(" / ", " of ")}`}>
-            {step}
-          </div>
-        ) : null}
+        {step && !hasCrumbs ? <StepMeta step={step} /> : null}
+        <SiteMenu />
       </header>
-      {crumbs && crumbs.length ? (
+      {hasCrumbs ? (
         <nav className="journey-breadcrumbs" aria-label="Booking progress">
-          {crumbs.map((crumb, index) => (
-            <Fragment key={`${crumb.label}-${index}`}>
-              {index > 0 ? (
-                <span className="crumb-separator" aria-hidden="true">
-                  /
-                </span>
-              ) : null}
-              {crumb.href ? (
-                <Link href={crumb.href}>{crumb.label}</Link>
-              ) : (
-                <span aria-current="step">{crumb.label}</span>
-              )}
-            </Fragment>
-          ))}
+          <div className="journey-breadcrumbs__trail">
+            {crumbs?.map((crumb, index) => (
+              <Fragment key={`${crumb.label}-${index}`}>
+                {index > 0 ? (
+                  <span className="crumb-separator" aria-hidden="true">
+                    /
+                  </span>
+                ) : null}
+                {crumb.href ? (
+                  <Link href={crumb.href}>{crumb.label}</Link>
+                ) : (
+                  <span aria-current="step">{crumb.label}</span>
+                )}
+              </Fragment>
+            ))}
+          </div>
+          {step ? <StepMeta step={step} /> : null}
         </nav>
       ) : null}
     </>

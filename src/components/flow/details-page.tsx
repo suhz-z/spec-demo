@@ -4,6 +4,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import {
+  ArrowRightIcon,
+  CheckoutScenery,
+  ChevronDownIcon,
+  MailIcon,
+  PersonIcon,
+  PlotThumbnail,
+  SelectionWave,
+} from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
 import { FLOW_STEPS, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
 import { useFlow } from "./flow-provider";
@@ -88,46 +97,55 @@ export function DetailsPage({ plot }: { plot: Plot }) {
   };
 
   return (
-    <FlowShell step={FLOW_STEPS.details} crumbs={flowCrumbs("details", plot.id)}>
+    <FlowShell step={FLOW_STEPS.details} crumbs={flowCrumbs("details", plot.id)} variant="checkout">
+      <CheckoutScenery />
       <FlowPageHead
         backHref={`/plots/${plot.id}/summary`}
         backLabel="Back to summary"
         title="Customer details"
-        subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="Held for this browser session only"
       />
 
-      <div className="flow-form-grid">
-        <form className="customer-form" noValidate onSubmit={submit}>
-          <label className="field">
-            <span>Full name</span>
-            <input
-              type="text"
-              autoComplete="name"
-              placeholder="Name as on ID"
-              value={values.name}
-              aria-invalid={Boolean(fieldErrors.name)}
-              aria-describedby={fieldErrors.name ? "details-name-error" : undefined}
-              aria-label="Full name"
-              onChange={(event) => updateField("name", event.target.value)}
-            />
+      <div className="checkout-grid details-checkout-grid">
+        <form className="checkout-form" noValidate onSubmit={submit}>
+          <div className="checkout-field">
+            <label htmlFor="details-name">Full name</label>
+            <div className="checkout-input">
+              <PersonIcon />
+              <input
+                id="details-name"
+                className="checkout-control"
+                type="text"
+                autoComplete="name"
+                placeholder="Enter your name"
+                value={values.name}
+                aria-invalid={Boolean(fieldErrors.name)}
+                aria-describedby={fieldErrors.name ? "details-name-error" : undefined}
+                aria-label="Full name"
+                onChange={(event) => updateField("name", event.target.value)}
+              />
+            </div>
             {fieldErrors.name ? (
               <em id="details-name-error" className="field-error">
                 {fieldErrors.name}
               </em>
             ) : null}
-          </label>
+          </div>
 
-          <label className="field">
-            <span>Mobile number</span>
-            <div className="phone-field">
-              <span>+91</span>
+          <div className="checkout-field">
+            <label htmlFor="details-mobile">Mobile number</label>
+            <div className="checkout-phone">
+              <span className="checkout-country">
+                +91
+                <ChevronDownIcon />
+              </span>
               <input
+                id="details-mobile"
+                className="checkout-control"
                 type="tel"
                 inputMode="numeric"
                 autoComplete="tel-national"
                 maxLength={10}
-                placeholder="10-digit mobile number"
+                placeholder="Enter mobile number"
                 value={values.mobile}
                 aria-invalid={Boolean(fieldErrors.mobile)}
                 aria-describedby={fieldErrors.mobile ? "details-mobile-error" : undefined}
@@ -140,28 +158,33 @@ export function DetailsPage({ plot }: { plot: Plot }) {
                 {fieldErrors.mobile}
               </em>
             ) : null}
-          </label>
+          </div>
 
-          <label className="field">
-            <span>Email</span>
-            <input
-              type="email"
-              autoComplete="email"
-              placeholder="name@example.com"
-              value={values.email}
-              aria-invalid={Boolean(fieldErrors.email)}
-              aria-describedby={fieldErrors.email ? "details-email-error" : undefined}
-              aria-label="Email"
-              onChange={(event) => updateField("email", event.target.value)}
-            />
+          <div className="checkout-field">
+            <label htmlFor="details-email">Email address</label>
+            <div className="checkout-input">
+              <MailIcon />
+              <input
+                id="details-email"
+                className="checkout-control"
+                type="email"
+                autoComplete="email"
+                placeholder="name@example.com"
+                value={values.email}
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={fieldErrors.email ? "details-email-error" : undefined}
+                aria-label="Email address"
+                onChange={(event) => updateField("email", event.target.value)}
+              />
+            </div>
             {fieldErrors.email ? (
               <em id="details-email-error" className="field-error">
                 {fieldErrors.email}
               </em>
             ) : null}
-          </label>
+          </div>
 
-          <label className="terms-check">
+          <label className="checkout-terms">
             <input
               type="checkbox"
               checked={values.accepted}
@@ -182,33 +205,44 @@ export function DetailsPage({ plot }: { plot: Plot }) {
             </p>
           ) : null}
 
-          <button className="booking-primary" type="submit">
-            Review payment <span aria-hidden="true">↗</span>
+          <button className="sg-cta checkout-submit" type="submit">
+            Review payment
+            <ArrowRightIcon />
           </button>
-          <p className="form-note">
+          <p className="sg-visually-hidden">
             Prototype only. Your details stay in this browser session and are not submitted to a
-            server. Hold duration: To be confirmed.
+            server.
           </p>
         </form>
 
-        <aside className="booking-aside">
-          <div className="aside-label">YOUR SELECTION</div>
-          <h3>Plot {plot.id}</h3>
-          <p>
-            {plot.area} · {formatSqFt(plot.areaSqFt)}
-          </p>
-          <div className="aside-row">
-            <span>Property price</span>
-            <b>Price on request</b>
+        <aside className="selection-card" aria-label="Your selection">
+          <span className="checkout-eyebrow">YOUR SELECTION</span>
+          <div className="selection-head">
+            <div>
+              <h2>Plot {plot.id}</h2>
+              <p>
+                {plot.area} <span aria-hidden="true">•</span> {formatSqFt(plot.areaSqFt)}
+              </p>
+            </div>
+            <PlotThumbnail label={`Illustration of Plot ${plot.id}`} />
           </div>
-          <div className="aside-row">
-            <span>Pay now</span>
-            <b>To be confirmed</b>
+          <div className="selection-rows">
+            <div className="selection-row">
+              <span>Property price</span>
+              <b>Price on request</b>
+            </div>
+            <div className="selection-row">
+              <span>Pay now</span>
+              <b>To be confirmed</b>
+            </div>
+            <div className="selection-row">
+              <span>Availability</span>
+              <b>
+                <span className="status available">On request</span>
+              </b>
+            </div>
           </div>
-          <div className="aside-row">
-            <span>Availability</span>
-            <b>On request</b>
-          </div>
+          <SelectionWave />
         </aside>
       </div>
     </FlowShell>

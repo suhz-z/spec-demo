@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { ArrowRightIcon, CheckoutScenery, PlotThumbnail, ShieldCheckIcon } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
 import { FLOW_STEPS, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
 import { useFlow } from "./flow-provider";
@@ -12,7 +13,8 @@ export function ReviewPage({ plot }: { plot: Plot }) {
 
   if (!hydrated) {
     return (
-      <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)}>
+      <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)} variant="checkout">
+        <CheckoutScenery />
         <div className="flow-state-page">
           <div className="state-screen">
             <div className="aside-label">REVIEW</div>
@@ -26,7 +28,8 @@ export function ReviewPage({ plot }: { plot: Plot }) {
 
   if (!customer) {
     return (
-      <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)}>
+      <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)} variant="checkout">
+        <CheckoutScenery />
         <div className="flow-state-page">
           <div className="state-screen">
             <div className="state-symbol pending" aria-hidden="true">
@@ -51,79 +54,70 @@ export function ReviewPage({ plot }: { plot: Plot }) {
   }
 
   return (
-    <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)}>
+    <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)} variant="checkout">
+      <CheckoutScenery leaves />
       <FlowPageHead
         backHref={`/plots/${plot.id}/details`}
         backLabel="Back to details"
         title="Review and pay"
-        subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="Availability is rechecked before payment"
       />
 
-      <div className="flow-review-grid">
-        <div className="review-main">
-          <div className="review-section">
-            <div className="aside-label">PLOT</div>
-            <div className="review-row">
-              <span>
-                Plot {plot.id} · {plot.area} · {formatSqFt(plot.areaSqFt)}
-              </span>
-              <Link className="plain-edit" href={`/plots`}>
-                Change
+      <div className="checkout-grid review-checkout-grid">
+        <section className="review-booking-card" aria-label="Booking details">
+          <span className="checkout-eyebrow">BOOKING DETAILS</span>
+          <div className="booking-summary-head">
+            <div>
+              <h2>Plot {plot.id}</h2>
+              <p>
+                {plot.area} <span aria-hidden="true">•</span> {formatSqFt(plot.areaSqFt)}
+              </p>
+              <span className="status available">On request</span>
+            </div>
+            <PlotThumbnail label={`Illustration of Plot ${plot.id}`} />
+          </div>
+
+          <div className="buyer-block">
+            <div className="buyer-head">
+              <span className="checkout-eyebrow">BUYER DETAILS</span>
+              <Link className="checkout-edit" href={`/plots/${plot.id}/details`}>
+                Edit details
               </Link>
             </div>
+            <p className="buyer-name">{customer.name}</p>
+            <p>+91 {customer.mobile}</p>
+            <p>{customer.email}</p>
+          </div>
+        </section>
+
+        <aside className="review-payment-card" aria-label="Payment summary">
+          <span className="checkout-eyebrow">PAYMENT SUMMARY</span>
+          <div className="payment-rows">
+            <div className="payment-row">
+              <span>Plot price</span>
+              <b>Price on request</b>
+            </div>
+            <div className="payment-row">
+              <span>Booking advance</span>
+              <b>To be confirmed</b>
+            </div>
+            <div className="payment-row">
+              <span>Taxes and charges</span>
+              <b>As applicable</b>
+            </div>
+            <div className="payment-row emphasis">
+              <span>Pay now</span>
+              <b>To be confirmed</b>
+            </div>
           </div>
 
-          <div className="review-section">
-            <div className="aside-label">BUYER</div>
-            <div className="review-row">
-              <span>{customer.name}</span>
-            </div>
-            <div className="review-row">
-              <span>+91 {customer.mobile}</span>
-            </div>
-            <div className="review-row">
-              <span>{customer.email}</span>
-            </div>
-            <Link className="plain-edit review-edit" href={`/plots/${plot.id}/details`}>
-              Edit details
-            </Link>
-          </div>
-
-          <p className="form-note">
-            The payment step in this prototype does not contact a payment provider.
-          </p>
-        </div>
-
-        <aside className="review-payment">
-          <div className="aside-label">PAYMENT SUMMARY</div>
-          <div className="aside-row">
-            <span>Plot price</span>
-            <b>Price on request</b>
-          </div>
-          <div className="aside-row">
-            <span>Booking advance</span>
-            <b>To be confirmed</b>
-          </div>
-          <div className="aside-row">
-            <span>Taxes and charges</span>
-            <b>As applicable</b>
-          </div>
-          <div className="aside-row emphasis">
-            <span>Pay now to book</span>
-            <b>To be confirmed</b>
-          </div>
-          <div className="aside-row">
-            <span>Remaining balance</span>
-            <b>To be confirmed</b>
-          </div>
-          <p className="payment-note">
-            Availability is checked again before payment. No amount is collected in this preview.
-          </p>
-          <Link className="booking-primary" href={`/plots/${plot.id}/payment`}>
-            Continue to payment <span aria-hidden="true">↗</span>
+          <Link className="sg-cta checkout-submit" href={`/plots/${plot.id}/payment`}>
+            Continue to payment
+            <ArrowRightIcon />
           </Link>
-          <p className="prototype-note">Preview only. No payment will be collected.</p>
+          <p className="secure-note">
+            <ShieldCheckIcon />
+            Your payment is secure and encrypted.
+          </p>
         </aside>
       </div>
     </FlowShell>

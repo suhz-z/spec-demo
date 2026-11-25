@@ -125,7 +125,7 @@ export function FloorPlanPage({ plot }: { plot: Plot }) {
                   </b>
                 </div>
               </div>
-              <Link className="panel-action" href={`/plots/${plot.id}/summary`}>
+              <Link className="sg-cta panel-cta" href={`/plots/${plot.id}/summary`}>
                 <span>View summary</span>
                 <span aria-hidden="true">↗</span>
               </Link>
@@ -137,7 +137,7 @@ export function FloorPlanPage({ plot }: { plot: Plot }) {
                 Choose a room to read its labelled size. The floor plan illustrates a possible villa
                 arrangement on a {plot.area} plot.
               </p>
-              <Link className="panel-action" href={`/plots/${plot.id}/summary`}>
+              <Link className="sg-cta panel-cta" href={`/plots/${plot.id}/summary`}>
                 <span>View summary</span>
                 <span aria-hidden="true">↗</span>
               </Link>
