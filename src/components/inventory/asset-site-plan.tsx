@@ -82,6 +82,7 @@ export function AssetSitePlan({
   const plotsRef = useRef<SitePlot[]>([]);
   const callbacks = useRef({ onSelect, onPreview, onPlots });
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const layoutPlotId = selectedOnly || zoomToSelected ? selectedPlotId : undefined;
   const hostClassName = [
     "sg-demo-plan",
     selectedOnly ? "sg-selected-plot checkout-thumb" : "",
@@ -129,7 +130,7 @@ export function AssetSitePlan({
 
         if (selectedOnly) {
           const selectedGroup = Array.from(svg.querySelectorAll<SVGGElement>("[data-plot]")).find(
-            (group) => group.getAttribute("data-plot") === selectedPlotId,
+            (group) => group.getAttribute("data-plot") === layoutPlotId,
           );
           if (!selectedGroup) throw new Error("selected plot is missing from the site plan");
 
@@ -151,7 +152,7 @@ export function AssetSitePlan({
 
         if (zoomToSelected) {
           const selectedGroup = Array.from(svg.querySelectorAll<SVGGElement>("[data-plot]")).find(
-            (group) => group.getAttribute("data-plot") === selectedPlotId,
+            (group) => group.getAttribute("data-plot") === layoutPlotId,
           );
           if (!selectedGroup) throw new Error("selected plot is missing from the site plan");
 
@@ -215,7 +216,7 @@ export function AssetSitePlan({
       cancelled = true;
       detachListeners?.();
     };
-  }, [readOnly, selectedOnly, selectedPlotId, zoomToSelected]);
+  }, [layoutPlotId, readOnly, selectedOnly, zoomToSelected]);
 
   useEffect(() => {
     const container = hostRef.current;
