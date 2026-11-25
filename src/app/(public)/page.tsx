@@ -44,7 +44,6 @@ export default function HomePage() {
                   priority
                   unoptimized
                 />
-                <figcaption>Indicative floor plan · not to scale</figcaption>
               </figure>
             </div>
           </main>
