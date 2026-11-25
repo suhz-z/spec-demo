@@ -184,7 +184,7 @@
 #wireframe-app .flow-page-head h1 {
   margin: 0;
   color: #26342b;
-  font-size: clamp(22px, 2.5vw, 28px);
+  font-size: clamp(26px, 3vw, 34px);
   font-weight: 450;
   line-height: 1.08;
   letter-spacing: -0.055em;
@@ -563,6 +563,7 @@
 }
 
 #wireframe-app .flow-summary-plan {
+  position: relative;
   display: flex;
   width: 100%;
   height: min(620px, 62svh);
@@ -570,9 +571,36 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  touch-action: none;
+  cursor: grab;
   border: 1px solid #e7ebe4;
   background: #f0f3ed;
   padding: 10px;
+}
+
+#wireframe-app .flow-summary-plan:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border: 0;
+  background: #f0f3ed;
+}
+
+#wireframe-app .flow-summary-plan:fullscreen .sg-demo-plan {
+  width: 100%;
+  height: 100%;
+}
+
+#wireframe-app .flow-summary-plan:fullscreen::backdrop {
+  background: #f0f3ed;
+}
+
+#wireframe-app .flow-summary-plan--dragging {
+  cursor: grabbing;
 }
 
 #wireframe-app .flow-summary-plan img,
@@ -599,6 +627,11 @@
   pointer-events: none;
 }
 
+#wireframe-app .flow-summary-plan .sg-zoomed-plan {
+  align-items: center;
+  justify-content: center;
+}
+
 #wireframe-app .flow-summary-plan .sg-zoomed-plan > svg {
   display: block;
   width: 100%;
@@ -607,6 +640,42 @@
   max-height: 100%;
   object-fit: contain;
   overflow: hidden;
+  transform: translate(var(--plan-pan-x, 0px), var(--plan-pan-y, 0px))
+    scale(var(--plan-zoom, 1));
+  transform-origin: center;
+}
+
+#wireframe-app .plot-summary-zoom {
+  position: absolute;
+  z-index: 2;
+  bottom: 16px;
+  left: 16px;
+  display: grid;
+  gap: 6px;
+}
+
+#wireframe-app .plot-summary-zoom button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid #dfe5dc;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #26342b;
+  font: 500 22px/1 var(--sans);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+#wireframe-app .plot-summary-zoom button:hover:not(:disabled) {
+  border-color: #9aab9a;
+  background: #f7f9f5;
+}
+
+#wireframe-app .plot-summary-zoom button:disabled {
+  color: #9aa39b;
+  cursor: not-allowed;
 }
 
 #wireframe-app .flow-payment-card {
@@ -1058,7 +1127,7 @@
   }
 
   #wireframe-app .flow-page-head h1 {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   #wireframe-app .flow-page-head p {
@@ -1156,7 +1225,7 @@
   }
 
   #wireframe-app .flow-page-head h1 {
-    font-size: 24px;
+    font-size: 29px;
   }
 
   #wireframe-app .flow-side-panel {
@@ -1252,6 +1321,15 @@
 #wireframe-app .flow-page--checkout .review-payment-card,
 #wireframe-app .flow-page--checkout .flow-state-page {
   zoom: 1;
+}
+
+#wireframe-app .flow-page .journey-breadcrumbs a,
+#wireframe-app .flow-page .journey-breadcrumbs__trail > span {
+  font-size: 13px;
+}
+
+#wireframe-app .flow-page .journey-breadcrumbs .flow-meta {
+  font-size: 12px;
 }
 
 #wireframe-app .flow-plan-layout--selected .flow-side-panel .villa-title h2 {

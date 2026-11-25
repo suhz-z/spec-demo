@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 
 export type SitePlot = {
   id: string;
@@ -20,6 +21,10 @@ type AssetSitePlanProps = {
   selectedOnly?: boolean;
   /** Zoom the source SVG around the selected parcel while keeping nearby map context. */
   zoomToSelected?: boolean;
+  /** Fit the full SVG viewBox to the containing stage. */
+  fitContainer?: boolean;
+  /** Scale the plan within its containing viewport. */
+  zoomScale?: number;
   /** Accessible name for the static figure. */
   label?: string;
 };
@@ -69,6 +74,8 @@ export function AssetSitePlan({
   readOnly = false,
   selectedOnly = false,
   zoomToSelected = false,
+  fitContainer = false,
+  zoomScale = 1.1,
   label,
 }: AssetSitePlanProps) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -78,7 +85,7 @@ export function AssetSitePlan({
   const hostClassName = [
     "sg-demo-plan",
     selectedOnly ? "sg-selected-plot checkout-thumb" : "",
-    zoomToSelected ? "sg-zoomed-plan" : "",
+    zoomToSelected || fitContainer ? "sg-zoomed-plan" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -228,6 +235,7 @@ export function AssetSitePlan({
       <div
         className={hostClassName}
         ref={hostRef}
+        style={{ "--plan-zoom": zoomScale } as CSSProperties}
         data-static={readOnly ? "true" : undefined}
         role={readOnly ? "img" : undefined}
         aria-label={readOnly ? (label ?? "Moolaparambu land subdivision plan") : undefined}

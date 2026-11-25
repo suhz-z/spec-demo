@@ -1,7 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import type {
+  CSSProperties,
+  PointerEvent as ReactPointerEvent,
+  WheelEvent as ReactWheelEvent,
+} from "react";
+
+import type { SitePlot } from "@/components/inventory/asset-site-plan";
 
 import { FlowPageHead } from "./flow-chrome";
-import { FLOW_STEPS, SITE, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
+import { FLOW_STEPS, SITE, flowCrumbs, formatSqFt, getPlot, type Plot } from "./flow-data";
 import { FlowShell } from "./flow-shell";
 import { PlotLocationPlan } from "./plot-location-plan";
 
@@ -11,28 +21,149 @@ function splitValue(label: string): [string, string] {
 }
 
 export function SummaryPage({ plot }: { plot: Plot }) {
-  const [areaValue, areaUnit] = splitValue(plot.area);
-  const [sqFtValue, sqFtUnit] = splitValue(formatSqFt(plot.areaSqFt));
+  const [selectedId, setSelectedId] = useState(plot.id);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    startPanX: number;
+    startPanY: number;
+  } | null>(null);
+  const didDragRef = useRef(false);
+  const selectedPlot = getPlot(selectedId) ?? plot;
+  const [areaValue, areaUnit] = splitValue(selectedPlot.area);
+  const [sqFtValue, sqFtUnit] = splitValue(formatSqFt(selectedPlot.areaSqFt));
   const [roadValue] = splitValue(SITE.roadAreaLabel);
 
+  const selectPlot = (selected: SitePlot) => setSelectedId(selected.id);
+
+  useEffect(() => {
+    const syncFullscreen = () => setIsFullscreen(document.fullscreenElement === mapRef.current);
+    document.addEventListener("fullscreenchange", syncFullscreen);
+    return () => document.removeEventListener("fullscreenchange", syncFullscreen);
+  }, []);
+
+  const handleWheelZoom = (event: ReactWheelEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const zoomDelta = event.deltaY < 0 ? 0.1 : -0.1;
+    setZoomScale((scale) => Math.min(2.5, Math.max(0.8, scale + zoomDelta)));
+  };
+
+  const toggleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement === mapRef.current) {
+        await document.exitFullscreen();
+      } else {
+        await mapRef.current?.requestFullscreen();
+      }
+    } catch {
+      setIsFullscreen(false);
+    }
+  };
+
+  const handlePanStart = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0 || (event.target as Element).closest(".plot-summary-zoom")) return;
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startPanX: pan.x,
+      startPanY: pan.y,
+    };
+    didDragRef.current = false;
+    setIsDragging(true);
+    const target = event.target as Element & {
+      setPointerCapture?: (pointerId: number) => void;
+    };
+    target.setPointerCapture?.(event.pointerId);
+  };
+
+  const handlePanMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    const deltaX = event.clientX - drag.startX;
+    const deltaY = event.clientY - drag.startY;
+    if (Math.abs(deltaX) + Math.abs(deltaY) > 4) didDragRef.current = true;
+    if (didDragRef.current) {
+      setPan({ x: drag.startPanX + deltaX, y: drag.startPanY + deltaY });
+      event.preventDefault();
+    }
+  };
+
+  const handlePanEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    setIsDragging(false);
+  };
+
   return (
-    <FlowShell step={FLOW_STEPS.summary} crumbs={flowCrumbs("summary", plot.id)}>
+    <FlowShell step={FLOW_STEPS.summary} crumbs={flowCrumbs("summary", selectedPlot.id)}>
       <FlowPageHead
-        backHref={plot.hasFloorPlan ? `/plots/${plot.id}/floor-plan` : "/plots"}
-        backLabel={plot.hasFloorPlan ? "Back to floor plan" : "Back to site plan"}
-        title={plot.name}
+        backHref={selectedPlot.hasFloorPlan ? `/plots/${selectedPlot.id}/floor-plan` : "/plots"}
+        backLabel={selectedPlot.hasFloorPlan ? "Back to floor plan" : "Back to site plan"}
+        title={selectedPlot.name}
       />
 
       <div className="flow-summary-grid">
         <section className="flow-summary-card" aria-label="Selected plot details">
-          <div className="flow-summary-plan">
-            <PlotLocationPlan plotId={plot.id} />
+          <div
+            ref={mapRef}
+            className={`flow-summary-plan${isDragging ? " flow-summary-plan--dragging" : ""}`}
+            style={{ "--plan-pan-x": `${pan.x}px`, "--plan-pan-y": `${pan.y}px` } as CSSProperties}
+            onPointerDown={handlePanStart}
+            onPointerMove={handlePanMove}
+            onPointerUp={handlePanEnd}
+            onPointerCancel={handlePanEnd}
+            onWheel={handleWheelZoom}
+            onClickCapture={(event) => {
+              if (!didDragRef.current) return;
+              event.preventDefault();
+              event.stopPropagation();
+              didDragRef.current = false;
+            }}
+          >
+            <PlotLocationPlan
+              plotId={selectedPlot.id}
+              zoomScale={zoomScale}
+              onSelect={selectPlot}
+            />
+            <div className="plot-summary-zoom" aria-label="Map zoom controls">
+              <button
+                type="button"
+                aria-label="Zoom out"
+                disabled={zoomScale <= 0.8}
+                onClick={() => setZoomScale((scale) => Math.max(0.8, scale - 0.1))}
+              >
+                −
+              </button>
+              <button
+                type="button"
+                aria-label="Zoom in"
+                disabled={zoomScale >= 2.5}
+                onClick={() => setZoomScale((scale) => Math.min(2.5, scale + 0.1))}
+              >
+                +
+              </button>
+              <button
+                type="button"
+                aria-label={isFullscreen ? "Exit fullscreen map" : "View map fullscreen"}
+                title={isFullscreen ? "Exit fullscreen" : "View fullscreen"}
+                onClick={() => void toggleFullscreen()}
+              >
+                {isFullscreen ? "⤢" : "⛶"}
+              </button>
+            </div>
           </div>
         </section>
 
         <aside className="flow-payment-card">
           <div className="price-intro">
-            <span>PLOT PRICE</span>
+            <span>{`PLOT ${selectedPlot.id} PRICE`}</span>
             <div className="price-title-row">
               <strong>Price on request</strong>
               <span className="status available">On request</span>
@@ -79,7 +210,7 @@ export function SummaryPage({ plot }: { plot: Plot }) {
               payment.
             </p>
           </details>
-          <Link className="sg-cta booking-primary" href={`/plots/${plot.id}/details`}>
+          <Link className="sg-cta booking-primary" href={`/plots/${selectedPlot.id}/details`}>
             Proceed to booking <span aria-hidden="true">↗</span>
           </Link>
         </aside>
