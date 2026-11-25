@@ -89,7 +89,7 @@ body {
   background: var(--sg-canvas);
   color: var(--sg-ink);
   font-family: var(--sg-font-sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -773,13 +773,13 @@ body:has(#wireframe-app) .sg-cta {
 
 .sg-field__hint {
   color: var(--sg-ink-muted);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
 .sg-field__error {
   color: var(--sg-danger);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.5;
 }
 

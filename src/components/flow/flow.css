@@ -566,7 +566,7 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: min(620px, 62svh);
+  height: min(720px, 72svh);
   min-height: 280px;
   align-items: center;
   justify-content: center;
@@ -609,7 +609,7 @@
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: min(620px, 62svh);
+  max-height: min(720px, 72svh);
   object-fit: contain;
 }
 
@@ -1075,8 +1075,8 @@
   }
 
   #wireframe-app .flow-summary-plan {
-    height: min(400px, 52svh);
-    min-height: 170px;
+    height: min(480px, 62svh);
+    min-height: 240px;
   }
 
   #wireframe-app .flow-payment-card,
@@ -1185,14 +1185,14 @@
   }
 
   #wireframe-app .flow-summary-plan {
-    height: 190px;
-    min-height: 140px;
-    max-height: 190px;
+    height: clamp(240px, 40svh, 320px);
+    min-height: 240px;
+    max-height: 320px;
   }
 
   #wireframe-app .flow-summary-plan img,
   #wireframe-app .flow-summary-plan .sg-demo-plan > svg {
-    max-height: 166px;
+    max-height: calc(100% - 20px);
   }
 
   #wireframe-app .flow-state-page .state-screen h2 {
@@ -1310,8 +1310,7 @@
 #wireframe-app .flow-page .flow-side-panel,
 #wireframe-app .flow-page .flow-footer,
 #wireframe-app .flow-page .flow-page-foot,
-#wireframe-app .flow-page .flow-payment-card,
-#wireframe-app .flow-page .flow-state-page {
+#wireframe-app .flow-page .flow-payment-card {
   zoom: 0.8;
 }
 
@@ -2090,4 +2089,253 @@
   #wireframe-app .checkout-submit {
     transition: none;
   }
+}
+
+/* Keep decision-related copy readable across the booking flow. */
+#wireframe-app .flow-page .flow-footer,
+#wireframe-app .flow-page .flow-footer a,
+#wireframe-app .flow-location,
+#wireframe-app .journey-breadcrumbs .flow-meta,
+#wireframe-app .journey-breadcrumbs a,
+#wireframe-app .flow-page-aside,
+#wireframe-app .flow-page-foot,
+#wireframe-app .landing-plan-frame figcaption,
+#wireframe-app .landing-page .foot-stats,
+#wireframe-app .landing-page .foot-stats b,
+#wireframe-app .flow-plan-summary,
+#wireframe-app .flow-plan-legend,
+#wireframe-app .flow-plan-note,
+#wireframe-app .flow-side-panel .villa-type,
+#wireframe-app .flow-side-panel .price-line span,
+#wireframe-app .flow-payment-card .price-fact span,
+#wireframe-app .flow-payment-card .price-intro > span,
+#wireframe-app .flow-form-grid .aside-row,
+#wireframe-app .flow-form-grid .aside-row b,
+#wireframe-app .flow-state-page .state-screen > p,
+#wireframe-app .flow-page--checkout .flow-header .flow-meta,
+#wireframe-app .checkout-eyebrow,
+#wireframe-app .review-booking-summary .checkout-eyebrow,
+#wireframe-app .review-payment-card .checkout-eyebrow,
+#wireframe-app .checkout-edit,
+#wireframe-app .selection-card .status {
+  font-size: 12px;
+}
+
+#wireframe-app .flow-page-head p,
+#wireframe-app .flow-side-panel .detail-row,
+#wireframe-app .flow-side-panel .detail-row b,
+#wireframe-app .flow-side-panel .panel-empty p,
+#wireframe-app .flow-payment-card .price-breakdown .detail-row,
+#wireframe-app .flow-payment-card .price-breakdown .detail-row b,
+#wireframe-app .flow-payment-card .pay-total,
+#wireframe-app .flow-form-grid .aside-row,
+#wireframe-app .flow-form-grid .aside-row b,
+#wireframe-app .flow-state-page .state-screen > p,
+#wireframe-app .selection-head p,
+#wireframe-app .booking-summary-head p {
+  font-size: 14px;
+}
+
+/* Match payment outcome screens to the normal flow scale. */
+#wireframe-app .flow-page .flow-state-page {
+  zoom: 1;
+}
+
+#wireframe-app .flow-state-page .aside-label,
+#wireframe-app .flow-state-page .state-reference,
+#wireframe-app .flow-state-page .state-action,
+#wireframe-app .flow-payment-page .demo-outcomes summary,
+#wireframe-app .flow-payment-page .outcome-actions button {
+  font-size: 14px;
+}
+
+#wireframe-app .flow-header .sub-brand {
+  font-size: 14px;
+}
+
+#wireframe-app .flow-header .sub-brand span {
+  font-size: 11px;
+}
+
+@media (max-width: 700px) {
+  #wireframe-app .flow-header .sub-brand {
+    font-size: 12px;
+  }
+
+  #wireframe-app .flow-header .sub-brand span {
+    font-size: 10px;
+  }
+}
+
+/* Keep page titles and back controls consistent across the booking flow. */
+#wireframe-app .flow-page .flow-page-head {
+  zoom: 0.8;
+  gap: 20px;
+  padding: 12px 0 8px;
+}
+
+#wireframe-app .flow-page .flow-page-heading {
+  gap: 16px;
+}
+
+#wireframe-app .flow-page .flow-page-head h1 {
+  font-size: clamp(26px, 3vw, 30px);
+  line-height: 1.08;
+}
+
+#wireframe-app .flow-page .flow-page-head .flow-back {
+  width: 34px;
+  height: 34px;
+  font-size: 20px;
+}
+
+/* Selected plot details: clearer labels, values, and section spacing. */
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .panel-top {
+  font-size: 14px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .panel-detail {
+  gap: 10px;
+  padding: 16px 0 12px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .villa-title h2 {
+  font-size: 30px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .villa-type,
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .status,
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .price-line span,
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .price-line small {
+  font-size: 14px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .details {
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .detail-row {
+  padding: 9px 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .detail-row b {
+  font-size: 16px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .price-line {
+  padding-top: 14px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .price-line b {
+  font-size: 28px;
+}
+
+#wireframe-app .flow-plan-layout--selected .flow-side-panel .panel-cta {
+  min-height: 52px;
+  margin-top: 18px;
+  font-size: 16px;
+}
+
+@media (max-width: 700px) {
+  #wireframe-app .flow-plan-layout--selected .flow-side-panel {
+    max-height: 210px;
+  }
+
+  #wireframe-app .flow-plan-layout--selected .flow-side-panel .panel-detail {
+    gap: 8px;
+    padding: 12px 0 8px;
+  }
+
+  #wireframe-app .flow-plan-layout--selected .flow-side-panel .villa-title h2 {
+    font-size: 26px;
+  }
+
+  #wireframe-app .flow-plan-layout--selected .flow-side-panel .details {
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+
+  #wireframe-app .flow-plan-layout--selected .flow-side-panel .detail-row {
+    padding: 8px 0;
+  }
+
+  #wireframe-app .flow-plan-layout--selected .flow-side-panel .panel-cta {
+    min-height: 48px;
+    margin-top: 12px;
+  }
+}
+
+/* Plot summary price card: clarify the total and give its sections room to scan. */
+#wireframe-app .flow-payment-card .price-intro {
+  padding-bottom: 12px;
+}
+
+#wireframe-app .flow-payment-card .price-intro > span,
+#wireframe-app .flow-payment-card .price-fact span,
+#wireframe-app .flow-payment-card .price-title-row .status {
+  font-size: 14px;
+}
+
+#wireframe-app .flow-payment-card .price-title-row {
+  margin-top: 8px;
+}
+
+#wireframe-app .flow-payment-card .price-title-row strong {
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+#wireframe-app .flow-payment-card .price-facts {
+  margin-bottom: 12px;
+  padding: 10px 0 12px;
+}
+
+#wireframe-app .flow-payment-card .price-fact {
+  gap: 4px;
+}
+
+#wireframe-app .flow-payment-card .price-fact b {
+  font-size: 18px;
+}
+
+#wireframe-app .flow-payment-card .price-breakdown .detail-row {
+  padding-block: 10px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+#wireframe-app .flow-payment-card .price-breakdown .detail-row b {
+  font-size: 15px;
+}
+
+#wireframe-app .flow-payment-card .pay-total {
+  padding: 12px 0 6px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+#wireframe-app .flow-payment-card .pay-total b {
+  font-size: 18px;
+}
+
+#wireframe-app .flow-payment-card .terms-inline {
+  margin-top: 12px;
+}
+
+#wireframe-app .flow-payment-card .terms-inline summary,
+#wireframe-app .flow-payment-card .terms-inline p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#wireframe-app .flow-payment-card .terms-inline summary {
+  padding-block: 12px;
+}
+
+#wireframe-app .flow-payment-card .booking-primary {
+  margin-top: 22px;
+  font-size: 16px;
 }

@@ -27,7 +27,6 @@ export function PaymentPage({ plot }: { plot: Plot }) {
         backHref={`/plots/${plot.id}/review`}
         backLabel="Back to review"
         title="Payment"
-        compact
       />
 
       <div className="flow-state-page flow-payment-page">
