@@ -75,7 +75,7 @@ export function PlotPicker() {
     <FlowShell step={FLOW_STEPS.plots} crumbs={flowCrumbs("", undefined)}>
       <FlowPageHead backHref="/" backLabel="Back to home" title="Select a plot" />
 
-      <div className="flow-plan-layout">
+      <div className={`flow-plan-layout${selected ? " flow-plan-layout--selected" : ""}`}>
         <div className="flow-plan-main">
           <div className="flow-plan-toolbar">
             <span className="flow-plan-summary">
@@ -99,23 +99,15 @@ export function PlotPicker() {
           </div>
         </div>
 
-        <aside className="flow-side-panel" aria-live="polite">
-          <div className="panel-top">
-            <span>Plot details</span>
-            <span>{selected ? `PLOT ${selected.id}` : "—"}</span>
-          </div>
-          {selected ? (
-            <PanelDetails plot={selected} />
-          ) : (
-            <div className="panel-empty">
-              <h2>Select a plot</h2>
-              <p>
-                All six plots measure {SITE.plotAreaLabel}. Choose a parcel on the survey plan to
-                see its details.
-              </p>
+        {selected ? (
+          <aside className="flow-side-panel" aria-live="polite">
+            <div className="panel-top">
+              <span>Plot details</span>
+              <span>{`PLOT ${selected.id}`}</span>
             </div>
-          )}
-        </aside>
+            <PanelDetails plot={selected} />
+          </aside>
+        ) : null}
       </div>
     </FlowShell>
   );

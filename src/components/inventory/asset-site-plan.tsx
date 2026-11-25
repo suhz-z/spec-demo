@@ -18,6 +18,8 @@ type AssetSitePlanProps = {
   readOnly?: boolean;
   /** Render only the selected parcel from the source SVG. */
   selectedOnly?: boolean;
+  /** Zoom the source SVG around the selected parcel while keeping nearby map context. */
+  zoomToSelected?: boolean;
   /** Accessible name for the static figure. */
   label?: string;
 };
@@ -66,12 +68,20 @@ export function AssetSitePlan({
   onPlots,
   readOnly = false,
   selectedOnly = false,
+  zoomToSelected = false,
   label,
 }: AssetSitePlanProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const plotsRef = useRef<SitePlot[]>([]);
   const callbacks = useRef({ onSelect, onPreview, onPlots });
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const hostClassName = [
+    "sg-demo-plan",
+    selectedOnly ? "sg-selected-plot checkout-thumb" : "",
+    zoomToSelected ? "sg-zoomed-plan" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   useEffect(() => {
     callbacks.current = { onSelect, onPreview, onPlots };
@@ -132,6 +142,22 @@ export function AssetSitePlan({
           return;
         }
 
+        if (zoomToSelected) {
+          const selectedGroup = Array.from(svg.querySelectorAll<SVGGElement>("[data-plot]")).find(
+            (group) => group.getAttribute("data-plot") === selectedPlotId,
+          );
+          if (!selectedGroup) throw new Error("selected plot is missing from the site plan");
+
+          selectedGroup.classList.add("selected");
+          const bounds = selectedGroup.getBBox();
+          const padding = Math.max(bounds.width, bounds.height) * 0.45;
+          const viewBoxX = bounds.x - padding;
+          const viewBoxY = bounds.y - padding;
+          const viewBoxWidth = bounds.width + padding * 2;
+          const viewBoxHeight = bounds.height + padding * 2;
+          svg.setAttribute("viewBox", `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`);
+        }
+
         if (readOnly) {
           setStatus("ready");
           return;
@@ -182,7 +208,7 @@ export function AssetSitePlan({
       cancelled = true;
       detachListeners?.();
     };
-  }, [readOnly, selectedOnly, selectedPlotId]);
+  }, [readOnly, selectedOnly, selectedPlotId, zoomToSelected]);
 
   useEffect(() => {
     const container = hostRef.current;
@@ -200,7 +226,7 @@ export function AssetSitePlan({
     <>
       {/* React must not own these children: the validated SVG is inserted with DOM APIs. */}
       <div
-        className={`sg-demo-plan${selectedOnly ? " sg-selected-plot checkout-thumb" : ""}`}
+        className={hostClassName}
         ref={hostRef}
         data-static={readOnly ? "true" : undefined}
         role={readOnly ? "img" : undefined}
