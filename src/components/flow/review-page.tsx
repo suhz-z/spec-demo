@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 
-import { ArrowRightIcon, CheckoutScenery, PlotThumbnail, ShieldCheckIcon } from "./checkout-art";
+import { AssetSitePlan } from "@/components/inventory/asset-site-plan";
+
+import { ArrowRightIcon, CheckoutScenery, SelectionWave } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
 import { FLOW_STEPS, flowCrumbs, formatSqFt, type Plot } from "./flow-data";
 import { useFlow } from "./flow-provider";
@@ -15,8 +17,13 @@ export function ReviewPage({ plot }: { plot: Plot }) {
     return (
       <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)} variant="checkout">
         <CheckoutScenery />
+        <FlowPageHead
+          backHref={`/plots/${plot.id}/details`}
+          backLabel="Back to details"
+          title="Review and pay"
+        />
         <div className="flow-state-page">
-          <div className="state-screen">
+          <div className="review-recovery-card">
             <div className="aside-label">REVIEW</div>
             <h2>Loading your details</h2>
             <p>Reading the details held for this browser session.</p>
@@ -30,8 +37,13 @@ export function ReviewPage({ plot }: { plot: Plot }) {
     return (
       <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)} variant="checkout">
         <CheckoutScenery />
+        <FlowPageHead
+          backHref={`/plots/${plot.id}/summary`}
+          backLabel="Back to selection"
+          title="Review and pay"
+        />
         <div className="flow-state-page">
-          <div className="state-screen">
+          <div className="review-recovery-card">
             <div className="state-symbol pending" aria-hidden="true">
               !
             </div>
@@ -41,7 +53,7 @@ export function ReviewPage({ plot }: { plot: Plot }) {
               Customer details are held only for this browser session. Enter them to continue to the
               payment review.
             </p>
-            <Link className="booking-primary state-action" href={`/plots/${plot.id}/details`}>
+            <Link className="sg-cta booking-primary state-action" href={`/plots/${plot.id}/details`}>
               Add customer details <span aria-hidden="true">↗</span>
             </Link>
             <Link className="text-back" href={`/plots/${plot.id}/summary`}>
@@ -55,7 +67,7 @@ export function ReviewPage({ plot }: { plot: Plot }) {
 
   return (
     <FlowShell step={FLOW_STEPS.review} crumbs={flowCrumbs("review", plot.id)} variant="checkout">
-      <CheckoutScenery leaves />
+      <CheckoutScenery />
       <FlowPageHead
         backHref={`/plots/${plot.id}/details`}
         backLabel="Back to details"
@@ -63,8 +75,7 @@ export function ReviewPage({ plot }: { plot: Plot }) {
       />
 
       <div className="checkout-grid review-checkout-grid">
-        <section className="review-booking-card" aria-label="Booking details">
-          <span className="checkout-eyebrow">BOOKING DETAILS</span>
+        <section className="review-booking-summary" aria-label="Booking details">
           <div className="booking-summary-head">
             <div>
               <h2>Plot {plot.id}</h2>
@@ -73,24 +84,44 @@ export function ReviewPage({ plot }: { plot: Plot }) {
               </p>
               <span className="status available">On request</span>
             </div>
-            <PlotThumbnail label={`Illustration of Plot ${plot.id}`} />
+            <AssetSitePlan
+              readOnly
+              selectedOnly
+              selectedPlotId={plot.id}
+              label={`Plot ${plot.id} from the Moolaparambu site plan`}
+              onSelect={() => {}}
+              onPreview={() => {}}
+              onPlots={() => {}}
+            />
           </div>
 
           <div className="buyer-block">
             <div className="buyer-head">
-              <span className="checkout-eyebrow">BUYER DETAILS</span>
+              <h3 className="checkout-eyebrow">CUSTOMER DETAILS</h3>
               <Link className="checkout-edit" href={`/plots/${plot.id}/details`}>
                 Edit details
               </Link>
             </div>
-            <p className="buyer-name">{customer.name}</p>
-            <p>+91 {customer.mobile}</p>
-            <p>{customer.email}</p>
+            <dl className="buyer-facts">
+              <div>
+                <dt>Name</dt>
+                <dd>{customer.name}</dd>
+              </div>
+              <div>
+                <dt>Mobile</dt>
+                <dd>+91 {customer.mobile}</dd>
+              </div>
+              <div>
+                <dt>Email</dt>
+                <dd>{customer.email}</dd>
+              </div>
+            </dl>
           </div>
         </section>
 
         <aside className="review-payment-card" aria-label="Payment summary">
           <span className="checkout-eyebrow">PAYMENT SUMMARY</span>
+          <p className="review-payment-intro">Final amounts will be confirmed by the sales team.</p>
           <div className="payment-rows">
             <div className="payment-row">
               <span>Plot price</span>
@@ -105,7 +136,7 @@ export function ReviewPage({ plot }: { plot: Plot }) {
               <b>As applicable</b>
             </div>
             <div className="payment-row emphasis">
-              <span>Pay now</span>
+              <span>Amount due now</span>
               <b>To be confirmed</b>
             </div>
           </div>
@@ -114,10 +145,7 @@ export function ReviewPage({ plot }: { plot: Plot }) {
             Continue to payment
             <ArrowRightIcon />
           </Link>
-          <p className="secure-note">
-            <ShieldCheckIcon />
-            Your payment is secure and encrypted.
-          </p>
+          <SelectionWave />
         </aside>
       </div>
     </FlowShell>

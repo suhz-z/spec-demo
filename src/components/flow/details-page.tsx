@@ -4,13 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import { AssetSitePlan } from "@/components/inventory/asset-site-plan";
+
 import {
   ArrowRightIcon,
   CheckoutScenery,
   ChevronDownIcon,
   MailIcon,
   PersonIcon,
-  PlotThumbnail,
   SelectionWave,
 } from "./checkout-art";
 import { FlowPageHead } from "./flow-chrome";
@@ -209,10 +210,6 @@ export function DetailsPage({ plot }: { plot: Plot }) {
             Review payment
             <ArrowRightIcon />
           </button>
-          <p className="sg-visually-hidden">
-            Prototype only. Your details stay in this browser session and are not submitted to a
-            server.
-          </p>
         </form>
 
         <aside className="selection-card" aria-label="Your selection">
@@ -224,7 +221,15 @@ export function DetailsPage({ plot }: { plot: Plot }) {
                 {plot.area} <span aria-hidden="true">•</span> {formatSqFt(plot.areaSqFt)}
               </p>
             </div>
-            <PlotThumbnail label={`Illustration of Plot ${plot.id}`} />
+            <AssetSitePlan
+              readOnly
+              selectedOnly
+              selectedPlotId={plot.id}
+              label={`Plot ${plot.id} from the Moolaparambu site plan`}
+              onSelect={() => {}}
+              onPreview={() => {}}
+              onPlots={() => {}}
+            />
           </div>
           <div className="selection-rows">
             <div className="selection-row">

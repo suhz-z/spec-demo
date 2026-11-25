@@ -78,15 +78,17 @@ export function FlowPageHead({
   title,
   subtitle,
   aside,
+  compact = false,
 }: {
   backHref: string;
   backLabel: string;
   title: string;
   subtitle?: string;
   aside?: ReactNode;
+  compact?: boolean;
 }) {
   return (
-    <div className="flow-page-head">
+    <div className={`flow-page-head${compact ? " flow-page-head--compact" : ""}`}>
       <div className="flow-page-heading">
         <FlowBack href={backHref} label={backLabel} />
         <div>

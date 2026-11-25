@@ -16,6 +16,8 @@ type AssetSitePlanProps = {
   onPlots: (plots: SitePlot[]) => void;
   /** Render the plan as a static figure with only the selected plot marked. */
   readOnly?: boolean;
+  /** Render only the selected parcel from the source SVG. */
+  selectedOnly?: boolean;
   /** Accessible name for the static figure. */
   label?: string;
 };
@@ -63,6 +65,7 @@ export function AssetSitePlan({
   onPreview,
   onPlots,
   readOnly = false,
+  selectedOnly = false,
   label,
 }: AssetSitePlanProps) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -106,6 +109,28 @@ export function AssetSitePlan({
         plotsRef.current = plots;
         container.replaceChildren(svg);
         callbacks.current.onPlots(plots);
+
+        if (selectedOnly) {
+          const selectedGroup = Array.from(svg.querySelectorAll<SVGGElement>("[data-plot]")).find(
+            (group) => group.getAttribute("data-plot") === selectedPlotId,
+          );
+          if (!selectedGroup) throw new Error("selected plot is missing from the site plan");
+
+          selectedGroup.classList.add("selected");
+          Array.from(svg.children).forEach((child) => {
+            if (child !== svg.querySelector("defs") && child !== selectedGroup) child.remove();
+          });
+
+          const bounds = selectedGroup.getBBox();
+          const padding = Math.max(bounds.width, bounds.height) * 0.09;
+          const viewBoxX = bounds.x - padding;
+          const viewBoxY = bounds.y - padding;
+          const viewBoxWidth = bounds.width + padding * 2;
+          const viewBoxHeight = bounds.height + padding * 2;
+          svg.setAttribute("viewBox", `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`);
+          setStatus("ready");
+          return;
+        }
 
         if (readOnly) {
           setStatus("ready");
@@ -157,7 +182,7 @@ export function AssetSitePlan({
       cancelled = true;
       detachListeners?.();
     };
-  }, [readOnly]);
+  }, [readOnly, selectedOnly, selectedPlotId]);
 
   useEffect(() => {
     const container = hostRef.current;
@@ -175,14 +200,16 @@ export function AssetSitePlan({
     <>
       {/* React must not own these children: the validated SVG is inserted with DOM APIs. */}
       <div
-        className="sg-demo-plan"
+        className={`sg-demo-plan${selectedOnly ? " sg-selected-plot checkout-thumb" : ""}`}
         ref={hostRef}
         data-static={readOnly ? "true" : undefined}
         role={readOnly ? "img" : undefined}
         aria-label={readOnly ? (label ?? "Moolaparambu land subdivision plan") : undefined}
       />
-      {status === "loading" ? <p className="sg-plan-loading">Loading site plan…</p> : null}
-      {status === "error" ? (
+      {status === "loading" && !selectedOnly ? (
+        <p className="sg-plan-loading">Loading site plan…</p>
+      ) : null}
+      {status === "error" && !selectedOnly ? (
         <div className="sg-plan-fallback">
           <Image
             src={SITE_PREVIEW_SRC}

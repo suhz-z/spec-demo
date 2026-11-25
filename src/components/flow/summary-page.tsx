@@ -76,7 +76,7 @@ export function SummaryPage({ plot }: { plot: Plot }) {
             </summary>
             <p>
               The payment schedule and cancellation policy are shared by Spectra Gardens before any
-              payment. This prototype does not publish unapproved terms.
+              payment.
             </p>
           </details>
           <Link className="sg-cta booking-primary" href={`/plots/${plot.id}/details`}>

@@ -26,9 +26,8 @@ export function PaymentPage({ plot }: { plot: Plot }) {
       <FlowPageHead
         backHref={`/plots/${plot.id}/review`}
         backLabel="Back to review"
-        title="Payment preview"
-        subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="No payment provider connected"
+        title="Payment"
+        compact
       />
 
       <div className="flow-state-page flow-payment-page">
@@ -37,15 +36,12 @@ export function PaymentPage({ plot }: { plot: Plot }) {
             <span />
           </div>
           <div className="aside-label">PAYMENT</div>
-          <h2>Payment gateway preview</h2>
-          <p>
-            This prototype is not connected to a payment provider. No payment will be collected.
-            Choose an outcome to preview the rest of the journey.
-          </p>
+          <h2>Payment gateway</h2>
+          <p>Choose an outcome to continue.</p>
           <p className="state-reference">Plot {plot.id}</p>
 
           <details className="demo-outcomes">
-            <summary>Preview a payment outcome</summary>
+            <summary>Choose an outcome</summary>
             <div className="outcome-actions">
               <button type="button" data-outcome="success" onClick={() => choose("success")}>
                 Successful payment

@@ -9,8 +9,7 @@ import { FlowShell } from "./flow-shell";
 
 function downloadSummary(plot: Plot, buyer: string, reference: string) {
   const lines = [
-    "SPECTRA GARDENS - BOOKING FLOW PREVIEW",
-    "This is a design preview. No real payment or booking has been created.",
+    "SPECTRA GARDENS - BOOKING SUMMARY",
     "",
     `Site: ${SITE.name}, ${SITE.region}`,
     `Plot: ${plot.name}`,
@@ -24,7 +23,7 @@ function downloadSummary(plot: Plot, buyer: string, reference: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "spectra-gardens-booking-preview.txt";
+  link.download = "spectra-gardens-booking-summary.txt";
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -40,7 +39,7 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
         <div className="flow-state-page">
           <div className="state-screen">
             <div className="aside-label">CONFIRMATION</div>
-            <h2>Loading your preview</h2>
+            <h2>Loading confirmation</h2>
             <p>Reading the details held for this browser session.</p>
           </div>
         </div>
@@ -57,16 +56,13 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
               !
             </div>
             <div className="aside-label">NOTHING TO CONFIRM</div>
-            <h2>No preview payment in this session</h2>
-            <p>
-              A confirmation is created only after the preview payment step. No real payment or
-              booking exists.
-            </p>
+            <h2>No payment found for this session</h2>
+            <p>Return to payment to continue.</p>
             <Link
               className="sg-cta booking-primary state-action"
               href={`/plots/${plot.id}/payment`}
             >
-              Open the payment preview <span aria-hidden="true">↗</span>
+              Open payment <span aria-hidden="true">↗</span>
             </Link>
             <Link className="text-back" href="/plots">
               Back to the site plan
@@ -83,8 +79,7 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
         backHref={`/plots/${plot.id}/summary`}
         backLabel="Back to summary"
         title="Confirmation"
-        subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="Design preview"
+        compact
       />
 
       <div className="flow-state-page">
@@ -92,9 +87,8 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
           <div className="state-symbol success" aria-hidden="true">
             ✓
           </div>
-          <div className="aside-label">DEMO CONFIRMATION</div>
+          <div className="aside-label">CONFIRMATION</div>
           <h2>Booking flow complete</h2>
-          <p>This is a design preview. No real payment or booking has been created.</p>
           <div className="confirmation-data">
             <div className="aside-row">
               <span>Plot</span>
@@ -127,10 +121,7 @@ export function ConfirmationPage({ plot }: { plot: Plot }) {
               Done
             </Link>
           </div>
-          <p className="form-note">
-            The reference exists only in this browser session. Price and payment terms remain on
-            request.
-          </p>
+          <p className="form-note">Price and payment terms remain on request.</p>
         </div>
       </div>
     </FlowShell>

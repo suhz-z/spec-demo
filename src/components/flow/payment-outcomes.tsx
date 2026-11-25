@@ -14,10 +14,9 @@ export function PaymentPendingPage({ plot }: { plot: Plot }) {
     <FlowShell step={FLOW_STEPS.outcome} crumbs={flowCrumbs("payment/pending", plot.id)}>
       <FlowPageHead
         backHref={`/plots/${plot.id}/payment`}
-        backLabel="Back to payment preview"
+        backLabel="Back to payment"
         title="Payment pending"
         subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="Preview state"
       />
 
       <div className="flow-state-page">
@@ -34,7 +33,7 @@ export function PaymentPendingPage({ plot }: { plot: Plot }) {
             className="booking-primary state-action"
             onClick={() =>
               setFeedback(
-                "This preview is not connected to the payment provider, so a live status cannot be checked.",
+                "Status updates are unavailable right now.",
               )
             }
           >
@@ -47,7 +46,7 @@ export function PaymentPendingPage({ plot }: { plot: Plot }) {
           ) : null}
           <div className="flow-state-links">
             <Link className="text-back" href={`/plots/${plot.id}/payment`}>
-              Back to payment preview
+              Back to payment
             </Link>
             <Link className="text-back" href="/plots">
               Choose another plot
@@ -64,10 +63,9 @@ export function PaymentFailedPage({ plot }: { plot: Plot }) {
     <FlowShell step={FLOW_STEPS.outcome} crumbs={flowCrumbs("payment/failed", plot.id)}>
       <FlowPageHead
         backHref={`/plots/${plot.id}/payment`}
-        backLabel="Back to payment preview"
+        backLabel="Back to payment"
         title="Payment failed"
         subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="Preview state"
       />
 
       <div className="flow-state-page">
@@ -105,10 +103,9 @@ export function PlotTakenPage({ plot }: { plot: Plot }) {
     <FlowShell step={FLOW_STEPS.outcome} crumbs={flowCrumbs("payment/taken", plot.id)}>
       <FlowPageHead
         backHref={`/plots/${plot.id}/payment`}
-        backLabel="Back to payment preview"
+        backLabel="Back to payment"
         title="Availability changed"
         subtitle={`Plot ${plot.id} · ${plot.area}`}
-        aside="Preview state"
       />
 
       <div className="flow-state-page">
@@ -119,8 +116,7 @@ export function PlotTakenPage({ plot }: { plot: Plot }) {
           <div className="aside-label">PLOT UNAVAILABLE</div>
           <h2>Plot {plot.id} is no longer available</h2>
           <p>
-            Availability changed before payment completed. Choose another plot to continue. This
-            outcome is a preview and has not changed any live inventory.
+            Availability changed before payment completed. Choose another plot to continue.
           </p>
           <div className="similar-villas" aria-label="Other plots">
             {alternatives.map((alternative) => (
@@ -134,7 +130,7 @@ export function PlotTakenPage({ plot }: { plot: Plot }) {
           </Link>
           <div className="flow-state-links">
             <Link className="text-back" href={`/plots/${plot.id}/payment`}>
-              Back to payment preview
+              Back to payment
             </Link>
           </div>
         </div>
